@@ -2,6 +2,8 @@
 ## Git Workflow (git-flow)
 We will use a variation of [git-flow](http://nvie.com/posts/a-successful-git-branching-model/) to ensure we always have a working version and minimize merge conflicts. Most important are the `develop` and the `master` branch. 
 
+<img src="https://github.com/Astarch/amos-ws18-proj3/blob/master/git-flow.png" width="400">
+
 The `master` branch always contains a release-ready version and is also the branch where release-tags are being made (only by the release manager!).
 
 The `develop` branch is the branch where all of the development will happen and where releases are scheduled from.
