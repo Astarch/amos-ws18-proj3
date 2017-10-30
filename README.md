@@ -1,4 +1,7 @@
 # amos-ws18-proj3
+
+For meeting checklist click [here](https://github.com/Astarch/amos-ws18-proj3/blob/develop/MEETINGS_CHECKLIST.md)
+
 ## Git Workflow (git-flow)
 We will use a variation of [git-flow](http://nvie.com/posts/a-successful-git-branching-model/) to ensure we always have a working version and minimize merge conflicts. Most important are the `develop` and the `master` branch. 
 
