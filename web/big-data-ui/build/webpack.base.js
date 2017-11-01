@@ -49,6 +49,10 @@ const webpackConfig = {
         loader: 'vue-loader',
         options: {
           extractCSS: config.isProd,
+          loaders: {
+            sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax=1&data=@import "./src/assets/base"',
+            scss: 'vue-style-loader!css-loader!sass-loader?data=@import "./src/assets/base";'
+          },
         },
       },
       {
