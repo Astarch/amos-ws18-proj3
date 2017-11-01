@@ -1,6 +1,6 @@
 <template>
 
-  <div class="user-modal-container" :class="{active: isActive}" id="login-modal" v-on:click="close">
+  <div class="user-modal-container" :class="{active: isActive}" id="login-modal" v-on:click.self="close">
     <div class="user-modal">
       <ul class="form-switcher">
         <li v-on:click.prevent.stop="flip('register')">
