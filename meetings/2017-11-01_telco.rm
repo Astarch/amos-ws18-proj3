@@ -1,0 +1,49 @@
+# Meeting at 2017-11-01 with Jörg, Dirk and Theo 
+
+## Goal of the Project:
+"Take data from the source, store and analyze, spit out trends / predictions."
+
+## *Topics*
+- Crypto Currency
+Good idea, could be interesting.
+- Tech Startups
+Too difficult. Probably not enough data to analyse properly. *You cannot tell is the startup was investing their money reasonably, or just party'd all the time.*
+- 3D Technology (Shutter/3D-TV)
+Maybe too old. 3D-TV was replaced by OLED, 4K and HDR. But VR and AR seem to be more suitable.
+
+    In general, we should focus on trends in the recent past. Analyse the data that was available before the trend (twitter, news, whatever) and predict the trends outcome, which will hopefully match with the actual trend behaviour which can be seen in e.g. GoogleTrends. Afterwards, we can use more current data and predict trends, that are not trending yet, but soon will.
+
+## *Name of the Project*
+- Free choice.
+
+## *Technologies*
+- Backend
+Jörg suggested Spring Boot instead of Spring Framework, since it will make several things in the process of development much easier. The application will be a standalone .JAR, containging and running its own webserver.
+- Frontend
+Dont use too much different frameworks and technologies. But as long as we are familiar with the frameworks we use, we should be fine.
+
+## *Data Sources*
+- Use good data sources, instead of many.
+- Five data sources is way too much for the time of the semester
+- Use only 1-3 complete and well structured data sources, then pick one statemant from the data and "proof" it.
+- Store the Data gathered from sources locally.
+- Analysis, development etc will work on local data. So no "data on demand from the source".
+- TU Berlin can provide AWS Budget in the context of this course.
+- Supercrunsh is offering AWS kickstart workshops for us, if we want or need to. The depth of the workshop is variable.
+- Docker will most likely be used as well.
+- Use the open data available, there is no Budget for more data.
+
+## *Further Steps*
+- Decide what databases to use.
+- Tool that gathers, stores and anlasizes data. (2-3 people)
+- Tool that displays the data graph. (2-3 people)
+- We should have a Workbench to play with.
+    
+## *Additional Info*
+- “Elastic Search” 
+- “Lucene”  (*Apache Lucene ist eine Programmbibliothek zur Volltextsuche.* https://de.wikipedia.org/wiki/Apache_Lucene)
+Jörg suggested Lucene, in which you can inject data. The data will be indexed and can be queried for word frequency, combinations, contexts and text mining in general. A subteam should have a look at this.
+
+## *Next Meeting / Contact*
+- Jörg wont be available for the rest of the week (holidays and vacation)
+- If something important is comming up, we can contact him via Whatsapp/Signal.
