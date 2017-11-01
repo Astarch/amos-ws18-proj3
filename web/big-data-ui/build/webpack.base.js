@@ -30,7 +30,7 @@ const webpackConfig = {
   ],
   module: {
     rules: [
-      {
+     /* {
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
         enforce: 'pre',
@@ -38,7 +38,7 @@ const webpackConfig = {
         options: {
           formatter: ESlintFormatter,
         },
-      },
+      },*/
       {
         test: /\.js$/,
         loader: 'babel-loader',
