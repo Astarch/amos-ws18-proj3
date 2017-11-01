@@ -1,5 +1,3 @@
-
-
 <template>
   <div id="app">
     <router-view></router-view>
@@ -8,18 +6,24 @@
 
 <script>
 
-export default {
-  name: 'app',
-};
+  export default {
+    name: 'app',
+  };
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-@import'~bootstrap/dist/css/bootstrap.css';
+<style lang="scss">
+  @import '~bootstrap/dist/css/bootstrap.css';
+
+  body {
+    background: map-get($theme-colors, 'dark');
+
+  }
+
+  #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+  }
 </style>

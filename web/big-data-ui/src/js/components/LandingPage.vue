@@ -2,7 +2,7 @@
   <div id="landing-page">
     <nav class="navbar navbar-expand-md bg-primary navbar-dark">
       <div class="container">
-        <a class="navbar-brand" href="#"><i class="fa d-inline fa-lg fa-cloud"></i><b> Brand</b></a>
+        <a class="navbar-brand" href="#"><i class="fa d-inline fa-lg fa-cloud"></i><b>AMOS</b></a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                 data-target="#navbar2SupportedContent" aria-controls="navbar2SupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
@@ -29,19 +29,10 @@
     </div>
     <div class="py-5 bg-dark text-white">
       <div class="container">
-        <div class="row">
-          <div class="col-md-9">
-            <p class="lead">Sign up to our newsletter for the latest news</p>
-            <form class="form-inline">
-              <div class="form-group">
-                <input type="email" class="form-control" placeholder="Your e-mail here"></div>
-              <button type="submit" class="btn btn-primary ml-3">Subscribe</button>
-            </form>
-          </div>
-        </div>
+
         <div class="row">
           <div class="col-md-12 mt-3 text-center">
-            <p>© Copyright 2017 Pingendo - All rights reserved.</p>
+            <p>© Copyright 2017 AMOS - All rights reserved.</p>
           </div>
         </div>
       </div>
@@ -88,6 +79,8 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+
+
 
   body > * {
     background-size: cover;
