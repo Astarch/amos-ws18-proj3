@@ -1,5 +1,0 @@
-CREATE TABLE USER (
-id UUID,
-username VARCHAR(255),
-password VARCHAR(255)
-);

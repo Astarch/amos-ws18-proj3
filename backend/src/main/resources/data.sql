@@ -1,0 +1,26 @@
+INSERT
+INTO
+    USER
+    (
+        id,
+        username,
+        password
+    )
+    VALUES
+    (
+        '63b61ed5-5ae4-4cc8-9aa3-f14a15c31755',
+        'user1',
+        'pass1'
+    )
+    ,
+    (
+        '337bf2b7-a12e-4d48-ba84-1feaddbd4b20',
+        'user2',
+        'pass2'
+    )
+    ,
+    (
+        '8ad5b3f5-5c78-415f-bd7a-34b38d523027',
+        'user3',
+        'pass3'
+    );
