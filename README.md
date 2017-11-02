@@ -34,8 +34,8 @@ We are running on a single EC2 instance (AWS):
 
 - Type: t2.micro
 - OS: Ubuntu Server 16.04 LTS
-- DNS: ec2-18-220-147-20.us-east-2.compute.amazonaws.com
-- Redis version: 3.2.
+- DNS: ec2-18-221-3-38.us-east-2.compute.amazonaws.com
+- Redis version: 3.2.3
 
 Point of contact: *Florian*
 
