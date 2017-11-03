@@ -9,15 +9,18 @@ import org.springframework.data.redis.serializer.GenericToStringSerializer;
 
 @Configuration
 public class RedisConfig {
-	@Value( "${redis.host}" )
+	@Value("${redis.host}")
 	private String host;
-	
+
+	@Value("${redis.port}")
+	private int port;
+
 	@Bean
 	JedisConnectionFactory jedisConnectionFactory() {
 
 		JedisConnectionFactory jedisConFactory = new JedisConnectionFactory();
 		jedisConFactory.setHostName(host);
-		jedisConFactory.setPort(6379);
+		jedisConFactory.setPort(port);
 		return jedisConFactory;
 	}
 

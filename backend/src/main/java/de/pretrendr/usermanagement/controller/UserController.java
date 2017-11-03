@@ -25,8 +25,8 @@ public class UserController {
 	}
 
 	@RequestMapping("/user")
-	public User user(@RequestParam(value = "name", defaultValue = "World") String name) {
-		return new User("username", "password", "firstname", "lastname", "email", "address", "phone");
+	public User user(@RequestParam(value = "name") String username) {
+		return new User(username, "password", "firstname", "lastname", "email", "address", "phone");
 	}
 
 	@RequestMapping("/users")
