@@ -11,11 +11,21 @@ import de.pretrendr.usermanagement.dataccess.UserDAO;
 import de.pretrendr.usermanagement.model.QUser;
 import de.pretrendr.usermanagement.model.User;
 
+/**
+ * @author Tristan Schneider
+ */
 @RestController
 public class LoginController {
 	private final UserService userService;
 	private final UserDAO userDAO;
 
+	/**
+	 * Autowired constructor.
+	 * 
+	 * @param userService
+	 * @param userDAO
+	 * @author Tristan Schneider
+	 */
 	@Autowired
 	public LoginController(final UserService userService, final UserDAO userDAO) {
 		this.userService = userService;
@@ -27,6 +37,12 @@ public class LoginController {
 	// return "Use method POST instead.";
 	// }
 
+	/**
+	 * @param username
+	 * @param password
+	 * @return
+	 * @author Tristan Schneider
+	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public User loginGet(@RequestParam(value = "name") String username,
 			@RequestParam(value = "passwd") String password) {
@@ -38,6 +54,12 @@ public class LoginController {
 		return user;
 	}
 
+	/**
+	 * @param username
+	 * @param password
+	 * @return
+	 * @author Tristan Schneider
+	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public User loginPost(@RequestParam(value = "name") String username,
 			@RequestParam(value = "passwd") String password) {

@@ -8,6 +8,10 @@ import de.pretrendr.usermanagement.dataccess.UserDAO;
 import de.pretrendr.usermanagement.model.QUser;
 import de.pretrendr.usermanagement.model.User;
 
+/**
+ * @author Tristan Schneider
+ *
+ */
 @Service
 @ComponentScan("de.pretrendr")
 public class UserServiceImpl implements UserService {
@@ -18,11 +22,13 @@ public class UserServiceImpl implements UserService {
 		this.userDAO = userDAO;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @author Tristan Schneider
+	 */
 	@Override
 	public boolean checkCredentials(String username, String password) {
-		// User user = new User(username, password, "John", "Doe", "john.doe@jd.com",
-		// "Generic Street 123, Dummytown",
-		// "+123/123123123");
 		User user = userDAO.findOne(QUser.user.username.eq(username));
 		return user != null && user.getPassword().equals(password);
 	}
