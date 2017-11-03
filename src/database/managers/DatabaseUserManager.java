@@ -1,10 +1,10 @@
-package databaseConnectors;
+package database.managers;
 
 import com.lambdaworks.redis.RedisClient;
 import com.lambdaworks.redis.RedisConnection;
 import com.lambdaworks.redis.RedisURI;
 
-import datamodelBackend.User;
+import backend.datamodel.User;
 
 /**
  * This class will connect Redis to our backend
@@ -12,14 +12,14 @@ import datamodelBackend.User;
  * @author Florian
  *
  */
-public class RedisConnector {
+public class DatabaseUserManager {
 	RedisClient redisClient;
 	RedisConnection<String, String> connection;
 	
 	/**
 	 * Create a connection to Redis
 	 */
-	public RedisConnector(){
+	public DatabaseUserManager(){
 		redisClient = new RedisClient(
 			    RedisURI.create("redis://ec2-18-221-3-38.us-east-2.compute.amazonaws.com:6379"));
 		connection = redisClient.connect();
@@ -33,7 +33,7 @@ public class RedisConnector {
 	 * @return an user from the database
 	 */
 	public User getUserbyUserObject(User user){
-		return getUserbyMail(user.getMail());
+		return getUserByMail(user.getMail());
 	}
 	
 	/**
@@ -43,7 +43,7 @@ public class RedisConnector {
 	 * @param userMail
 	 * @return an user from the database
 	 */
-	public User getUserbyMail(String userMail){
+	public User getUserByMail(String userMail){
 		String redisValue = connection.get(userMail);
 		if (redisValue == null || redisValue.equals("")) {
 			return null;
@@ -62,6 +62,15 @@ public class RedisConnector {
 				newUser.getFirstname() + "####" + 
 				newUser.getPassword();
 	    connection.set(newUser.getMail(), redisValue);
+	}
+	
+	/**
+	 * Delete an user in Redis
+	 * 
+	 * @param userMail
+	 */
+	public void deleteUserByMail(String userMail){
+		connection.del(userMail);
 	}
 	
 	/**
