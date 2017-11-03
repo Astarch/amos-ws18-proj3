@@ -4,23 +4,43 @@ INTO
     (
         id,
         username,
-        password
+        password,
+        firstname,
+        lastname,
+        email,
+        address,
+        phone
     )
     VALUES
     (
         '63b61ed5-5ae4-4cc8-9aa3-f14a15c31755',
         'user1',
-        'pass1'
+        'pass1',
+        'firstname1',
+        'lastname1',
+        'email1',
+        'address1',
+        'phone1'
     )
     ,
     (
         '337bf2b7-a12e-4d48-ba84-1feaddbd4b20',
         'user2',
-        'pass2'
+        'pass2',
+        'firstname2',
+        'lastname2',
+        'email2',
+        'address2',
+        'phone2'
     )
     ,
     (
         '8ad5b3f5-5c78-415f-bd7a-34b38d523027',
         'user3',
-        'pass3'
+        'pass3',
+        'firstname3',
+        'lastname3',
+        'email3',
+        'address3',
+        'phone3'
     );
