@@ -33,7 +33,7 @@ public class DatabaseUserManager {
 	 * @return an user from the database
 	 */
 	public User getUserbyUserObject(User user){
-		return getUserbyMail(user.getMail());
+		return getUserByMail(user.getMail());
 	}
 	
 	/**
@@ -43,7 +43,7 @@ public class DatabaseUserManager {
 	 * @param userMail
 	 * @return an user from the database
 	 */
-	public User getUserbyMail(String userMail){
+	public User getUserByMail(String userMail){
 		String redisValue = connection.get(userMail);
 		if (redisValue == null || redisValue.equals("")) {
 			return null;
@@ -62,6 +62,15 @@ public class DatabaseUserManager {
 				newUser.getFirstname() + "####" + 
 				newUser.getPassword();
 	    connection.set(newUser.getMail(), redisValue);
+	}
+	
+	/**
+	 * Delete an user in Redis
+	 * 
+	 * @param userMail
+	 */
+	public void deleteUserByMail(String userMail){
+		connection.del(userMail);
 	}
 	
 	/**

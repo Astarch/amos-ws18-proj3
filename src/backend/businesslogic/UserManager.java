@@ -19,7 +19,7 @@ public class UserManager {
 		databaseUserManager.createUser(newUser);
 		
 		//get an user from Redis
-		User getUser = databaseUserManager.getUserbyMail(email);
+		User getUser = databaseUserManager.getUserByMail(email);
 		
 		System.out.println(getUser.toString());
 		
