@@ -1,42 +1,42 @@
-package BackendTest;
+package backend.database;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import databaseConnectors.RedisConnector;
-import datamodelBackend.User;
+import backend.datamodel.User;
+import database.managers.DatabaseUserManager;
 
 public class TestUserDatabase {
-	static RedisConnector redisConnector;
+	static DatabaseUserManager databaseUserManager;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		redisConnector = new RedisConnector();
+		databaseUserManager = new DatabaseUserManager();
 	}
 	
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		redisConnector.closeConnection();
+		databaseUserManager.closeConnection();
 	}
 
 	@Test
 	public void createAndGetNewUser() {
 		String userMail = "" + java.util.UUID.randomUUID() + "@web.com";
 		User newUser = new User("Musterman", "password","Max",userMail);
-		redisConnector.createUser(newUser);
+		databaseUserManager.createUser(newUser);
 		
-		User getUser = redisConnector.getUserbyMail(userMail);
+		User getUser = databaseUserManager.getUserbyMail(userMail);
 		equals(userMail.equals(getUser.getMail()));
 	}
 	
 	@Test
 	public void userNotExist() {
-		equals(redisConnector.getUserbyMail("userNotExist")==null);
+		equals(databaseUserManager.getUserbyMail("userNotExist")==null);
 	}
 	
 	@Test
 	public void mailIsEmpty() {
-		equals(redisConnector.getUserbyMail("userNotExist")==null);
+		equals(databaseUserManager.getUserbyMail("userNotExist")==null);
 	}
 }

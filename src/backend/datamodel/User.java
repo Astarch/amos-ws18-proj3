@@ -1,4 +1,4 @@
-package datamodelBackend;
+package backend.datamodel;
 
 public class User {
 	private String mail; //key value

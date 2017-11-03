@@ -1,10 +1,10 @@
-package databaseConnectors;
+package database.managers;
 
 import com.lambdaworks.redis.RedisClient;
 import com.lambdaworks.redis.RedisConnection;
 import com.lambdaworks.redis.RedisURI;
 
-import datamodelBackend.User;
+import backend.datamodel.User;
 
 /**
  * This class will connect Redis to our backend
@@ -12,14 +12,14 @@ import datamodelBackend.User;
  * @author Florian
  *
  */
-public class RedisConnector {
+public class DatabaseUserManager {
 	RedisClient redisClient;
 	RedisConnection<String, String> connection;
 	
 	/**
 	 * Create a connection to Redis
 	 */
-	public RedisConnector(){
+	public DatabaseUserManager(){
 		redisClient = new RedisClient(
 			    RedisURI.create("redis://ec2-18-221-3-38.us-east-2.compute.amazonaws.com:6379"));
 		connection = redisClient.connect();
