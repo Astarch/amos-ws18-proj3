@@ -2,7 +2,6 @@ const path = require('path');
 const config = require('../config');
 const webpack = require('webpack');
 const ESlintFormatter = require('eslint-friendly-formatter');
-
 const defaults = {
   __DEV__: JSON.stringify(config.isDev),
   __PROD__: JSON.stringify(config.isProd),
@@ -25,7 +24,7 @@ const webpackConfig = {
     },
   },
   plugins: [
-    new webpack.DefinePlugin(defaults),
+    new webpack.DefinePlugin(defaults)
 
   ],
   module: {
