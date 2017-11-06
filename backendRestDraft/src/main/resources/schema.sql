@@ -1,7 +1,7 @@
 CREATE TABLE
     USER
     (
-        id UUID,
+        id UUID primary key,
         username VARCHAR(255),
         password VARCHAR(255),
         firstname VARCHAR(255),
@@ -20,5 +20,6 @@ CREATE TABLE
     USER_ROLES
     (
         user_id UUID REFERENCES USER(id),
-        role_id UUID REFERENCES role(id)
+        role_id UUID REFERENCES role(id),
+        PRIMARY KEY(user_id, role_id)  
     );
