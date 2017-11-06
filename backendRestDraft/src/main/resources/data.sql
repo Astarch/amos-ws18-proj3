@@ -44,3 +44,47 @@ INTO
         'address3',
         'phone3'
     );
+INSERT
+INTO
+    ROLE
+    (
+        id,
+        role
+    )
+    VALUES
+    (
+        '8ad5b3f5-abcd-415f-bd7a-34b38d523027',
+        'USER'
+    )
+    ,
+    (
+        '8ad5b3f5-abce-415f-bd7a-34b38d523027',
+        'ADMIN'
+    );
+INSERT
+INTO
+    USER_ROLES
+    (
+        user_id,
+        role_id
+    )
+    VALUES
+    (
+        '63b61ed5-5ae4-4cc8-9aa3-f14a15c31755',
+        '8ad5b3f5-abcd-415f-bd7a-34b38d523027'
+    )
+    ,
+    (
+        '337bf2b7-a12e-4d48-ba84-1feaddbd4b20',
+        '8ad5b3f5-abcd-415f-bd7a-34b38d523027'
+    )
+    ,
+    (
+        '337bf2b7-a12e-4d48-ba84-1feaddbd4b20',
+        '8ad5b3f5-abce-415f-bd7a-34b38d523027'
+    )
+    ,
+    (
+        '8ad5b3f5-5c78-415f-bd7a-34b38d523027',
+        '8ad5b3f5-abce-415f-bd7a-34b38d523027'
+    );

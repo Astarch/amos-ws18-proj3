@@ -46,14 +46,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable()
 		.httpBasic().and()
 		.userDetailsService(userDetailsService())
-		.authorizeRequests().antMatchers("/api/**").authenticated().and()
+		.authorizeRequests().antMatchers("/api/**").hasRole("ADMIN").and()
 		.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
 		.formLogin().successHandler(authenticationSuccessHandler).and()
 		.formLogin().failureHandler(authenticationFailureHandler);
-
-		// CSRF tokens handling
-//		 http.addFilterAfter(new CsrfTokenResponseHeaderBindingFilter(),
-//		 CsrfFilter.class);
+		// @formatter:on
 	}
 
 	@Bean

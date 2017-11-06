@@ -4,19 +4,28 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author Tristan Schneider
@@ -25,7 +34,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode
+@ToString(exclude = "password, roles")
+@EqualsAndHashCode(exclude = "password, roles")
 public class User implements Serializable, UserDetails {
 	private static final long serialVersionUID = 1L;
 
@@ -62,10 +72,17 @@ public class User implements Serializable, UserDetails {
 	private String address;
 	private String phone;
 
+	@JsonIgnore
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles;
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+		for (Role role : roles) {
+			authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRole().toUpperCase()));
+		}
 		return authorities;
 	}
 
