@@ -1,5 +1,7 @@
 package de.pretrendr.usermanagement.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,7 +48,6 @@ public class LoginController {
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public User loginGet(@RequestParam(value = "name") String username,
 			@RequestParam(value = "passwd") String password) {
-		// return Dummy
 		User user = null;
 		if (userService.checkCredentials(username, password)) {
 			user = userDAO.findOne(QUser.user.username.eq(username).and(QUser.user.password.eq(password)));
@@ -65,5 +66,12 @@ public class LoginController {
 			@RequestParam(value = "passwd") String password) {
 		// return Dummy
 		return new User(username, password, "firstname", "lastname", "email", "address", "phone");
+	}
+
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public User logout(HttpSession session) {
+		// return Dummy
+		session.invalidate();
+		return new User("username", "password", "firstname", "lastname", "email", "address", "phone");
 	}
 }
