@@ -14,14 +14,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.csrf.CsrfFilter;
 
-import com.allanditzel.springframework.security.web.csrf.CsrfTokenResponseHeaderBindingFilter;
-
+/**
+ * @author Tristan Schneider
+ *
+ */
 @Configuration
 @EnableWebSecurity(debug = false)
 @ComponentScan
-public class PretrenderSecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	@Qualifier("customUserDetailsService")
 	private UserDetailsService userDetailsService;
@@ -39,12 +40,6 @@ public class PretrenderSecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userDetailsService());
 	}
 
-	// @Override
-	// public void configureGlobal(AuthenticationManagerBuilder auth) throws
-	// Exception {
-	// auth.authenticationProvider(authenticationProvider());
-	// }
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
@@ -52,52 +47,20 @@ public class PretrenderSecurityConfig extends WebSecurityConfigurerAdapter {
 		.httpBasic().and()
 		.userDetailsService(userDetailsService())
 		.authorizeRequests().antMatchers("/api/**").authenticated().and()
-		.authorizeRequests().antMatchers("/login/**").permitAll().and()
 		.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
 		.formLogin().successHandler(authenticationSuccessHandler).and()
 		.formLogin().failureHandler(authenticationFailureHandler);
-		// http.logout().logoutSuccessUrl("/");
 
 		// CSRF tokens handling
-		 http.addFilterAfter(new CsrfTokenResponseHeaderBindingFilter(),
-		 CsrfFilter.class);
+//		 http.addFilterAfter(new CsrfTokenResponseHeaderBindingFilter(),
+//		 CsrfFilter.class);
 	}
-
-	// @Override
-	// protected void configure(HttpSecurity http) throws Exception {
-//		// @formatter:off
-//        http
-//            .csrf()
-//                .disable()
-//            .authorizeRequests()
-//                .antMatchers(HttpMethod.GET, "/login/**").permitAll()
-////                .antMatchers(HttpMethod.POST, "/api/**").hasRole("USER")
-//                .anyRequest().authenticated()
-//                .and()
-////            .formLogin()
-////                .loginProcessingUrl("/api/v1/users/login")
-////                .usernameParameter("username")
-////                .passwordParameter("password")
-////                .successHandler(new RESTAuthenticationSuccessHandler())
-////                .failureHandler(new RESTAuthenticationFailureHandler())
-////                .and()
-//            .exceptionHandling()
-//                .authenticationEntryPoint(new RESTAuthenticationEntryPoint())
-//                .and()
-//            .logout()
-//                .logoutUrl("/logout")
-////                .addLogoutHandler(new RESTLogoutHandler())
-//                .invalidateHttpSession(true);
-//        // @formatter:on
-	// }
 
 	@Bean
 	public AuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 		authProvider.setUserDetailsService(userDetailsService());
-		// authProvider.setPasswordEncoder(encoder());
 		return authProvider;
-		// return new PretrendrAuthenticationProvider();
 	}
 
 	@Bean

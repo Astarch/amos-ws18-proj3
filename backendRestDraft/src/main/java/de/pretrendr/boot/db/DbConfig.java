@@ -1,4 +1,4 @@
-package de.pretrendr.boot;
+package de.pretrendr.boot.db;
 
 import javax.sql.DataSource;
 
@@ -11,6 +11,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+/**
+ * Database configuration.
+ * 
+ * @author Tristan Schneider
+ *
+ */
 @Configuration
 @EnableAutoConfiguration
 @EntityScan(basePackages = { "de.pretrendr" })
@@ -22,5 +28,4 @@ public class DbConfig {
 	public DataSource dataSource() {
 		return DataSourceBuilder.create().build();
 	}
-
 }

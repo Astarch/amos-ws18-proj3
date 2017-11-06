@@ -18,6 +18,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author Tristan Schneider
+ */
 @Table(name = "User")
 @Entity
 @Data
@@ -26,6 +29,17 @@ import lombok.NoArgsConstructor;
 public class User implements Serializable, UserDetails {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param username
+	 * @param password
+	 * @param firstname
+	 * @param lastname
+	 * @param email
+	 * @param address
+	 * @param phone
+	 */
 	public User(String username, String password, String firstname, String lastname, String email, String address,
 			String phone) {
 		this.id = UUID.randomUUID();

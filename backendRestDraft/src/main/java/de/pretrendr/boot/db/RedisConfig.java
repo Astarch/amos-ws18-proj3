@@ -1,4 +1,4 @@
-package de.pretrendr.boot;
+package de.pretrendr.boot.db;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -7,6 +7,11 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
 
+/**
+ * Redis configuration. Still buggy.
+ * 
+ * @author Tristan Schneider
+ */
 @Configuration
 public class RedisConfig {
 	@Value("${redis.host}")

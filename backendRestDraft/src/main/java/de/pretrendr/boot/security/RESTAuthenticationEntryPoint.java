@@ -11,6 +11,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Tristan Schneider
+ */
 @Component
 public class RESTAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
