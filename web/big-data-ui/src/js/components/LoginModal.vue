@@ -228,6 +228,7 @@
     z-index: 3;
     font-family: 'Lato', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
     font-size: 14px;
+    -background-color: rgba(17, 17, 17, .9);
     -webkit-transition: all 0.25s linear;
     -moz-transition: all 0.25s linear;
     -o-transition: all 0.25s linear;
