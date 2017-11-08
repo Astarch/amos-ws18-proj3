@@ -15,9 +15,9 @@
         <input type="text" name="name" placeholder="Name" v-model="registerName"
                v-on:keyup.enter.stop="submit(modal_type_register)">
         <input type="email" name="email" placeholder="Email" v-model="registerEmail"
-               v-on:keyup.enter.stop="submit(modal_type_register)">
+               v-on:keyup.enter.stop="submit(modal_type_register)" v-on:input="checkEmail" ref="emailInput" v-bind:style="regEmailStyle">
         <input type="password" name="password" placeholder="Password" v-model="registerPassword"
-               v-on:keyup.enter.stop="submit(modal_type_register)">
+               v-on:keyup.enter.stop="submit(modal_type_register)" v-on:input="checkPassword" ref="pwinput" v-bind:style="regPwStyle">
         <input type="submit"
                class="lol2"
                :class="{disabled: isSubmitting}"
@@ -59,7 +59,6 @@
   const modalTypeLogin = 'login';
   const modal_type_register = 'register';
 
-
   export default {
     name: 'login-modal',
     props: {
@@ -86,6 +85,13 @@
       // Modal error messages
       registerError: '',
       loginError: '',
+
+      regPwStyle: {
+        backgroundColor: ''
+      },
+      regEmailStyle: {
+        backgroundColor: ''
+      }
     }),
     created() {
       this.modal_type_login = modalTypeLogin;
@@ -124,9 +130,78 @@
             data.password = this.loginPassword;
             break;
         }
+      },
+
+      checkEmail: function (){
+        console.log(this.registerEmail);
+        var emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        console.log(emailRegex.test(this.registerEmail));
+        if(emailRegex.test(this.registerEmail)){
+          this.regEmailStyle.backgroundColor="#CBFFB9";
+        } else {
+          this.regEmailStyle.backgroundColor="#F09090";
+        }
+        if(this.registerEmail.length == 0){
+          this.regEmailStyle.backgroundColor="";
+        }
+      },
+
+      checkPassword: function (){
+        var strength = 0;
+        var smallChar = /[a-z]+/;
+        var capitalChar = /[A-Z]+/;
+        var numberChar = /[0-9]+/;
+        var specialChar = /[^A-Za-z0-9]+/;
+
+        if(smallChar.test(this.registerPassword)){
+         strength++; 
+        }
+        if(capitalChar.test(this.registerPassword)){
+         strength++; 
+        }
+        if(numberChar.test(this.registerPassword)){
+         strength++; 
+        }
+        if(specialChar.test(this.registerPassword)){
+         strength++; 
+        }
+
+        strength += Math.floor(Math.min(4, this.registerPassword.length/2));
+
+        if(this.registerPassword.length == 0){
+          strength = 0;
+        }                  
+        switch(strength){
+          case 0:
+            this.regPwStyle.backgroundColor="";
+            break;
+          case 1:
+            this.regPwStyle.backgroundColor="#F09090";
+            break;
+          case 2:
+            this.regPwStyle.backgroundColor="#EBA096";
+            break;
+          case 3:
+            this.regPwStyle.backgroundColor="#E5B09C";
+            break;
+          case 4:
+            this.regPwStyle.backgroundColor="#E0C0A2";
+            break;
+          case 5:
+            this.regPwStyle.backgroundColor="#DBCFA7";
+            break;
+          case 6:
+            this.regPwStyle.backgroundColor="#D6DFAD";
+            break;
+          case 7:
+            this.regPwStyle.backgroundColor="#D0EFB3";
+            break;
+          case 8:
+            this.regPwStyle.backgroundColor="#CBFFB9";
+            break;
+        }
+        console.log(strength);
       }
-
-
     }
   }
 
@@ -153,7 +228,6 @@
     z-index: 3;
     font-family: 'Lato', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
     font-size: 14px;
-    background-color: rgba(17, 17, 17, .9);
     -webkit-transition: all 0.25s linear;
     -moz-transition: all 0.25s linear;
     -o-transition: all 0.25s linear;
