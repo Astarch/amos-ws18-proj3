@@ -12,14 +12,32 @@
       </ul>
       <div class="form-register" :class="{active: type == modal_type_register}" id="form-register">
         <div class="error-message" v-text="registerError"></div>
-        <input type="text" name="name" placeholder="Name" v-model="registerName"
-               v-on:keyup.enter.stop="submit(modal_type_register)">
-        <input type="email" name="email" placeholder="Email" v-model="registerEmail"
-               v-on:keyup.enter.stop="submit(modal_type_register)" v-on:input="checkEmail" ref="emailInput" v-bind:style="regEmailStyle">
-        <input type="password" name="password" placeholder="Password" v-model="registerPassword"
-               v-on:keyup.enter.stop="submit(modal_type_register)" v-on:input="checkPassword" ref="pwinput" v-bind:style="regPwStyle">
+        <input type="text"
+               name="name"
+               placeholder="Name"
+               v-model="registerName"
+               v-on:keyup.enter.stop="submit(modal_type_register)"
+               v-on:input="toggleRegistrationError">
+        <input type="email"
+               name="email"
+               placeholder="Email"
+               v-model="registerEmail"
+               v-on:keyup.enter.stop="submit(modal_type_register)"
+               v-on:input="checkEmail"
+               ref="emailInput"
+               v-bind:style="regEmailStyle">
+        <input type="password"
+               name="password"
+               placeholder="Password"
+               v-model="registerPassword"
+               v-on:keyup.enter.stop="submit(modal_type_register)"
+               v-on:input="checkPassword"
+               ref="pwinput"
+               v-bind:style="regPwStyle">
+        <div v-if="showRegistrationError" class="alert alert-danger" role="alert">
+          {{registrationErrorText}}
+        </div>
         <input type="submit"
-               class="lol2"
                :class="{disabled: isSubmitting}"
                v-on:click.stop="submit(modal_type_register)"
                v-model="registerSubmit"
@@ -30,10 +48,23 @@
       </div>
       <div class="form-login" :class="{active: type == modal_type_login}" id="form-login">
         <div class="error-message" v-text="loginError"></div>
-        <input type="text" name="user" placeholder="Email or Username" v-model="loginUser"
-               v-on:keyup.enter.stop="submit(modal_type_login)">
-        <input type="password" name="password" placeholder="Password" v-model="loginPassword"
-               v-on:keyup.enter.stop="submit(modal_type_login)">
+        <input type="text"
+               name="user"
+               placeholder="Email or Username"
+               v-model="loginUser"
+               v-on:input="toggleLoginError"
+               v-on:keyup.enter.stop="submit(modal_type_login)"
+               v-on:change="toggleLoginError">
+        <input type="password"
+               name="password"
+               placeholder="Password"
+               v-model="loginPassword"
+               v-on:keyup.enter.stop="submit(modal_type_login)"
+               v-on:input="checkPassword"
+               v-on:change="toggleLoginError">
+        <div v-if="showLoginError" class="alert alert-danger" role="alert">
+          {{loginErrorText}}
+        </div>
         <input type="submit"
                :class="{disabled: isSubmitting}"
                v-on:click.stop="submit(modal_type_login)"
@@ -79,6 +110,12 @@
     data: () => ({
       isSubmitting: false,
 
+      showLoginError: false,
+      showRegistrationError: false,
+
+      loginErrorText: '',
+      RegistrationErrorText: '',
+
       // Submit button text
       registerSubmit: modal_submit_register,
       loginSubmit: modal_submit_login,
@@ -122,54 +159,107 @@
         } else {
           this.$emit('changeType', this.modal_type_register);
         }
-
       },
-
-      submit: function (which) {
-        this.isSubmitting = true;
+      submit(which) {
+        //this.isSubmitting = true;
         var data = {form: this.type};
 
         switch (this.type) {
           case 'register':
+            this.validateRegistration(this.registerName, this.registerEmail, this.registerPassword);
             console.log(this.registerName)
             data.name = this.registerName;
             data.email = this.registerEmail;
             data.password = this.registerPassword;
             break;
           case 'login':
+            this.validateLogin(this.loginUser, this.loginPassword);
             data.user = this.loginUser;
             data.password = this.loginPassword;
             break;
         }
       },
-
-      checkEmail: function (){
-        if(this.registerEmail.length > 0){
-          if(emailRegex.test(this.registerEmail)){
-            this.regEmailStyle.backgroundColor=colors[colors.length-1];
-          } else {
-            this.regEmailStyle.backgroundColor=colors[1];
-          }
+      validateRegistration(name, mail, password) {
+        if (!this.isNameValid(name)) {
+          this.toggleRegistrationError('Please enter a valid name!');
+        } else if (!this.isMailValid(mail)) {
+          this.toggleRegistrationError('Please enter a valid mail!');
+        } else if (!this.isPasswordValid(password)) {
+          this.toggleRegistrationError('Please enter a valid password!');
         } else {
-          this.regEmailStyle.backgroundColor=colors[0];
+          this.toggleRegistrationError();
         }
       },
-
-      checkPassword: function (){
-        var strength = 0;
-
-        if(this.registerPassword.length > 0){
-          strength += smallCharRegex.test(this.registerPassword); // contains a-z
-          strength += capitalCharRegex.test(this.registerPassword); // contains A-Z
-          strength += numberCharRegex.test(this.registerPassword); // contains 0-9
-          strength += specialCharRegex.test(this.registerPassword); // contains special character
-          strength += Math.floor(Math.min(4, this.registerPassword.length/3)); // 0-12 characters result in 0-4 points
-        }
-
-        if(strength>0 && strength<colors.length){
-          this.regPwStyle.backgroundColor=colors[strength];
+      validateLogin(name, password) {
+        if (!this.isNameValid(name)) {
+          this.toggleLoginError('Please enter a valid username!');
+        } else if (!this.isPasswordValid(password)) {
+          this.toggleLoginError('Please enter a valid password!');
         } else {
-          this.regPwStyle.backgroundColor=colors[0];
+          this.toggleLoginError();
+        }
+      },
+      toggleLoginError(message) {
+        console.log('toggleLoginError(): ', message)
+        if (typeof message === 'string' || message instanceof String) {
+          this.showLoginError = true;
+          this.loginErrorText = message;
+        } else {
+          this.showLoginError = false;
+        }
+      },
+      toggleRegistrationError(message) {
+        console.log('toggleRegistrationError(): ', message)
+        if (typeof message === 'string' || message instanceof String) {
+          this.showRegistrationError = true;
+          this.registrationErrorText = message;
+        } else {
+          this.showRegistrationError = false;
+        }
+      },
+      isMailValid(mail) {
+        return mail.length > 0 && emailRegex.test(mail);
+      },
+      isNameValid(name) {
+        return name.length > 2;
+      },
+      isPasswordValid(password) {
+        return password.length > 4;
+      },
+      calculatePasswordStrength(password) {
+        let strength = 0;
+
+        if (password.length > 0) {
+          strength += smallCharRegex.test(password); // contains a-z
+          strength += capitalCharRegex.test(password); // contains A-Z
+          strength += numberCharRegex.test(password); // contains 0-9
+          strength += specialCharRegex.test(password); // contains special character
+          strength += Math.floor(Math.min(4, password.length / 3)); // 0-12 characters result in 0-4 points
+        }
+        return strength;
+      },
+      checkEmail: function () {
+        this.toggleRegistrationError();
+        this.toggleLoginError();
+        if (this.registerEmail.length > 0) {
+          if (emailRegex.test(this.registerEmail)) {
+            this.regEmailStyle.backgroundColor = colors[colors.length - 1];
+          } else {
+            this.regEmailStyle.backgroundColor = colors[1];
+          }
+        } else {
+          this.regEmailStyle.backgroundColor = colors[0];
+        }
+      },
+      checkPassword: function () {
+        this.toggleRegistrationError();
+        this.toggleLoginError();
+        var strength = this.calculatePasswordStrength(this.registerPassword);
+
+        if (strength > 0 && strength < colors.length) {
+          this.regPwStyle.backgroundColor = colors[strength];
+        } else {
+          this.regPwStyle.backgroundColor = colors[0];
         }
       }
     }
@@ -256,9 +346,13 @@
   }
 
   .user-modal-container .form-login.active,
-  .user-modal-container .form-register.active,
-  .user-modal-container .form-password.active {
+  .user-modal-container .form-register.active {
     display: block;
+  }
+
+  .user-modal-container .form-login .alert,
+  .user-modal-container .form-register .alert {
+    border-radius: 0;
   }
 
   .user-modal-container input {
