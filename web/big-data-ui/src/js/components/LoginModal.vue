@@ -64,6 +64,8 @@
   const capitalCharRegex = /[A-Z]+/;
   const numberCharRegex = /[0-9]+/;
   const specialCharRegex = /[^A-Za-z0-9]+/;
+  const colors = new Array("", "#F09090", "#EBA096", "#E5B09C", "#E0C0A2", "#DBCFA7", "#D6DFAD", "#D0EFB3", "#CBFFB9")
+
 
   export default {
     name: 'login-modal',
@@ -142,65 +144,32 @@
       },
 
       checkEmail: function (){
-        if(emailRegex.test(this.registerEmail)){
-          this.regEmailStyle.backgroundColor="#CBFFB9";
+        if(this.registerEmail.length > 0){
+          if(emailRegex.test(this.registerEmail)){
+            this.regEmailStyle.backgroundColor=colors[colors.length-1];
+          } else {
+            this.regEmailStyle.backgroundColor=colors[1];
+          }
         } else {
-          this.regEmailStyle.backgroundColor="#F09090";
-        }
-        if(this.registerEmail.length == 0){
-          this.regEmailStyle.backgroundColor="";
+          this.regEmailStyle.backgroundColor=colors[0];
         }
       },
 
       checkPassword: function (){
         var strength = 0;
 
-        if(smallCharRegex.test(this.registerPassword)){
-         strength++; 
-        }
-        if(capitalCharRegex.test(this.registerPassword)){
-         strength++; 
-        }
-        if(numberCharRegex.test(this.registerPassword)){
-         strength++; 
-        }
-        if(specialCharRegex.test(this.registerPassword)){
-         strength++; 
+        if(this.registerPassword.length > 0){
+          strength += smallCharRegex.test(this.registerPassword); // contains a-z
+          strength += capitalCharRegex.test(this.registerPassword); // contains A-Z
+          strength += numberCharRegex.test(this.registerPassword); // contains 0-9
+          strength += specialCharRegex.test(this.registerPassword); // contains special character
+          strength += Math.floor(Math.min(4, this.registerPassword.length/3)); // 0-12 characters result in 0-4 points
         }
 
-        strength += Math.floor(Math.min(4, this.registerPassword.length/2));
-
-        if(this.registerPassword.length == 0){
-          strength = 0;
-        }
-        switch(strength){
-          case 0:
-            this.regPwStyle.backgroundColor="";
-            break;
-          case 1:
-            this.regPwStyle.backgroundColor="#F09090";
-            break;
-          case 2:
-            this.regPwStyle.backgroundColor="#EBA096";
-            break;
-          case 3:
-            this.regPwStyle.backgroundColor="#E5B09C";
-            break;
-          case 4:
-            this.regPwStyle.backgroundColor="#E0C0A2";
-            break;
-          case 5:
-            this.regPwStyle.backgroundColor="#DBCFA7";
-            break;
-          case 6:
-            this.regPwStyle.backgroundColor="#D6DFAD";
-            break;
-          case 7:
-            this.regPwStyle.backgroundColor="#D0EFB3";
-            break;
-          case 8:
-            this.regPwStyle.backgroundColor="#CBFFB9";
-            break;
+        if(strength<=8){
+          this.regPwStyle.backgroundColor=colors[strength];
+        } else {
+          this.regPwStyle.backgroundColor=colors[0];
         }
       }
     }
