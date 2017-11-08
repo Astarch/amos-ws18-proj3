@@ -166,7 +166,7 @@
           strength += Math.floor(Math.min(4, this.registerPassword.length/3)); // 0-12 characters result in 0-4 points
         }
 
-        if(strength<=8){
+        if(strength>0 && strength<colors.length){
           this.regPwStyle.backgroundColor=colors[strength];
         } else {
           this.regPwStyle.backgroundColor=colors[0];
