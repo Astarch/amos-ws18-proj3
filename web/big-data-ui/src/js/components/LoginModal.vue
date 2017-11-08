@@ -59,6 +59,12 @@
   const modalTypeLogin = 'login';
   const modal_type_register = 'register';
 
+  const emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+  const smallCharRegex = /[a-z]+/;
+  const capitalCharRegex = /[A-Z]+/;
+  const numberCharRegex = /[0-9]+/;
+  const specialCharRegex = /[^A-Za-z0-9]+/;
+
   export default {
     name: 'login-modal',
     props: {
@@ -86,9 +92,12 @@
       registerError: '',
       loginError: '',
 
+      // Style Password Input Field
       regPwStyle: {
         backgroundColor: ''
       },
+
+      // Style Email Input Field
       regEmailStyle: {
         backgroundColor: ''
       }
@@ -133,9 +142,6 @@
       },
 
       checkEmail: function (){
-        console.log(this.registerEmail);
-        var emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-        console.log(emailRegex.test(this.registerEmail));
         if(emailRegex.test(this.registerEmail)){
           this.regEmailStyle.backgroundColor="#CBFFB9";
         } else {
@@ -148,21 +154,17 @@
 
       checkPassword: function (){
         var strength = 0;
-        var smallChar = /[a-z]+/;
-        var capitalChar = /[A-Z]+/;
-        var numberChar = /[0-9]+/;
-        var specialChar = /[^A-Za-z0-9]+/;
 
-        if(smallChar.test(this.registerPassword)){
+        if(smallCharRegex.test(this.registerPassword)){
          strength++; 
         }
-        if(capitalChar.test(this.registerPassword)){
+        if(capitalCharRegex.test(this.registerPassword)){
          strength++; 
         }
-        if(numberChar.test(this.registerPassword)){
+        if(numberCharRegex.test(this.registerPassword)){
          strength++; 
         }
-        if(specialChar.test(this.registerPassword)){
+        if(specialCharRegex.test(this.registerPassword)){
          strength++; 
         }
 
@@ -170,7 +172,7 @@
 
         if(this.registerPassword.length == 0){
           strength = 0;
-        }                  
+        }
         switch(strength){
           case 0:
             this.regPwStyle.backgroundColor="";
@@ -200,7 +202,6 @@
             this.regPwStyle.backgroundColor="#CBFFB9";
             break;
         }
-        console.log(strength);
       }
     }
   }
