@@ -20,8 +20,8 @@
             <p class="lead mb-5">To analyse and visualise your Data and find trends in it.&nbsp;
               <br></p>
             <div id=loginButtons>
-              <a href="#register" class="btn btn-lg btn-primary mx-1" v-on:click="open('register', $event)">Register</a>
-              <a href="#login" class="btn btn-lg btn-primary mx-1" v-on:click="open('login', $event)">Log In</a>
+              <a href="#register" ref="register" class="btn btn-lg btn-primary mx-1" v-on:click.prevent="open('register')">Register</a>
+              <a href="#login" class="btn btn-lg btn-primary mx-1" v-on:click.prevent="open('login')">Log In</a>
             </div>
           </div>
         </div>
@@ -55,15 +55,14 @@
 
 
   export default {
-    components: {LoginModal},
-    name: 'hello',
+    components: { LoginModal },
+    name: 'landing',
     data: () => ({
       modalActive: false,
       modalType: 'login',
     }),
     methods: {
-      open(which, event) {
-        event.preventDefault();
+      open(which) {
         this.modalActive = true;
         this.modalType = which;
       },
@@ -79,7 +78,6 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-
 
 
   body > * {
