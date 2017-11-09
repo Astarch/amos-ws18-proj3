@@ -21,6 +21,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Sets;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,8 +35,8 @@ import lombok.ToString;
 @Entity
 @Data
 @NoArgsConstructor
-@ToString(exclude = "password, roles")
-@EqualsAndHashCode(exclude = "password, roles")
+@ToString(exclude = { "password" })
+@EqualsAndHashCode(exclude = { "password" })
 public class User implements Serializable, UserDetails {
 	private static final long serialVersionUID = 1L;
 
@@ -65,6 +66,8 @@ public class User implements Serializable, UserDetails {
 	@Id
 	private UUID id;
 	private String username;
+
+	@JsonIgnore
 	private String password;
 	private String firstname;
 	private String lastname;
@@ -75,7 +78,7 @@ public class User implements Serializable, UserDetails {
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles;
+	private Set<Role> roles = Sets.newHashSet();
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

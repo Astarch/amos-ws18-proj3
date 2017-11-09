@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.session.web.http.HeaderHttpSessionStrategy;
+import org.springframework.session.web.http.HttpSessionStrategy;
 
 /**
  * @author Tristan Schneider
@@ -44,12 +46,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
 		http.csrf().disable()
-		.httpBasic().and()
-		.userDetailsService(userDetailsService())
-		.authorizeRequests().antMatchers("/api/**").hasRole("ADMIN").and()
-		.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
-		.formLogin().successHandler(authenticationSuccessHandler).and()
-		.formLogin().failureHandler(authenticationFailureHandler);
+		.authorizeRequests()
+			.antMatchers("/api/**").hasRole("USER")
+			.antMatchers("/auth/login").permitAll()
+			.antMatchers("/auth/logout").permitAll()
+			.anyRequest().authenticated()
+			.and()
+		.exceptionHandling
+			().authenticationEntryPoint(authenticationEntryPoint)
+			.and()
+	    .formLogin()
+	        .loginProcessingUrl("/auth/login")
+	        .usernameParameter("username")
+	        .passwordParameter("password")
+	        .successHandler(authenticationSuccessHandler)
+	        .failureHandler(authenticationFailureHandler)
+	        .and()
+	    .logout()
+	        .logoutUrl("/auth/logout")
+	        .invalidateHttpSession(true);
 		// @formatter:on
 	}
 
@@ -58,6 +73,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 		authProvider.setUserDetailsService(userDetailsService());
 		return authProvider;
+	}
+
+	@Bean
+	public HttpSessionStrategy httpSessionStrategy() {
+		return new HeaderHttpSessionStrategy();
 	}
 
 	@Bean
