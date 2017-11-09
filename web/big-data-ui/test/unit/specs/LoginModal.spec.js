@@ -24,7 +24,6 @@ describe('LandingPage.vue', () => {
 	it('should transmit the Input of the register fields', () => {
 		const Constructor = Vue.extend(LoginModal);
 		const registerData = new Constructor().$mount();
-		expect(false).to.be.true;
 
 		registerData.registerName = "MaxMustermann";
 		registerData.registerEmail = "MaxMustermann@gmail.de";
@@ -60,7 +59,7 @@ describe('LandingPage.vue', () => {
 		registerData1.registerName = "MaxMustermann";
 		registerData1.registerEmail = "MaxMustermann@gmail.de";
 		registerData1.registerPassword = "CoolPW";
-    	
+
     	const button = registerData.$el.querySelector('#registerSubmit');
 		const clickEvent = new window.Event('click');
 		button.dispatchEvent(clickEvent);
