@@ -5,8 +5,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.pretrendr.usermanagement.businesslogic.UserService;
@@ -43,8 +43,8 @@ public class UserController {
 	 * @return
 	 * @author Tristan Schneider
 	 */
-	@RequestMapping("/get")
-	public ResponseEntity<User> user(@RequestParam(value = "name") UUID id) {
+	@RequestMapping("/get/{id}")
+	public ResponseEntity<User> user(@PathVariable final UUID id) {
 		return new ResponseEntity<User>(userDAO.findOne(id), HttpStatus.OK);
 	}
 

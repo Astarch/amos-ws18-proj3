@@ -26,6 +26,7 @@ public class Role {
 
 	@Id
 	private UUID id;
+
 	private String role;
 
 	@JsonIgnore

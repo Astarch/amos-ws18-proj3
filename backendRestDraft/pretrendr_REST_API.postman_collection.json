@@ -1,0 +1,168 @@
+{
+	"variables": [],
+	"info": {
+		"name": "pretrendr REST API",
+		"_postman_id": "dafc64e1-df45-acfd-cb35-3c0c38c2f12e",
+		"description": "This serves as a definition for the user management api for the backend.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"description": "",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var xAuthToken = postman.getResponseHeader(\"x-auth-token\");",
+									"if (xAuthToken !== null) {",
+									"  postman.setGlobalVariable(\"currentToken\", xAuthToken.replace(/['\"]+/g, ''));",
+									"}",
+									"",
+									"",
+									"tests[\"HTTPSTATUS OK\"] = responseCode.code == 200;",
+									"tests[\"TOKEN OK\"] = xAuthToken !== null;"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/auth/login",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic dXNlcjI6cGFzczI=",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "user2",
+									"description": ""
+								},
+								{
+									"key": "password",
+									"value": "pass2",
+									"description": ""
+								}
+							]
+						},
+						"description": "Method: POST\r\nParameters\r\n    - username\r\n    - password\r\nRequest Payload\r\n    - none\r\nResponse Payload:\r\n    - user (full json)\r\n    - x-auth-token"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/auth/logout",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic dXNlcjI6cGFzczI=",
+								"description": ""
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Method: DELETE\r\nParameters\r\n    - none\r\nRequest Payload\r\n    - x-auth-token\r\nResponse Payload:\r\n    - none"
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/auth/register",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic dXNlcjI6cGFzczI=",
+								"description": ""
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"user4\",\n    \"password\": \"pass4\",\n    \"firstname\": \"firstname4\",\n    \"lastname\": \"lastname4\",\n    \"email\": \"email4\",\n    \"address\": \"address4\",\n    \"phone\": \"phone4\"\n}"
+						},
+						"description": "Method: POST\r\nParameters\r\n    - none\r\nRequest Payload\r\n    - user (full json except ID)\r\n    - x-auth-token\r\nResponse Payload:\r\n    - user (full json with ID)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"description": "",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/user/getAll",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic dXNlcjI6cGFzczI=",
+								"description": ""
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get User",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/user/get/337bf2b7-a12e-4d48-ba84-1feaddbd4b20",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic dXNlcjI6cGFzczI=",
+								"description": ""
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Method: GET\r\nParameters\r\n    - id\r\nRequest Payload\r\n    - none\r\nResponse Payload:\r\n    - user (full json)\r\n    - x-auth-token"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
