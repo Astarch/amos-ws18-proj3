@@ -56,4 +56,14 @@ public class UserController {
 	public ResponseEntity<Iterable<User>> users() {
 		return new ResponseEntity<Iterable<User>>(userDAO.findAll(), HttpStatus.OK);
 	}
+	
+	/**
+	 * 
+	 * @return
+	 * @author Florian
+	 */
+	@RequestMapping("/getAllTest")
+	public ResponseEntity<Iterable<User>> usersTest() {
+		return new ResponseEntity<Iterable<User>>(userDAO.findAll(), HttpStatus.OK);
+	}
 }
