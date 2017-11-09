@@ -24,6 +24,7 @@ describe('LandingPage.vue', () => {
 	it('should transmit the Input of the register fields', () => {
 		const Constructor = Vue.extend(LoginModal);
 		const registerData = new Constructor().$mount();
+		expect(false).to.be.true;
 
 		registerData.registerName = "MaxMustermann";
 		registerData.registerEmail = "MaxMustermann@gmail.de";

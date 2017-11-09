@@ -57,7 +57,7 @@ jobs:
           name: unit
           command: cd web/big-data-ui; ./node_modules/karma/bin/karma start test/unit/karma.conf.js --single-run
           environment:
-            JUNIT_REPORT_PATH: /junit/
+            JUNIT_REPORT_PATH: /junit
             JUNIT_REPORT_NAME: test-results.xml
       - store_test_results:
           path: web/big-data-ui/test/unit/junit

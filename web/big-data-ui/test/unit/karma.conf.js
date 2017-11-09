@@ -33,8 +33,8 @@ module.exports = function (config) {
       ]
     },
      junitReporter: {
-      outputDir: process.env.JUNIT_REPORT_PATH, // results will be saved as $outputDir/$browserName.xml 
-      outputFile: process.env.JUNIT_REPORT_NAME, // if included, results will be saved as $outputDir/$browserName/$outputFile 
+      outputDir: './junit', // results will be saved as $outputDir/$browserName.xml 
+      outputFile: 'test-results.xml', // if included, results will be saved as $outputDir/$browserName/$outputFile 
       useBrowserName: false,  }
   });
 };
