@@ -14,7 +14,7 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
 
-    working_directory: ~/repo
+    working_directory: ~/repo/web
 
     steps:
       - checkout
@@ -22,18 +22,56 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-{{ checksum "web/big-data-ui/package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: yarn install
+      - run: 
+          name: install
+          command: cd web/big-data-ui; yarn install
+
+      - run: 
+          name: install karma
+          command: cd web/big-data-ui; yarn add karma
 
       - save_cache:
           paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+            - ./web/big-data-ui/node_modules
+          key: v1-dependencies-{{ checksum "web/big-data-ui/package.json" }}
         
       # run tests!
-      - run: yarn test
+      #- run: cd web/big-data-ui; yarn run unit
+
+  test:
+    docker:
+      - image: circleci/node:7.10
+    steps:
+      - checkout
+      - run: 
+          name: install
+          command: cd web/big-data-ui; yarn install
+      - run: 
+          name: install karma
+          command: cd web/big-data-ui; yarn add karma
+      - run: 
+          name: unit
+          command: cd web/big-data-ui; ./node_modules/karma/bin/karma start test/unit/karma.conf.js --single-run
+          environment:
+            JUNIT_REPORT_PATH: /junit/
+            JUNIT_REPORT_NAME: test-results.xml
+      - store_test_results:
+          path: web/big-data-ui/test/unit/junit
+      - store_artifacts:
+          path: web/big-data-ui/test/unit/junit
+      - store_artifacts:
+          path: web/big-data-ui/test/unit/coverage
 
 
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build

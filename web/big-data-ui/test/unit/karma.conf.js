@@ -13,7 +13,7 @@ module.exports = function (config) {
     // 2. add it to the `browsers` array below.
     browsers: ['PhantomJS'],
     frameworks: ['mocha', 'sinon-chai', 'phantomjs-shim'],
-    reporters: ['spec', 'coverage'],
+    reporters: ['spec', 'coverage', 'progress', 'junit'],
     files: [
       require.resolve('jquery'),
       require.resolve('popper.js'),
@@ -32,5 +32,9 @@ module.exports = function (config) {
         {type: 'text-summary'},
       ]
     },
+     junitReporter: {
+      outputDir: process.env.JUNIT_REPORT_PATH, // results will be saved as $outputDir/$browserName.xml 
+      outputFile: process.env.JUNIT_REPORT_NAME, // if included, results will be saved as $outputDir/$browserName/$outputFile 
+      useBrowserName: false,  }
   });
 };
