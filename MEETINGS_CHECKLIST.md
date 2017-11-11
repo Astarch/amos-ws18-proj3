@@ -5,7 +5,7 @@
     -   *Sprint Manager:*
     -   +  Create release branch from develop ("release/sprint-xx")
         +  Tag release branch with "sprint-xx-release-candidate"
-    -   *Product Owner*:
+    -   *New and old Product Owner*:
         +  Note release-candidate tag for sprint in release plan
         +  Ensure backlog is ready for planning
 2. Old Sprint review
