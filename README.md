@@ -2,6 +2,25 @@
 
 For meeting checklist click [here](https://github.com/Astarch/amos-ws18-proj3/blob/develop/MEETINGS_CHECKLIST.md)
 
+## Architecture / Stages / Continuous Integration
+
+We plit up our system into three stages:
+<img src="/architecture/architecture_stages.pdf" width="450">
+* Production stage 
+    * Based on master branch
+    * Prod-Server 1: 18.216.122.218 (Domain: pretrendr.com)
+         * Frontend
+         * Backend
+* Test/Quality stage 
+     * Based on developer branch
+     * Test-Server 1: 18.216.129.153 (Domain: pretrendr.org)
+         * Frontend
+         * Backend
+* Local Machine based on new feature branch
+
+Continuous integration backend: jenkins + bash script
+Continuous integration frontens: TODO
+
 ## Git Workflow (git-flow)
 
 **Feature Freeze:** Wednesday 23:59!
