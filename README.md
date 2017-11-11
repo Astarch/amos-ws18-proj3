@@ -2,10 +2,10 @@
 
 For meeting checklist click [here](https://github.com/Astarch/amos-ws18-proj3/blob/develop/MEETINGS_CHECKLIST.md)
 
-## Architecture / Stages / Continuous Integration
+## Architecture / Stages
 
-We plit up our system into three stages:
-<img src="/architecture/architecture_stages.pdf" width="450">
+The system consits of three stages:
+![Stages](architecture/architecture_stages.pdf?raw=true "Stages")
 * Production stage 
     * Based on master branch
     * Prod-Server 1: 18.216.122.218 (Domain: pretrendr.com)
@@ -18,8 +18,26 @@ We plit up our system into three stages:
          * Backend
 * Local Machine based on new feature branch
 
-Continuous integration backend: jenkins + bash script
-Continuous integration frontens: TODO
+## Continuous Integration
+### Continuous Integration Backend
+
+To achieve continuous integration we set up a jenkins service which check every five minutes the github repository. If there is a change on github, the following shell script will be executed:
+
+```bash
+sudo kill $(ps aux | grep 'java -jar pretrendr-' | awk '{print $2}' || true) || true
+sudo rm -rf /home/ubuntu/pretrendr/backend/backendRestDraft
+sudo mv "/var/lib/jenkins/workspace/Run Backend - prod system/backendRestDraft" /home/ubuntu/pretrendr/backend
+cd /home/ubuntu/pretrendr/backend/backendRestDraft
+sudo mvn compile
+sudo mvn clean install
+sudo mv /home/ubuntu/pretrendr/backend/backendRestDraft/target/pretrendr-0.1.0.jar /home/ubuntu/pretrendr/backend/pretrendr-0.1.0.jar
+cd /home/ubuntu/pretrendr/backend
+sudo java -jar pretrendr-0.1.0.jar </dev/null &>/dev/null &
+```
+
+### Continuous Integration Frontend
+
+TODO
 
 ## Git Workflow (git-flow)
 
