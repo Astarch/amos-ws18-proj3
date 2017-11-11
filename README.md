@@ -5,7 +5,7 @@ For meeting checklist click [here](https://github.com/Astarch/amos-ws18-proj3/bl
 ## Architecture / Stages
 
 The system consits of three stages:
-![Stages](architecture/architecture_stages.pdf?raw=true "Stages")
+![Stages Overview](architecture/architecture_stages.pdf?raw=true "Stages Overview")
 * Production stage 
     * Based on master branch
     * Prod-Server 1: 18.216.122.218 (Domain: pretrendr.com)
