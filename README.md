@@ -6,14 +6,14 @@ For meeting checklist click [here](https://github.com/Astarch/amos-ws18-proj3/bl
 
 The system consits of three stages:
 ![Stages Overview](architecture/architecture_stages.pdf?raw=true "Stages Overview")
-* Production stage 
+* Production / live stage 
     * Based on master branch
-    * Prod-Server 1: 18.216.122.218 (Domain: pretrendr.com)
+    * Prod-Server 1: 18.216.122.218 (Domain: pretrendr.com / .org)
          * Frontend
          * Backend
-* Test/Quality stage 
+* Test/Staging stage 
      * Based on developer branch
-     * Test-Server 1: 18.216.129.153 (Domain: pretrendr.org)
+     * Test-Server 1: 18.216.129.153 (Domain: staging.pretrendr.com / .org)
          * Frontend
          * Backend
 * Local Machine based on new feature branch
