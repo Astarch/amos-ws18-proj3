@@ -51,20 +51,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/auth/login").permitAll()
 			.antMatchers("/auth/logout").permitAll()
 			.anyRequest().authenticated()
-			.and()
-		.exceptionHandling
-			().authenticationEntryPoint(authenticationEntryPoint)
-			.and()
-	    .formLogin()
-	        .loginProcessingUrl("/auth/login")
-	        .usernameParameter("username")
-	        .passwordParameter("password")
-	        .successHandler(authenticationSuccessHandler)
-	        .failureHandler(authenticationFailureHandler)
-	        .and()
-	    .logout()
-	        .logoutUrl("/auth/logout")
-	        .invalidateHttpSession(true);
+		.and()
+		.exceptionHandling()
+			.authenticationEntryPoint(authenticationEntryPoint)
+		.and()
+		.formLogin()
+		.loginProcessingUrl("/auth/login")
+			.usernameParameter("username")
+			.passwordParameter("password")
+			.successHandler(authenticationSuccessHandler)
+			.failureHandler(authenticationFailureHandler)
+		.and()
+		.logout()
+			.logoutUrl("/auth/logout")
+			.invalidateHttpSession(true);
 		// @formatter:on
 	}
 
