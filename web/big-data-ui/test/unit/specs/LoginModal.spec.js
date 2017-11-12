@@ -59,7 +59,7 @@ describe('LandingPage.vue', () => {
 		registerData1.registerName = "MaxMustermann";
 		registerData1.registerEmail = "MaxMustermann@gmail.de";
 		registerData1.registerPassword = "CoolPW";
-    	
+
     	const button = registerData.$el.querySelector('#registerSubmit');
 		const clickEvent = new window.Event('click');
 		button.dispatchEvent(clickEvent);
