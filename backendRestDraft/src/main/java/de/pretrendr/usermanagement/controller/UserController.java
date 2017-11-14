@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import de.pretrendr.usermanagement.model.User;
  */
 @RequestMapping("/api/user")
 @RestController
+@CrossOrigin
 public class UserController {
 
 	private final UserService userService;
@@ -56,7 +58,7 @@ public class UserController {
 	public ResponseEntity<Iterable<User>> users() {
 		return new ResponseEntity<Iterable<User>>(userDAO.findAll(), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * 
 	 * @return
