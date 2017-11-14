@@ -23,6 +23,10 @@
               <a href="#register" ref="register" class="btn btn-lg btn-primary mx-1" v-on:click.prevent="open('register')">Register</a>
               <a href="#login" class="btn btn-lg btn-primary mx-1" v-on:click.prevent="open('login')">Log In</a>
             </div>
+
+            <div id=apiTestButtons>
+              <a href="#getAll" ref="getAll" class="btn btn-lg btn-primary mx-1" v-on:click.prevent="getAllUsers()">getAll</a>
+            </div>
           </div>
         </div>
       </div>
@@ -52,6 +56,7 @@
 
 <script>
   import LoginModal from './LoginModal';
+  import axios from 'axios';
 
 
   export default {
@@ -70,6 +75,26 @@
       close(event) {
         event.preventDefault();
         this.modalActive = false;
+      },
+
+      getAllUsers(){
+
+        let http = axios.create({
+          baseURL: `http://staging.pretrendr.com:8081/`,
+          withCredentials: true,
+          auth: {
+            username: 'user2',
+            password: 'pass2'
+          },
+        });
+
+        http.get('/api/user/getAll')
+             .then(function (response) {
+               console.log(response);
+             })
+             .catch(function (error) {
+               console.log(error);
+             });
       },
     },
   }
