@@ -3,6 +3,7 @@ package de.pretrendr.usermanagement.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +20,7 @@ import de.pretrendr.usermanagement.model.pojo.RegUser;
  */
 @RequestMapping("/auth")
 @RestController
+@CrossOrigin
 public class AuthenticationController {
 	private final UserService userService;
 	private final UserDAO userDAO;

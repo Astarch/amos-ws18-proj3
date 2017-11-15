@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "pretrendr REST API",
-		"_postman_id": "dafc64e1-df45-acfd-cb35-3c0c38c2f12e",
+		"_postman_id": "bcaec626-b9f5-6c45-21eb-71b6702082a7",
 		"description": "This serves as a definition for the user management api for the backend.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -20,13 +20,10 @@
 								"type": "text/javascript",
 								"exec": [
 									"var xAuthToken = postman.getResponseHeader(\"x-auth-token\");",
-									"if (xAuthToken !== null) {",
-									"  postman.setGlobalVariable(\"currentToken\", xAuthToken.replace(/['\"]+/g, ''));",
-									"}",
-									"",
-									"",
+									"tests[\"TOKEN OK\"] = xAuthToken !== null;",
+									"postman.setGlobalVariable(\"currentToken\", xAuthToken);",
 									"tests[\"HTTPSTATUS OK\"] = responseCode.code == 200;",
-									"tests[\"TOKEN OK\"] = xAuthToken !== null;"
+									""
 								]
 							}
 						}
@@ -77,7 +74,10 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": "Method: DELETE\r\nParameters\r\n    - none\r\nRequest Payload\r\n    - x-auth-token\r\nResponse Payload:\r\n    - none"
 					},
 					"response": []
@@ -135,7 +135,10 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": ""
 					},
 					"response": []
@@ -157,7 +160,10 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": "Method: GET\r\nParameters\r\n    - id\r\nRequest Payload\r\n    - none\r\nResponse Payload:\r\n    - user (full json)\r\n    - x-auth-token"
 					},
 					"response": []
