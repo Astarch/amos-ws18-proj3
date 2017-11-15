@@ -1,6 +1,6 @@
 <template>
   <div id="landing-page">
-      <header-nav></header-nav>
+    <header-nav></header-nav>
     <div class="py-5 gradient-overlay"
          style="background-image: url(&quot;https://pingendo.github.io/templates/sections/assets/cover_event.jpg&quot;);">
       <div class="container py-5">
@@ -13,18 +13,22 @@
             <p class="lead mb-5">To analyse and visualise your Data and find trends in it.&nbsp;
               <br></p>
             <div id=loginButtons>
-              <a href="#register" ref="register" class="btn btn-lg btn-primary mx-1" v-on:click.prevent="open('register')">Register</a>
+              <a href="#register" ref="register" class="btn btn-lg btn-primary mx-1"
+                 v-on:click.prevent="open('register')">Register</a>
               <a href="#login" class="btn btn-lg btn-primary mx-1" v-on:click.prevent="open('login')">Log In</a>
             </div>
 
             <div id=apiTestButtons>
-              <a href="#getAll" ref="getAll" class="btn btn-lg btn-primary mx-1" v-on:click.prevent="getAllUsers()">getAll</a>
+              <a href="#getAll" ref="getAll" class="btn btn-lg btn-primary mx-1" v-on:click.prevent="getAllUsers()">doLogin</a>
+              <div class="card">
+                <div class="card-body text-dark">{{requestAnswer}}</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-   <footer-fix></footer-fix>
+    <footer-fix></footer-fix>
 
     <login-modal
       :is-active="modalActive"
@@ -41,14 +45,16 @@
 <script>
   import LoginModal from './LoginModal';
   import axios from 'axios';
+  import qs from 'qs';
 
 
   export default {
     name: 'landing',
-    components: { LoginModal },
+    components: {LoginModal},
     data: () => ({
       modalActive: false,
       modalType: 'login',
+      requestAnswer: ''
     }),
     methods: {
       open(which) {
@@ -61,28 +67,39 @@
         this.modalActive = false;
       },
 
-      getAllUsers(){
+      getAllUsers() {
+        let port = "8081/"
+        let localhostUrl = "http://localhost:" + port
+        let stagingUrl = "http://staging.pretrendr.com:" + port
+
+        var username = 'user2';
+        var password = 'pass2';
 
         let http = axios.create({
-          baseURL: `http://staging.pretrendr.com:8081/`,
+          baseURL: localhostUrl,
           withCredentials: true,
-          auth: {
-            username: 'user2',
-            password: 'pass2'
-          },
+          auth: qs.stringify({
+            username: username,
+            password: password
+          }),
         });
 
-        http.get('/api/user/getAll')
-             .then(function (response) {
-               console.log(response);
-             })
-             .catch(function (error) {
-               console.log(error);
-             });
+        http.post('/auth/login', qs.stringify({
+          username: username,
+          password: password
+        }))
+            .then(response => {
+              console.log(response);
+              this.requestAnswer = response.data;
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+
+
       },
     },
   }
-
 
 
 </script>
