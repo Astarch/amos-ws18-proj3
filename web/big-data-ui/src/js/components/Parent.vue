@@ -1,19 +1,17 @@
 <template>
-<div class="row">
-    <div class="col s12" style="margin-top: 70px">
+    <div class="row" style="margin-top: 70px">
         <!-- include child component and pass data -->
-        <graph class="col s12" :data="dataset"></graph>
+        <chart class="col s6" :data="dataset"></chart>
     </div>
-</div>
 </template>
 <script>
 
-import graph from "./Graph"
+import chart from "./Chart"
 import * as d3 from 'd3'
 
         export default {
             components: {
-                graph
+                chart
         },
             data: function () {
                 return {
