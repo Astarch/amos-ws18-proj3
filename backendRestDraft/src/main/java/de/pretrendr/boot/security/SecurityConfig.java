@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.session.web.http.HeaderHttpSessionStrategy;
 import org.springframework.session.web.http.HttpSessionStrategy;
 
@@ -35,6 +36,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private RESTAuthenticationFailureHandler authenticationFailureHandler;
 	@Autowired
 	private RESTAuthenticationSuccessHandler authenticationSuccessHandler;
+
+	@Autowired
+	private PretrendrCorsFilter myCorsFilter;
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -63,7 +67,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.logout()
 			.logoutUrl("/auth/logout")
-			.invalidateHttpSession(true);
+			.invalidateHttpSession(true)
+		.and()
+		.addFilterBefore(myCorsFilter, ChannelProcessingFilter.class);
 		// @formatter:on
 	}
 

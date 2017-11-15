@@ -54,6 +54,7 @@ public class UserController {
 	 * @return
 	 * @author Tristan Schneider
 	 */
+	@CrossOrigin
 	@RequestMapping("/getAll")
 	public ResponseEntity<Iterable<User>> users() {
 		return new ResponseEntity<Iterable<User>>(userDAO.findAll(), HttpStatus.OK);
