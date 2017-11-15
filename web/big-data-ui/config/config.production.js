@@ -9,7 +9,7 @@ module.exports = {
   appName: 'Prod App',
   index: path.resolve(__dirname, '../dist/index.html'),
   assetsRoot: path.resolve(__dirname, '../dist'),
-  assetsSubDirectory: 'assets',
+  assetsSubDirectory: 'static',
   assetsPublicPath: '/',
   // Gzip off by default as many popular static hosts such as
   // Surge or Netlify already gzip all static assets for you.

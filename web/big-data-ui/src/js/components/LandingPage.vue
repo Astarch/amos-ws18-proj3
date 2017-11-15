@@ -39,8 +39,8 @@
 
 
   export default {
-    components: { LoginModal },
     name: 'landing',
+    components: { LoginModal },
     data: () => ({
       modalActive: false,
       modalType: 'login',
@@ -58,7 +58,7 @@
     },
   }
 
-  
+
 
 </script>
 
