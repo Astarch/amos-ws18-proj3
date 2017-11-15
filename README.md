@@ -2,6 +2,43 @@
 
 For meeting checklist click [here](https://github.com/Astarch/amos-ws18-proj3/blob/develop/MEETINGS_CHECKLIST.md)
 
+## Architecture / Stages
+
+The system consits of three stages:
+![Stages Overview](architecture/architecture_stages.pdf?raw=true "Stages Overview")
+* Production / live stage 
+    * Based on master branch
+    * Prod-Server 1: 18.216.122.218 (Domain: pretrendr.com / .org)
+         * Frontend
+         * Backend
+* Test/Staging stage 
+     * Based on developer branch
+     * Test-Server 1: 18.216.129.153 (Domain: staging.pretrendr.com / .org)
+         * Frontend
+         * Backend
+* Local Machine based on new feature branch
+
+## Continuous Integration
+### Continuous Integration Backend
+
+To achieve continuous integration we set up a jenkins service which check every five minutes the github repository. If there is a change on github, the following shell script will be executed:
+
+```bash
+sudo kill $(ps aux | grep 'java -jar pretrendr-' | awk '{print $2}' || true) || true
+sudo rm -rf /home/ubuntu/pretrendr/backend/backendRestDraft
+sudo mv "/var/lib/jenkins/workspace/Run Backend - prod system/backendRestDraft" /home/ubuntu/pretrendr/backend
+cd /home/ubuntu/pretrendr/backend/backendRestDraft
+sudo mvn compile
+sudo mvn clean install
+sudo mv /home/ubuntu/pretrendr/backend/backendRestDraft/target/pretrendr-0.1.0.jar /home/ubuntu/pretrendr/backend/pretrendr-0.1.0.jar
+cd /home/ubuntu/pretrendr/backend
+sudo java -jar pretrendr-0.1.0.jar </dev/null &>/dev/null &
+```
+
+### Continuous Integration Frontend
+
+TODO
+
 ## Git Workflow (git-flow)
 
 **Feature Freeze:** Wednesday 23:59!
