@@ -59,7 +59,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        keys:
+          keys:
           - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
           - v1-dependencies
       - run: 
@@ -82,7 +82,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        keys:
+          keys:
           - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
           - v1-dependencies
       - run: 
