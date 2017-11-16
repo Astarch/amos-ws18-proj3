@@ -24,6 +24,11 @@ import lombok.ToString;
 @EqualsAndHashCode(exclude = "users")
 public class Role {
 
+	public Role(UUID id, String role) {
+		this.id = id;
+		this.role = role;
+	}
+
 	@Id
 	private UUID id;
 
