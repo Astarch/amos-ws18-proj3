@@ -96,7 +96,7 @@ jobs:
           working_directory: /
           command: |
             sudo apt-get -y -qq install awscli
-            aws s3 sync ~/repo/web/big-data-ui/dist s3://staging.pretrendrfrontend/ --delete
+            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --delete
 
 
 
