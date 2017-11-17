@@ -2,6 +2,46 @@
 
 For meeting checklist click [here](https://github.com/Astarch/amos-ws18-proj3/blob/develop/MEETINGS_CHECKLIST.md)
 
+## Architecture / Stages
+
+The system consits of three stages:
+![Stages Overview](architecture/architecture_stages.pdf?raw=true "Stages Overview")
+* Production / live stage 
+    * Based on master branch
+    * Prod-Server 1: 18.216.122.218
+         * Backend
+    * S3-Bucket 1: pretrendr.com
+         * Frontend
+* Test/Staging stage 
+     * Based on developer branch
+     * Test-Server 1: 18.216.129.153
+         * Backend
+    * S3-Bucket 1: staging.pretrendr.com
+         * Frontend
+* Local Machine based on new feature branch
+
+## Continuous Integration
+### Continuous Integration Backend
+
+To achieve continuous integration we set up a jenkins service which check the github repository every five minutes. If there is a change on github, the following shell script will be executed:
+
+```bash
+sudo rm -rf /home/ubuntu/pretrendr/backend/backendRestDraft || true
+sudo mv "/var/lib/jenkins/workspace/deploy-test-system/backendRestDraft" /home/ubuntu/pretrendr/backend
+cd /home/ubuntu/pretrendr/backend/backendRestDraft
+sudo mvn compile
+sudo mvn clean install || true
+sudo rm /home/ubuntu/pretrendr/backend/pretrendr-0.1.0.jar || true
+sudo mv /home/ubuntu/pretrendr/backend/backendRestDraft/target/pretrendr-0.1.0.jar /home/ubuntu/pretrendr/backend/pretrendr-0.1.0.jar
+sudo rm -rf /var/lib/jenkins/workspace/* || true
+cd /home/ubuntu/pretrendr/backend
+sudo java -jar pretrendr-0.1.0.jar </dev/null &>/dev/null &
+```
+
+### Continuous Integration Frontend
+
+TODO
+
 ## Git Workflow (git-flow)
 
 **Feature Freeze:** Wednesday 23:59!
@@ -31,18 +71,6 @@ To start developing a new feature please follow the next steps:
 3. Merge `release` into `master` and back into `develop` if bugfixes have been made
 4. Delete `release` branch
 5. Tag `master` as release on github! 
-
-
-## User Database Setup
-The database for our user management is based on Redis (NoSQL database)
-We are running on a single EC2 instance (AWS):
-
-- Type: t2.micro
-- OS: Ubuntu Server 16.04 LTS
-- DNS: ec2-18-221-3-38.us-east-2.compute.amazonaws.com
-- Redis version: 3.2.3
-
-Point of contact: *Florian*
 
 
 

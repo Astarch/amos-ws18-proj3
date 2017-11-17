@@ -1,38 +1,54 @@
-//package de.pretrendr;
+// package de.pretrendr;
 //
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-//import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+// import static org.junit.Assert.assertEquals;
 //
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.test.context.junit4.SpringRunner;
-//import org.springframework.test.web.servlet.MockMvc;
+// import org.junit.Before;
+// import org.junit.Test;
+// import org.junit.runner.RunWith;
+// import org.mockito.Mock;
+// import org.springframework.boot.test.context.SpringBootTest;
+// import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+// import org.springframework.test.context.web.WebAppConfiguration;
 //
-////@RunWith(SpringRunner.class)
-////@SpringBootTest
-////@AutoConfigureMockMvc
-//public class UserControllerTest {
+// import de.pretrendr.boot.Application;
+// import de.pretrendr.usermanagement.businesslogic.UserService;
+// import de.pretrendr.usermanagement.controller.UserController;
+// import de.pretrendr.usermanagement.dataccess.UserDAO;
+// import de.pretrendr.usermanagement.dataccess.UserRedisDAO;
+// import de.pretrendr.usermanagement.model.User;
 //
-////	@Autowired
-////	private MockMvc mockMvc;
-////
-////	@Test
-////	public void noParamGreetingShouldReturnDefaultMessage() throws Exception {
-////
-////		this.mockMvc.perform(get("/greeting")).andDo(print()).andExpect(status().isOk())
-////				.andExpect(jsonPath("$.content").value("Hello, World!"));
-////	}
-////
-////	@Test
-////	public void paramGreetingShouldReturnTailoredMessage() throws Exception {
-////
-////		this.mockMvc.perform(get("/greeting").param("name", "Spring Community")).andDo(print())
-////				.andExpect(status().isOk()).andExpect(jsonPath("$.content").value("Hello, Spring Community!"));
-////	}
+// @RunWith(SpringJUnit4ClassRunner.class)
+// @SpringBootTest(classes = Application.class)
+// @WebAppConfiguration
+// public class UserControllerTest {
 //
-//}
+// @Mock
+// UserService userService;
+//
+// @Mock
+// UserDAO userDAO;
+//
+// @Mock
+// UserRedisDAO userRedisDAO;
+//
+// UserController userController;
+//
+// @Before
+// public void init() {
+// userController = new UserController(userService, userDAO, userRedisDAO);
+// }
+//
+// @Test
+// public void testExample() {
+// // Arrange
+// String testUserName = "testusername";
+//
+// // Act
+// User u = userController.user(testUserName);
+//
+// // Assert
+// assertEquals(testUserName, u.getUsername());
+//
+// }
+//
+// }

@@ -13,10 +13,13 @@ module.exports = function (config) {
     // 2. add it to the `browsers` array below.
     browsers: ['PhantomJS'],
     frameworks: ['mocha', 'sinon-chai', 'phantomjs-shim'],
-    reporters: ['spec', 'coverage'],
-    files: ['./index.js'],
+    reporters: ['spec', 'coverage', 'progress', 'junit'],
+    files: [
+      require.resolve('jquery'),
+      require.resolve('popper.js'),
+      './index.js'],
     preprocessors: {
-      './index.js': ['webpack', 'sourcemap']
+      './index.js': ['webpack', 'sourcemap'],
     },
     webpack: webpackConfig,
     webpackMiddleware: {
@@ -25,9 +28,13 @@ module.exports = function (config) {
     coverageReporter: {
       dir: './coverage',
       reporters: [
-        { type: 'lcov', subdir: '.' },
-        { type: 'text-summary' },
+        {type: 'lcov', subdir: '.'},
+        {type: 'text-summary'},
       ]
     },
+     junitReporter: {
+      outputDir: './junit', // results will be saved as $outputDir/$browserName.xml 
+      outputFile: 'test-results.xml', // if included, results will be saved as $outputDir/$browserName/$outputFile 
+      useBrowserName: false,  }
   });
 };
