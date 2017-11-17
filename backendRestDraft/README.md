@@ -24,6 +24,15 @@
 		- search **m2e-apt**
 		- install
 		- restart eclipse
+		
+7) Eclipse Preferences
+    - `Preferences->Java->Code Style->Formatter->Edit->On/Off Tags`
+    [x] **Enable Off/On tags**
+    - `Preferences->Java->Editor->SaveActions`
+    [x] Perform the selected actions on save
+    [x] Format source code
+    [x] Organize Imports
+    [x] Additional Actions
 
 You should be able to build the project now. Simply right click the project -> Run as ... -> Spring Boot App
 
