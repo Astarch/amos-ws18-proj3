@@ -1,18 +1,18 @@
 {
 	"variables": [],
 	"info": {
-		"name": "pretrendr REST API",
-		"_postman_id": "bcaec626-b9f5-6c45-21eb-71b6702082a7",
+		"name": "pretrendr.de/api",
+		"_postman_id": "8b705960-24f8-a084-4ece-7e5b0058174b",
 		"description": "This serves as a definition for the user management api for the backend.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "auth",
+			"name": "/auth",
 			"description": "",
 			"item": [
 				{
-					"name": "Login",
+					"name": "/login",
 					"event": [
 						{
 							"listen": "test",
@@ -33,8 +33,13 @@
 						"method": "POST",
 						"header": [
 							{
-								"key": "Authorization",
-								"value": "Basic dXNlcjI6cGFzczI=",
+								"key": "username",
+								"value": "user2",
+								"description": ""
+							},
+							{
+								"key": "password",
+								"value": "pass2",
 								"description": ""
 							}
 						],
@@ -58,16 +63,11 @@
 					"response": []
 				},
 				{
-					"name": "Logout",
+					"name": "/logout",
 					"request": {
 						"url": "http://{{baseurl}}:{{baseport}}/auth/logout",
 						"method": "GET",
 						"header": [
-							{
-								"key": "Authorization",
-								"value": "Basic dXNlcjI6cGFzczI=",
-								"description": ""
-							},
 							{
 								"key": "x-auth-token",
 								"value": "{{currentToken}}",
@@ -83,7 +83,7 @@
 					"response": []
 				},
 				{
-					"name": "Register",
+					"name": "/register",
 					"request": {
 						"url": "http://{{baseurl}}:{{baseport}}/auth/register",
 						"method": "POST",
@@ -92,21 +92,11 @@
 								"key": "Content-Type",
 								"value": "application/json",
 								"description": ""
-							},
-							{
-								"key": "Authorization",
-								"value": "Basic dXNlcjI6cGFzczI=",
-								"description": ""
-							},
-							{
-								"key": "x-auth-token",
-								"value": "{{currentToken}}",
-								"description": ""
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"user4\",\n    \"password\": \"pass4\",\n    \"firstname\": \"firstname4\",\n    \"lastname\": \"lastname4\",\n    \"email\": \"email4\",\n    \"address\": \"address4\",\n    \"phone\": \"phone4\"\n}"
+							"raw": "{\n    \"username\": \"user4\",\n    \"password\": \"pass4\",\n    \"firstname\": \"firstname4\",\n    \"lastname\": \"lastname4\",\n    \"email\": \"email4@test.me\",\n    \"address\": \"address4\",\n    \"phone\": \"phone4\"\n}"
 						},
 						"description": "Method: POST\r\nParameters\r\n    - none\r\nRequest Payload\r\n    - user (full json except ID)\r\n    - x-auth-token\r\nResponse Payload:\r\n    - user (full json with ID)"
 					},
@@ -115,20 +105,15 @@
 			]
 		},
 		{
-			"name": "user",
+			"name": "/user",
 			"description": "",
 			"item": [
 				{
-					"name": "Get All Users",
+					"name": "/getAll",
 					"request": {
 						"url": "http://{{baseurl}}:{{baseport}}/api/user/getAll",
 						"method": "GET",
 						"header": [
-							{
-								"key": "Authorization",
-								"value": "Basic dXNlcjI6cGFzczI=",
-								"description": ""
-							},
 							{
 								"key": "x-auth-token",
 								"value": "{{currentToken}}",
@@ -144,16 +129,11 @@
 					"response": []
 				},
 				{
-					"name": "Get User",
+					"name": "/get/{id}",
 					"request": {
 						"url": "http://{{baseurl}}:{{baseport}}/api/user/get/337bf2b7-a12e-4d48-ba84-1feaddbd4b20",
 						"method": "GET",
 						"header": [
-							{
-								"key": "Authorization",
-								"value": "Basic dXNlcjI6cGFzczI=",
-								"description": ""
-							},
 							{
 								"key": "x-auth-token",
 								"value": "{{currentToken}}",

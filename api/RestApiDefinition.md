@@ -1,52 +1,79 @@
 # REST API Definition
+---
+---
+## Authentication
+---
 
-### /login
-    Method: POST
-    Parameters
-        - username
-        - password
-    Request Payload
-        - none
-    Response Payload:
-        - user (full json)
-        - x-auth-token
+### /auth/login
+    Request
+        Method: POST
+        Headers: 
+        Parameters:
+        Body: form-data
+            - username
+            - password
+
+    Response:
+        Headers: x-auth-token
+        Content-Type: json
+        Body: User
+        Status: 200 OK
+            - 401 unauthorized
+### /auth/logout
+    Request
+        Method: GET
+        Headers: x-auth-token
+        Parameters:
+        Body: 
+
+    Response:
+        Headers: x-auth-token (new session)
+        Content-Type:
+        Body: 
+        Status: 401 unauthorized
         
-### /login
-    Method: DELETE
-    Parameters
-        - none
-    Request Payload
-        - x-auth-token
-    Response Payload:
-        - none
-    
-### /user
-    Method: GET
-    Parameters
-        - id
-    Request Payload
-        - none
-    Response Payload:
-        - user (full json)
-        - x-auth-token
-
-### /users
-    Method: GET
-    Parameters
-        - limit
-        - offset
-        - searchterm
-    Request Payload
-        - x-auth-token
-    Response Payload:
-        - List of users
-
 ### /register
-    Method: POST
-    Parameters
-        - none
-    Request Payload
-        - user (full json except ID)
-        - x-auth-token
-    Response Payload:
-        - user (full json with ID)
+    Request
+        Method: POST
+        Headers: content-type
+        Parameters:
+        Body: User
+
+    Response:
+        Headers:
+        Content-Type: json
+        Body: User
+        Status: 200 OK
+            - 409 Conflict
+            - 406 Not Acceptable
+
+---
+---
+## UserManagement
+---
+### /api/user/get/{id}
+    Request
+        Method: GET
+        Headers: x-auth-token
+        Parameters:
+        Body: 
+
+    Response:
+        Headers:
+        Content-Type: json
+        Body: User
+        Status: 200 OK
+
+### /api/user/getAll
+    Request
+        Method: GET
+        Headers: x-auth-token
+        Parameters:
+        Body: 
+
+    Response:
+        Headers:
+        Content-Type: json
+        Body: List<User>
+        Status: 200 OK
+
