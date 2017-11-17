@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Maps;
 
-import de.pretrendr.usermanagement.model.pojo.GraphData;
 import scala.util.Random;
 
 @RequestMapping("/api/dummy")
@@ -21,7 +20,8 @@ import scala.util.Random;
 public class DummyController {
 
 	@RequestMapping(value = "/graphData", method = RequestMethod.GET)
-	public ResponseEntity<GraphData> getDummyGraphData(@RequestParam(name = "size", defaultValue = "10") int size,
+	public ResponseEntity<Map<String, String>> getDummyGraphData(
+			@RequestParam(name = "size", defaultValue = "10") int size,
 			@RequestParam(name = "range", defaultValue = "100") int range) {
 		Map<String, String> content = Maps.newHashMap();
 		Random rand = new Random();
@@ -29,9 +29,9 @@ public class DummyController {
 			content.put("word" + Integer.toString(i), Integer.toString(rand.nextInt(range)));
 		}
 
-		GraphData graphData = new GraphData(content);
+		// GraphData graphData = new GraphData(content);
 
-		return new ResponseEntity<GraphData>(graphData, HttpStatus.OK);
+		return new ResponseEntity<Map<String, String>>(content, HttpStatus.OK);
 
 	}
 }
