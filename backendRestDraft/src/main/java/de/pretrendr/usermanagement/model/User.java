@@ -91,8 +91,10 @@ public class User implements Serializable, UserDetails {
 	// @JsonIgnore
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		for (Role role : roles) {
-			authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRole().toUpperCase()));
+		if (roles != null && !roles.isEmpty()) {
+			for (Role role : roles) {
+				authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRole().toUpperCase()));
+			}
 		}
 		return authorities;
 	}

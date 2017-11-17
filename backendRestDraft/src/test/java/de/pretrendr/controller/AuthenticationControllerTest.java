@@ -17,13 +17,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.http.MockHttpOutputMessage;
-import org.springframework.test.context.ContextConfiguration;
 
 import de.pretrendr.PretrendrTestBase;
 import de.pretrendr.usermanagement.model.Role;
 import de.pretrendr.usermanagement.model.User;
 
-@ContextConfiguration
 public class AuthenticationControllerTest extends PretrendrTestBase {
 
 	private User user;
@@ -64,7 +62,7 @@ public class AuthenticationControllerTest extends PretrendrTestBase {
 	}
 
 	@Test
-	public void register_InvalidEmail_TODO() throws Exception {
+	public void register_InvalidEmail_406() throws Exception {
 		User invalidEmail = new User(UUID.randomUUID(), "otherUsername", "password", "firstname", "lastname",
 				"invalidEmail", "address", "phone", null);
 		mockMvc.perform(post("/auth/register").content(this.json(invalidEmail)).contentType(jsonContentType))
@@ -72,7 +70,7 @@ public class AuthenticationControllerTest extends PretrendrTestBase {
 	}
 
 	@Test
-	public void register_ValidEmail_TODO() throws Exception {
+	public void register_ValidEmail_200() throws Exception {
 		User validEmail = new User(UUID.randomUUID(), "otherUsername", "password", "firstname", "lastname",
 				"validEmail@test.me", "address", "phone", null);
 		mockMvc.perform(post("/auth/register").content(this.json(validEmail)).contentType(jsonContentType))

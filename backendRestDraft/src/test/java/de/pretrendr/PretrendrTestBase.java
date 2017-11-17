@@ -55,6 +55,7 @@ public abstract class PretrendrTestBase {
 		assertNotNull("the JSON message converter must not be null", this.mappingJackson2HttpMessageConverter);
 	}
 
+	@SuppressWarnings("unchecked")
 	protected String json(Object o) throws IOException {
 		MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
 		this.mappingJackson2HttpMessageConverter.write(o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
