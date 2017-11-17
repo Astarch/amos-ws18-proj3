@@ -12,6 +12,8 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.collect.Lists;
+
 import de.pretrendr.PretrendrTestBase;
 import de.pretrendr.usermanagement.model.Role;
 import de.pretrendr.usermanagement.model.User;
@@ -25,8 +27,8 @@ public class UserControllerTest extends PretrendrTestBase {
 	public void setup() throws Exception {
 		this.user = userDAO.save(new User(UUID.randomUUID(), "username", "password", "firstname", "lastname",
 				"existing@mail.me", "address", "phone", null));
-		this.rolesList.add(roleDAO.save(new Role(UUID.randomUUID(), "USER")));
-		this.rolesList.add(roleDAO.save(new Role(UUID.randomUUID(), "ADMIN")));
+		this.rolesList = Lists.newArrayList(roleDAO.save(new Role(UUID.randomUUID(), "USER")),
+				roleDAO.save(new Role(UUID.randomUUID(), "ADMIN")));
 	}
 
 	@Test

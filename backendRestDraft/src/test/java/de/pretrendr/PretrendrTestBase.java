@@ -34,6 +34,7 @@ public abstract class PretrendrTestBase {
 
 	protected MockMvc mockMvc;
 
+	@SuppressWarnings("rawtypes")
 	protected HttpMessageConverter mappingJackson2HttpMessageConverter;
 
 	@Autowired
