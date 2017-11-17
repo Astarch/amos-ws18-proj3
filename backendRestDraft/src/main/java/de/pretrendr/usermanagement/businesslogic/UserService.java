@@ -1,5 +1,10 @@
 package de.pretrendr.usermanagement.businesslogic;
 
+import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.EntityNotFoundException;
+
 import de.pretrendr.usermanagement.model.User;
 import de.pretrendr.usermanagement.model.pojo.RegUser;
 
@@ -32,4 +37,16 @@ public interface UserService {
 	 *         else null
 	 */
 	User register(RegUser userReg);
+
+	/**
+	 * Retrieves user with the give id from the database. If not found, an
+	 * {@link EntityNotFoundException} will be thrown.
+	 * 
+	 * @param userId
+	 * @return user
+	 */
+	User getUser(UUID userId);
+
+	List<User> getAll();
+
 }

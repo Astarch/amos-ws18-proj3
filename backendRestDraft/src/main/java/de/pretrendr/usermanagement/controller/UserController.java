@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.pretrendr.usermanagement.businesslogic.UserService;
-import de.pretrendr.usermanagement.dataccess.UserDAO;
 import de.pretrendr.usermanagement.model.User;
 
 /**
@@ -23,8 +22,6 @@ import de.pretrendr.usermanagement.model.User;
 public class UserController {
 
 	private final UserService userService;
-	private final UserDAO userDAO;
-	// private final UserRedisDAO userRedisDAO;
 
 	/**
 	 * @param userService
@@ -33,11 +30,8 @@ public class UserController {
 	 * @author Tristan Schneider
 	 */
 	@Autowired
-	public UserController(UserService userService, UserDAO userDAO) {
-		// , UserRedisDAO userRedisDAO) {
+	public UserController(UserService userService) {
 		this.userService = userService;
-		this.userDAO = userDAO;
-		// this.userRedisDAO = userRedisDAO;
 	}
 
 	/**
@@ -47,7 +41,7 @@ public class UserController {
 	 */
 	@RequestMapping("/get/{id}")
 	public ResponseEntity<User> user(@PathVariable final UUID id) {
-		return new ResponseEntity<User>(userDAO.findOne(id), HttpStatus.OK);
+		return new ResponseEntity<User>(userService.getUser(id), HttpStatus.OK);
 	}
 
 	/**
@@ -56,7 +50,7 @@ public class UserController {
 	 */
 	@RequestMapping("/getAll")
 	public ResponseEntity<Iterable<User>> users() {
-		return new ResponseEntity<Iterable<User>>(userDAO.findAll(), HttpStatus.OK);
+		return new ResponseEntity<Iterable<User>>(userService.getAll(), HttpStatus.OK);
 	}
 
 	/**
@@ -66,6 +60,6 @@ public class UserController {
 	 */
 	@RequestMapping("/getAllTest")
 	public ResponseEntity<Iterable<User>> usersTest() {
-		return new ResponseEntity<Iterable<User>>(userDAO.findAll(), HttpStatus.OK);
+		return new ResponseEntity<Iterable<User>>(userService.getAll(), HttpStatus.OK);
 	}
 }

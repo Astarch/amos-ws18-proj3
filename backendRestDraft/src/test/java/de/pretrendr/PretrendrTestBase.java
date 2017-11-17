@@ -21,6 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import de.pretrendr.boot.Application;
+import de.pretrendr.usermanagement.dataccess.RoleDAO;
+import de.pretrendr.usermanagement.dataccess.UserDAO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -35,7 +37,13 @@ public abstract class PretrendrTestBase {
 	protected HttpMessageConverter mappingJackson2HttpMessageConverter;
 
 	@Autowired
-	private WebApplicationContext webApplicationContext;
+	protected RoleDAO roleDAO;
+
+	@Autowired
+	protected UserDAO userDAO;
+
+	@Autowired
+	protected WebApplicationContext webApplicationContext;
 
 	@Autowired
 	void setConverters(HttpMessageConverter<?>[] converters) {
