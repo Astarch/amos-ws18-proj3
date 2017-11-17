@@ -1,38 +1,53 @@
-## Spring Setup Instructions
+# Spring Setup Instructions
 
-1) install java jdk1.8
+## Frontend Developers
+### 1) install java jdk1.8
 
-2) install maven
-	- start a NEW command line
-	- run **mvn -v**
-	- if this works and the java home is set corretly, you are fine so far.
-	
-3) install sts
-    - Take the 64 bit version (if you are on a 64bit system), because 32 might not start at all.
-4) install lombok
-	- save lombok.jar parallel to STS.exe
-	- run **java -jar lombok.jar**
-		- select STS.exe
-		- install/update
+### 2) install maven
+- start a NEW command line
+- run **mvn -v**
+- if this works and the java home is set corretly, you are fine so far.
+
+### 3) start run.bat/run.sh
+- execute **run.bat** or **./run.sh**
+    - This will build and run the server with cleansed database.
+    - Tests will be skipped for speedup.
+
+## Backend Developer
+### 1) install java jdk1.8
+
+### 2) install maven
+- start a NEW command line
+- run **mvn -v**
+- if this works and the java home is set corretly, you are fine so far.
+
+### 3) install sts
+- Take the 64 bit version (if you are on a 64bit system), because 32 might not start at all.
+
+### 4) install lombok
+- save lombok.jar parallel to STS.exe
+- run **java -jar lombok.jar**
+	- select STS.exe
+	- install/update
 		
-5) create workspace outside of git repo
-	- import "Existing Maven Project"
-	- select the pom.xml
+### 5) create workspace outside of git repo
+- import "Existing Maven Project"
+- select the pom.xml
 
-6) install m2e-apt
-	- goto Eclipse Marketplace
-		- search **m2e-apt**
-		- install
-		- restart eclipse
+### 6) install m2e-apt
+- goto Eclipse Marketplace
+	- search **m2e-apt**
+	- install
+	- restart eclipse
 		
-7) Eclipse Preferences
-    - `Preferences->Java->Code Style->Formatter->Edit->On/Off Tags`
-    [x] **Enable Off/On tags**
-    - `Preferences->Java->Editor->SaveActions`
-    [x] Perform the selected actions on save
-    [x] Format source code
-    [x] Organize Imports
-    [x] Additional Actions
+### 7) Eclipse Preferences
+- `Preferences->Java->Code Style->Formatter->Edit->On/Off Tags`
+[x] Enable Off/On tags
+- `Preferences->Java->Editor->SaveActions`
+[x] Perform the selected actions on save
+[x] Format source code
+[x] Organize Imports
+[x] Additional Actions
 
 You should be able to build the project now. Simply right click the project -> Run as ... -> Spring Boot App
 
