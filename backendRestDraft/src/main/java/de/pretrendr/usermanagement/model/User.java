@@ -88,7 +88,7 @@ public class User implements Serializable, UserDetails {
 	private Set<Role> roles = Sets.newHashSet();
 
 	@Override
-	@JsonIgnore
+	// @JsonIgnore
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		for (Role role : roles) {

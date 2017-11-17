@@ -29,7 +29,7 @@ import de.pretrendr.usermanagement.dataccess.UserDAO;
 @WebAppConfiguration
 public abstract class PretrendrTestBase {
 
-	protected MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
+	protected MediaType jsonContentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
 			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
 	protected MockMvc mockMvc;
