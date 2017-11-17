@@ -8,14 +8,17 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -55,7 +58,6 @@ public class User implements Serializable, UserDetails {
 	 */
 	public User(String username, String password, String firstname, String lastname, String email, String address,
 			String phone) {
-		this.id = UUID.randomUUID();
 		this.username = username;
 		this.password = password;
 		this.firstname = firstname;
@@ -66,6 +68,9 @@ public class User implements Serializable, UserDetails {
 	}
 
 	@Id
+	@GeneratedValue(generator = "UUID")
+	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	@Column(length = 16)
 	private UUID id;
 	private String username;
 
@@ -83,6 +88,7 @@ public class User implements Serializable, UserDetails {
 	private Set<Role> roles = Sets.newHashSet();
 
 	@Override
+	@JsonIgnore
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		for (Role role : roles) {

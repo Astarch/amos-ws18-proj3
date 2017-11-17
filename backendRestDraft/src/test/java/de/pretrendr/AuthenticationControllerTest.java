@@ -39,8 +39,7 @@ import de.pretrendr.usermanagement.model.User;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-// @ActiveProfiles("test")
-public class UserControllerTest {
+public class AuthenticationControllerTest {
 
 	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
 			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
