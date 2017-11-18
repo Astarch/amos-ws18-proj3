@@ -25,6 +25,9 @@ jobs:
           - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
           - v1-dependencies
       - run:
+          name: install software-properties-common
+          command: cd backendRestDraft/; sudo apt-get install software-properties-common
+      - run:
           name: install java sdk 8
           command: cd backendRestDraft/; sudo add-apt-repository ppa:webupd8team/java; sudo apt-get update -y; sudo apt-get install openjdk-8-jdk
       - run:
