@@ -100,7 +100,7 @@ jobs:
   #    #      sudo apt-get -y -qq install awscli
   #    #      aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend/ --delete
 
-  deploy_live_frontend1:
+  deploy_live_backend:
     docker:
       - image: circleci/node:7.10
     working_directory: ~/repo
