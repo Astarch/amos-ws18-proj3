@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  - build_and_test_frontend:
+  buildandtestfrontend:
     docker:
       # specify the version you desire here
       - image: circleci/node:7.10
@@ -18,12 +18,6 @@ jobs:
 
     steps:
       - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
-          - v1-dependencies
       - run:
           name: install
           command: cd web/big-data-ui; yarn install
@@ -49,7 +43,7 @@ jobs:
             - ./web/big-data-ui/.cache/yarn
           key: v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
 
-    - build_and_test_backend:
+    buildandtestbackend:
       working_directory: ~/repo
       docker:
       - image: circleci/openjdk:8-jdk-browsers
@@ -134,15 +128,15 @@ jobs:
 
 workflows:
   version: 2
-  build_test_deploy_pretrendr:
+  buildandtestbackend_buildandtestfrontend_deploy:
     jobs:
-      - build_and_test_backend
-      - build_and_test_frontend:
+      - buildandtestbackend
+      - buildandtestfrontend:
           requires:
-            - build_and_test_backend
+            - buildandtestbackend
       - deploy_live:
           requires:
-            - build_and_test_frontend
+            - buildandtestbackend
           filters:
             branches:
               only:
