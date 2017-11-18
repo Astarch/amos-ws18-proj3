@@ -163,10 +163,9 @@ workflows:
               only:
                 - develop
                 - master
-                - feature/circleci9
       - backend_deploy_staging:
-          requires:
-            - backend_build_and_test
+          #requires:
+           # - backend_build_and_test
           filters:
             branches:
               only:
