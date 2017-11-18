@@ -4,12 +4,10 @@
 #
 version: 2
 jobs:
-
   build1:
     docker:
       # specify the version you desire here
       - image: maven:3.5.0-jdk-8
-      - image: circleci/node:7.10
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -29,7 +27,26 @@ jobs:
       #    command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
       - run:
           name: run unit tests backend
-          command: cd backendRestDraft/; sudo mvn test
+          command: cd backendRestDraft/; mvn test
+
+  build2:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:7.10
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
+          - v1-dependencies
       - run:
           name: install
           command: cd web/big-data-ui; yarn install
@@ -125,16 +142,19 @@ workflows:
   build-and-deploy:
     jobs:
       - build1
+      - build2:
+        requires:
+          - build1
       - deploy_live:
           requires:
-            - build1
+            - build2
           filters:
             branches:
               only:
                 - master
       - deploy_staging:
           requires:
-            - build1
+            - build2
           filters:
             branches:
               only:
