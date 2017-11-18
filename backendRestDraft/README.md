@@ -58,28 +58,29 @@ Here are some useful turorials, which were used for the setup of this spring boo
 
 
 Spring Boot
-https://jaxenter.de/spring-boot-tutorial-54020
+	https://jaxenter.de/spring-boot-tutorial-54020
 
 Spring Security
-https://www.codesandnotes.be/2014/10/31/restful-authentication-using-spring-security-on-spring-boot-and-jquery-as-a-web-client/
+	https://www.codesandnotes.be/2014/10/31/restful-authentication-using-spring-security-on-spring-boot-and-jquery-as-a-web-client/
 
 Spring Login
-https://www.mkyong.com/spring-security/spring-security-custom-login-form-annotation-example/
+	https://www.mkyong.com/spring-security/spring-security-custom-login-form-annotation-example/
 
 Spring JPA
-https://spring.io/blog/2011/02/10/getting-started-with-spring-data-jpa/
+	https://spring.io/blog/2011/02/10/getting-started-with-spring-data-jpa/
 
 Spring JPA and QueryDSL
-https://spring.io/blog/2011/04/26/advanced-spring-data-jpa-specifications-and-querydsl/
-http://www.baeldung.com/querydsl-with-jpa-tutorial
+	https://spring.io/blog/2011/04/26/advanced-spring-data-jpa-specifications-and-querydsl/
+	http://www.baeldung.com/querydsl-with-jpa-tutorial
 
 Spring Authentication against Database with custom UserService
-http://www.baeldung.com/spring-security-authentication-with-a-database
+	http://www.baeldung.com/spring-security-authentication-with-a-database
 
 Spring and HSQLDB
-https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-sql.html
+	https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-sql.html
 
-
+Spring REST Testing
+	https://spring.io/guides/tutorials/bookmarks/#_testing_a_rest_service
 
 **If you still encounter problems or have any questions, please ask.**
 
