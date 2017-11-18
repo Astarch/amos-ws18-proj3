@@ -122,7 +122,7 @@ jobs:
           name: Install aws cli and deploy to aws S3
           working_directory: /
           command: |
-            sudo apt-get -y -qq install awscli
+            sudo pip install --upgrade awscli
             aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend/ --region us-east-2 --delete
 
   deploy_staging_frontend:
