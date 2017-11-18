@@ -147,9 +147,7 @@ workflows:
   build_test_deploy:
     jobs:
       - build_and_test_backend
-      - build_and_test_frontend:
-        requires:
-          - build_and_test_backend
+      - build_and_test_frontend
       - deploy_live:
           requires:
             - build_and_test_frontend
