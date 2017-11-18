@@ -118,7 +118,7 @@ jobs:
           - v1-dependencies
       - run:
           name: deploy to AWS
-          command: sudo sh ~/repo/architecture/deployment/deploy_prod.sh
+          command: sudo sh ~/repo/architecture/deployment/deploy_prod.sh -y
 
   deploy_staging_backend:
     docker:
@@ -132,7 +132,7 @@ jobs:
           - v1-dependencies
       - run:
           name: deploy to AWS
-          command: sudo sh ~/repo/architecture/deployment/deploy_staging.sh
+          command: sudo sh ~/repo/architecture/deployment/deploy_staging.sh -y
 
   deploy_live_frontend:
     docker:
@@ -178,7 +178,7 @@ jobs:
           working_directory: /
           command: |
             sudo apt-get -y -qq install awscli S3
-            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/  --source-region us-east-2 --delete
+            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --region us-east-2 --delete
 
 workflows:
   version: 2
