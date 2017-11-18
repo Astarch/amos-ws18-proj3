@@ -24,8 +24,11 @@ jobs:
           - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
           - v1-dependencies
       - run:
+          name: run unit tests backend
+          command: echo $JAVA_HOME
+      - run:
           name: install maven
-          command: echo $JAVA_HOME; cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
+          command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
       - run:
           name: run unit tests backend
           command: cd backendRestDraft/; sudo mvn test
