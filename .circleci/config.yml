@@ -179,10 +179,11 @@ workflows:
               only:
                 - master
       - deploy_staging_backend:
-          #requires:
+          requires:
             #- build_and_test_backend
-            #- build_and_test_frontend
+            - build_and_test_frontend
           filters:
             branches:
               only:
-                - develop
+                - feature/circleci7
+                #- develop
