@@ -1,8 +1,7 @@
 #!bin/bash
 set -e
-cd ~/repo
-cd ..
-tar -zcvf backendRestDraft.tar.gz backendRestDraft/
+cd /home/circleci
+tar -zcvf backendRestDraft.tar.gz repo/
 wget "https://www.dropbox.com/s/4t137xjyadtsgci/AMOS_EC2_KEY.pem"
 echo password | sudo -S chmod 400 AMOS_EC2_KEY.pem
 scp -i AMOS_EC2_KEY.pem -o BatchMode=yes -o StrictHostKeyChecking=no backendRestDraft.tar.gz ubuntu@18.216.129.153:/home/ubuntu
