@@ -177,8 +177,8 @@ jobs:
           name: Install aws cli and deploy to aws
           working_directory: /
           command: |
-            sudo apt-get -y -qq install awscli S3
-            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --region us-east-2 --delete
+            sudo apt-get -y -qq install awscli
+            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --delete
 
 workflows:
   version: 2
