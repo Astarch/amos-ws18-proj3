@@ -4,7 +4,19 @@
 #
 version: 2
 jobs:
-  build:
+  checkout_code:
+    docker:
+      - image: maven:3.5.0-jdk-8
+      - image: circleci/node:7.10
+    working_directory: ~/circleci-workflows
+    steps:
+      - checkout
+      - save_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/circleci-workflows
+
+  build_and_test_backend:
     docker:
       # specify the version you desire here
       - image: maven:3.5.0-jdk-8
@@ -14,14 +26,7 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
 
-    working_directory: ~/repo
-
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
-          - v1-dependencies
+    working_directory: ~/circleci-workflows
       #- run:
       #    name: install maven
       #    command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
@@ -29,7 +34,7 @@ jobs:
           name: run unit tests backend
           command: cd backendRestDraft/; mvn test
 
-  acceptance_test_1:
+  build_and_test_frontend:
     docker:
       # specify the version you desire here
       - image: circleci/node:7.10
@@ -39,7 +44,7 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
 
-    working_directory: ~/repo
+    working_directory: ~/circleci-workflows
 
     steps:
       - checkout
@@ -139,22 +144,26 @@ jobs:
 
 workflows:
   version: 2
-  build_accept_deploy:
+  build-and-deploy:
     jobs:
-      - build
-      - acceptance_test_1:
-        requires:
-          - build
+      - checkout_code
+      - build_and_test_backend:
+          requires:
+            - checkout_code
+      - build_and_test_frontend:
+          requires:
+            - checkout_code
+            - build_and_test_backend
       - deploy_live:
           requires:
-            - acceptance_test_1
+            - build_and_test_frontend
           filters:
             branches:
               only:
                 - master
       - deploy_staging:
           requires:
-            - acceptance_test_1
+            - build_and_test_frontend
           filters:
             branches:
               only:
