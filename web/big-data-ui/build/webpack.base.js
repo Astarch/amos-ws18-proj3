@@ -2,16 +2,39 @@ const path = require('path');
 const config = require('../config');
 const webpack = require('webpack');
 const ESlintFormatter = require('eslint-friendly-formatter');
+
+// Helper to get current git branch, commit, author, date etc
+const git = require('git-rev-sync');
+const gitlog = require('gitlog');
+
+const gitLogOptions =
+  {
+    repo: __dirname + '/../../',
+    number: 1,
+    fields:
+      [
+        'authorName',
+      ]
+  };
+
 const defaults = {
   __DEV__: JSON.stringify(config.isDev),
   __PROD__: JSON.stringify(config.isProd),
-  'process.env':{
+  'process.env': {
     'NODE_ENV': `"${config.env}"`,
     'JUNIT_REPORT_PATH': "./junit",
     'JUNIT_REPORT_NAME': "test-results.xml",
-    },  
+  },
   __APP_MODE__: `"${config.appMode}"`,
+  'GIT': {
+    'COMMIT': JSON.stringify(git.short()),
+    'BRANCH': JSON.stringify(git.branch()),
+    'DATE': JSON.stringify(git.date()),
+    'MESSAGE': JSON.stringify(git.message()),
+    'AUTHOR': JSON.stringify(gitlog(gitLogOptions)[0].authorName)
+  },
 };
+
 
 const webpackConfig = {
   entry: './src/js/main.js',
@@ -33,15 +56,15 @@ const webpackConfig = {
   ],
   module: {
     rules: [
-     /* {
-        test: /\.(js|vue)$/,
-        loader: 'eslint-loader',
-        enforce: 'pre',
-        exclude: /node_modules/,
-        options: {
-          formatter: ESlintFormatter,
-        },
-      },*/
+      /* {
+         test: /\.(js|vue)$/,
+         loader: 'eslint-loader',
+         enforce: 'pre',
+         exclude: /node_modules/,
+         options: {
+           formatter: ESlintFormatter,
+         },
+       },*/
       {
         test: /\.js$/,
         loader: 'babel-loader',
