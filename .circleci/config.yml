@@ -32,6 +32,9 @@ jobs:
       - run: 
           name: install karma
           command: cd web/big-data-ui; yarn add karma
+      - run:
+          name: run unit tests backend
+          command: cd backendRestDraft/; mvn test
       - run: 
           name: run unit tests
           command: cd web/big-data-ui; ./node_modules/karma/bin/karma start test/unit/karma.conf.js --single-run
@@ -92,11 +95,17 @@ jobs:
           name: create build
           command: cd web/big-data-ui; yarn run build
       - run:
+          name: compile backendend
+          command: cd backendRestDraft/; sudo mvn compile
+      - run:
+          name: clean install backend
+	  caommand cd backendRestDraft/; sudo mvn clean install
+      - run:
           name: Install aws cli and deploy to aws
           working_directory: /
           command: |
             sudo apt-get -y -qq install awscli
-            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --delete
+            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging.s3-website.us-east-2/ --delete
 
 
 
