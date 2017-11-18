@@ -5,7 +5,7 @@
 version: 2
 jobs:
 
-  build:
+  build1:
     docker:
       # specify the version you desire here
       - image: maven:3.5.0-jdk-8
@@ -124,17 +124,17 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - build
+      - build1
       - deploy_live:
           requires:
-            - build
+            - build1
           filters:
             branches:
               only:
                 - master
       - deploy_staging:
           requires:
-            - build
+            - build1
           filters:
             branches:
               only:
