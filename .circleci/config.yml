@@ -29,7 +29,7 @@ jobs:
           name: run unit tests backend
           command: cd backendRestDraft/; mvn test
 
-  test:
+  acceptance_test_1:
     docker:
       # specify the version you desire here
       - image: circleci/node:7.10
@@ -139,22 +139,22 @@ jobs:
 
 workflows:
   version: 2
-  build-test-and-deploy:
+  build_accept_deploy:
     jobs:
       - build
-      - test:
+      - acceptance_test_1:
         requires:
           - build
       - deploy_live:
           requires:
-            - test
+            - acceptance_test_1
           filters:
             branches:
               only:
                 - master
       - deploy_staging:
           requires:
-            - test
+            - acceptance_test_1
           filters:
             branches:
               only:
