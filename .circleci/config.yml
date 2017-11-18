@@ -3,7 +3,7 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2
-jobs: 
+jobs:
   buildandtestfrontend:
     docker:
       # specify the version you desire here
@@ -143,7 +143,7 @@ workflows:
                 - master
       - deploy_staging:
           requires:
-            - build_and_test_frontend
+            - buildandtestfrontend
           filters:
             branches:
               only:
