@@ -21,6 +21,12 @@ jobs:
       - run:
           name: run unit tests backend
           command: cd backendRestDraft/; mvn test
+      - run:
+          name: compile
+          command: cd backendRestDraft/; mvn compile
+      - run:
+          name: clean install
+          command: cd backendRestDraft/; mvn clean install
 
   build_and_test_frontend:
     docker:
@@ -102,7 +108,7 @@ jobs:
 
   deploy_live_backend:
     docker:
-      - image: maven:3.5.0-jdk-8
+      - image: circleci/node:7.10
     working_directory: ~/repo
     steps:
       - checkout
@@ -110,19 +116,13 @@ jobs:
           keys:
           - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
           - v1-dependencies
-      - run:
-          name: compile
-          command: cd backendRestDraft/; mvn compile
-      - run:
-          name: clean install
-          command: cd backendRestDraft/; mvn clean install
       - run:
           name: deploy to AWS
           command: sudo sh ~/repo/architecture/deployment/deploy_prod.sh
 
   deploy_staging_backend:
     docker:
-      - image: maven:3.5.0-jdk-8
+      - image: circleci/node:7.10
     working_directory: ~/repo
     steps:
       - checkout
@@ -130,12 +130,6 @@ jobs:
           keys:
           - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
           - v1-dependencies
-      - run:
-          name: compile
-          command: cd backendRestDraft/; mvn compile
-      - run:
-          name: clean install
-          command: cd backendRestDraft/; mvn clean install
       - run:
           name: deploy to AWS
           command: sudo sh ~/repo/architecture/deployment/deploy_staging.sh
@@ -161,7 +155,7 @@ jobs:
           working_directory: /
           command: |
             sudo apt-get -y -qq install awscli
-            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend.s3-website.us-east-2/ --delete
+            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend/ --source-region us-east-2 --delete
 
   deploy_staging_frontend:
     docker:
@@ -184,7 +178,7 @@ jobs:
           working_directory: /
           command: |
             sudo apt-get -y -qq install awscli S3
-            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging.s3-website.us-east-2/ --delete
+            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/  --source-region us-east-2 --delete
 
 workflows:
   version: 2
