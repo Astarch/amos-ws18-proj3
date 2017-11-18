@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build1:
+  build:
     docker:
       # specify the version you desire here
       - image: maven:3.5.0-jdk-8
@@ -29,7 +29,7 @@ jobs:
           name: run unit tests backend
           command: cd backendRestDraft/; mvn test
 
-  build2:
+  test:
     docker:
       # specify the version you desire here
       - image: circleci/node:7.10
@@ -139,22 +139,22 @@ jobs:
 
 workflows:
   version: 2
-  build-and-deploy:
+  build-test-and-deploy:
     jobs:
-      - build1
-      - build2:
+      - build
+      - test:
         requires:
-          - build1
+          - build
       - deploy_live:
           requires:
-            - build2
+            - test
           filters:
             branches:
               only:
                 - master
       - deploy_staging:
           requires:
-            - build2
+            - test
           filters:
             branches:
               only:
