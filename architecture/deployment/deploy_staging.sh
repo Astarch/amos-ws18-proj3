@@ -1,5 +1,7 @@
 #!bin/bash
-cd ~/repo
+## Error will make circleci build fail
+set -e
+
 tar -zcvf backendRestDraft.tar.gz backendRestDraft/
 wget "https://www.dropbox.com/s/4t137xjyadtsgci/AMOS_EC2_KEY.pem"
 echo password | sudo -S chmod 400 AMOS_EC2_KEY.pem

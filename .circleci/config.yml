@@ -86,6 +86,19 @@ jobs:
           command: |
             aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --region us-east-2 --acl public-read --delete 
 
+  backend_deploy_staging:
+    docker:
+      - image: circleci/node:7.10
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: deploy to AWS
+          working_directory: ~/repo
+          command: |
+            chmod +x ~/repo/architecture/deployment/deploy_staging.sh
+            sudo sh ~/repo/architecture/deployment/deploy_staging.sh -y
+
   frontend_deploy_prod:
     docker:
       # docker image with aws and node version 8.7 preinstalled!
@@ -119,13 +132,6 @@ workflows:
     jobs:
       - frontend_build_and_test
       - backend_build_and_test
-      - frontend_deploy_prod:
-          requires:
-            - frontend_build_and_test
-          filters:
-            branches:
-              only:
-                - master
       - frontend_deploy_staging:
           requires:
             - frontend_build_and_test
@@ -133,4 +139,19 @@ workflows:
             branches:
               only:
                 - develop
+                #- feature/circleci9
+      - backend_deploy_staging:
+          #requires:
+            #- backend_build_and_test
+          filters:
+            branches:
+              only:
+                - develop
                 - feature/circleci9
+      - frontend_deploy_prod:
+          requires:
+            - frontend_build_and_test
+          filters:
+            branches:
+              only:
+                - master     
