@@ -98,7 +98,7 @@ jobs:
           command: cd web/big-data-ui; yarn run build
       - run:
           name: compile backendend
-          command: cd backendRestDraft/; sudo mvn compile
+          command: cd backendRestDraft/; mvn install; sudo mvn compile
       - run:
           name: clean install backend
           command: cd backendRestDraft/; sudo mvn clean install
