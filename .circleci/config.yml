@@ -84,7 +84,7 @@ jobs:
   #    #      sudo apt-get -y -qq install awscli
   #    #      aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend/ --delete
 
-  deploy_live_backend:
+  deploy_live2_backend:
     docker:
       - image: maven:3.5.0-jdk-8
     working_directory: ~/repo
