@@ -84,6 +84,45 @@ jobs:
   #    #      sudo apt-get -y -qq install awscli
   #    #      aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend/ --delete
 
+  #deploy_live_backend:
+  #  docker:
+  #    - image: maven:3.5.0-jdk-8
+  #  working_directory: ~/repo
+  #    - run:
+  #        name: compile
+  #        command: cd backendRestDraft/; mvn compile
+  #    - run:
+  #        name: clean install
+  #        command: cd backendRestDraft/; mvn clean install
+  #    #- run:
+  #    #    name: deploy to aws ec2
+  #    #    command: |
+  #    #      sudo apt-get -y -qq install awscli
+  #    #      aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend/ --delete
+
+  deploy_live_frontend1:
+    docker:
+      - image: circleci/node:7.10
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
+          - v1-dependencies
+      - run:
+          name: install
+          command: cd web/big-data-ui; yarn install
+      - run:
+          name: create build
+          command: cd web/big-data-ui; yarn run build
+      - run:
+          name: Install aws cli and deploy to aws S3
+          working_directory: /
+          command: |
+            sudo apt-get -y -qq install awscli
+            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend.s3-website.us-east-2/ --delete
+
   deploy_live_frontend:
     docker:
       - image: circleci/node:7.10
@@ -130,22 +169,6 @@ jobs:
             sudo apt-get -y -qq install awscli S3
             aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging.s3-website.us-east-2/ --delete
 
-  deploy_live_backend:
-    docker:
-      - image: maven:3.5.0-jdk-8
-    working_directory: ~/repo
-      - run:
-          name: compile
-          command: cd backendRestDraft/; mvn compile
-      - run:
-          name: clean install
-          command: cd backendRestDraft/; mvn clean install
-      #- run:
-      #    name: deploy to aws ec2
-      #    command: |
-      #      sudo apt-get -y -qq install awscli
-      #      aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend/ --delete
-      
 workflows:
   version: 2
   build_test_deploy:
