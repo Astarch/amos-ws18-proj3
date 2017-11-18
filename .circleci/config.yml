@@ -32,7 +32,9 @@ jobs:
       - run:
           name: install karma
           command: cd web/big-data-ui; yarn add karma
-
+      - run:
+          name: install maven
+          command: cd backendRestDraft/; sudo apt-get install maven
       - run:
           name: run unit tests backend
           command: cd backendRestDraft/; mvn test
@@ -97,8 +99,11 @@ jobs:
           name: create build
           command: cd web/big-data-ui; yarn run build
       - run:
+          name: install maven
+          command: cd backendRestDraft/; sudo apt-get install maven
+      - run:
           name: compile backendend
-          command: cd backendRestDraft/; mvn install; sudo mvn compile
+          command: cd backendRestDraft/; mvn install
       - run:
           name: clean install backend
           command: cd backendRestDraft/; sudo mvn clean install
