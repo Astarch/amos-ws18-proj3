@@ -51,7 +51,11 @@ jobs:
       - checkout
       - run:
           name: run unit tests backend
-          command: cd backendRestDraft/; mvn test
+          command: cd backendRestDraft/; mvn test jacoco:report
+      - store_test_results:
+          path: backendRestDraft/target/site/jacoco
+      - store_artifacts:
+          path: backendRestDraft/target/site/jacoco
       - run:
           name: compile
           command: cd backendRestDraft/; mvn compile
@@ -59,7 +63,7 @@ jobs:
           name: clean install
           command: cd backendRestDraft/; mvn clean install
 
-  frontend_deploy_staging:
+  frontend_deploy:
     docker:
       # docker image with aws and node version 8.7 preinstalled!
       - image: andrasszell/circleci-node-aws:8.7
@@ -84,7 +88,13 @@ jobs:
           name: Deploy Frontend to AWS
           working_directory: /
           command: |
-            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --region us-east-2 --acl public-read --delete 
+            if [[ $CIRCLE_BRANCH == "master" ]]; then
+              aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend/ --region us-east-2 --acl public-read --delete 
+              echo "Deployed to production";
+            else
+              aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --region us-east-2 --acl public-read --delete 
+              echo "deployed to staging"; 
+            fi
 
   backend_deploy_staging:
     docker:
@@ -126,23 +136,37 @@ jobs:
           command: |
             aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend/ --region us-east-2 --acl public-read --delete 
 
+  backend_deploy_prod:
+    docker:
+      - image: circleci/node:7.10
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: deploy to AWS
+          working_directory: ~/repo
+          command: |
+            chmod +x ~/repo/architecture/deployment/deploy_prod.sh
+            sudo sh ~/repo/architecture/deployment/deploy_prod.sh -y
+
 workflows:
   version: 2
   build_test_deploy:
     jobs:
       - frontend_build_and_test
       - backend_build_and_test
-      - frontend_deploy_staging:
+      - frontend_deploy:
           requires:
             - frontend_build_and_test
           filters:
             branches:
               only:
                 - develop
-                #- feature/circleci9
+                - master
+                - feature/circleci9
       - backend_deploy_staging:
-          #requires:
-            #- backend_build_and_test
+          requires:
+            - backend_build_and_test
           filters:
             branches:
               only:
@@ -154,4 +178,4 @@ workflows:
           filters:
             branches:
               only:
-                - master     
+                - master    
