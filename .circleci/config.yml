@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build_and_test_frontend:
+  frontend_build_and_test:
     docker:
       - image: circleci/node:7.10
 
@@ -39,7 +39,7 @@ jobs:
             - ./web/big-data-ui/.cache/yarn
           key: v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
 
-  deploy_staging_frontend:
+  frontend_deploy:
     docker:
       # docker image with aws and node version 8.7 preinstalled!
       - image: andrasszell/circleci-node-aws:8.7
@@ -56,20 +56,27 @@ jobs:
       - run:
           name: create build
           command: cd web/big-data-ui; yarn run build
+      - save_cache:
+          paths:
+            - ./web/big-data-ui/.cache/yarn
+          key: v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
       - run:
-          name: Install aws cli and deploy to aws
-          working_directory: /
-          command: |
-            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --region us-east-2 --acl public-read --delete 
+          name: deploy frontend
+          command: sudo sh ~/repo/deployment/deploy_web.sh -y
+     # - run:
+      #    name: Install aws cli and deploy to aws
+       #   working_directory: /
+        #  command: |
+         #   aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --region us-east-2 --acl public-read --delete 
 
 workflows:
   version: 2
   build_test_deploy:
     jobs:
-      #- build_and_test_frontend
-      - deploy_staging_frontend:
-          #requires:
-            #- build_and_test_frontend
+      - frontend_build_and_test
+      - frontend_deploy:
+          requires:
+            - frontend_build_and_test
           filters:
             branches:
               only:

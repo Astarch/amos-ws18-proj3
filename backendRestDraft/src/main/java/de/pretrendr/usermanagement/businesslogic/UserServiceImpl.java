@@ -1,9 +1,14 @@
 package de.pretrendr.usermanagement.businesslogic;
 
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 
+import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
@@ -43,17 +48,6 @@ public class UserServiceImpl implements UserService {
 	 * @author Tristan Schneider
 	 */
 	@Override
-	public boolean checkCredentials(String username, String password) {
-		User user = userDAO.findOne(QUser.user.username.eq(username));
-		return user != null && user.getPassword().equals(password);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @author Tristan Schneider
-	 */
-	@Override
 	public User register(RegUser userReg) {
 		User user = userDAO
 				.findOne(QUser.user.username.eq(userReg.getUsername()).or(QUser.user.email.eq(userReg.getEmail())));
@@ -71,5 +65,21 @@ public class UserServiceImpl implements UserService {
 				throw new EmailNotValidException();
 			}
 		}
+	}
+
+	@Override
+	public User getUser(UUID userId) {
+		User user = userDAO.findOne(userId);
+		if (user == null) {
+			throw new EntityNotFoundException(
+					MessageFormat.format("{0} with id {1} could not be found.", "User", userId));
+		}
+		return user;
+	}
+
+	@Override
+	public List<User> getAll() {
+		List<User> allUsers = Lists.newArrayList(userDAO.findAll());
+		return allUsers;
 	}
 }

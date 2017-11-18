@@ -45,7 +45,7 @@ public class AuthenticationController {
 	 * @author Tristan Schneider
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public ResponseEntity<User> loginPost(@RequestBody final RegUser userReg) {
+	public ResponseEntity<User> register(@RequestBody final RegUser userReg) {
 		User user = userService.register(userReg);
 		if (user != null) {
 			return new ResponseEntity<User>(user, HttpStatus.OK);

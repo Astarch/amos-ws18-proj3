@@ -1,5 +1,10 @@
 package de.pretrendr.usermanagement.businesslogic;
 
+import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.EntityNotFoundException;
+
 import de.pretrendr.usermanagement.model.User;
 import de.pretrendr.usermanagement.model.pojo.RegUser;
 
@@ -8,17 +13,6 @@ import de.pretrendr.usermanagement.model.pojo.RegUser;
  *
  */
 public interface UserService {
-	/**
-	 * Finds the user with the given username, compares the given password and
-	 * return true iff matched, else false.
-	 * 
-	 * @param username
-	 *            unique username
-	 * @param password
-	 *            password
-	 * @return true iff matched, else false
-	 */
-	boolean checkCredentials(String username, String password);
 
 	/**
 	 * Registers the given <b>userReg</b> in the database. The default role is
@@ -32,4 +26,16 @@ public interface UserService {
 	 *         else null
 	 */
 	User register(RegUser userReg);
+
+	/**
+	 * Retrieves user with the give id from the database. If not found, an
+	 * {@link EntityNotFoundException} will be thrown.
+	 * 
+	 * @param userId
+	 * @return user
+	 */
+	User getUser(UUID userId);
+
+	List<User> getAll();
+
 }
