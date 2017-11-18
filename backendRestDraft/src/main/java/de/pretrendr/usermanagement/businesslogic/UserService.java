@@ -13,17 +13,6 @@ import de.pretrendr.usermanagement.model.pojo.RegUser;
  *
  */
 public interface UserService {
-	/**
-	 * Finds the user with the given username, compares the given password and
-	 * return true iff matched, else false.
-	 * 
-	 * @param username
-	 *            unique username
-	 * @param password
-	 *            password
-	 * @return true iff matched, else false
-	 */
-	boolean checkCredentials(String username, String password);
 
 	/**
 	 * Registers the given <b>userReg</b> in the database. The default role is

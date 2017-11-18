@@ -48,17 +48,6 @@ public class UserServiceImpl implements UserService {
 	 * @author Tristan Schneider
 	 */
 	@Override
-	public boolean checkCredentials(String username, String password) {
-		User user = userDAO.findOne(QUser.user.username.eq(username));
-		return user != null && user.getPassword().equals(password);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @author Tristan Schneider
-	 */
-	@Override
 	public User register(RegUser userReg) {
 		User user = userDAO
 				.findOne(QUser.user.username.eq(userReg.getUsername()).or(QUser.user.email.eq(userReg.getEmail())));
