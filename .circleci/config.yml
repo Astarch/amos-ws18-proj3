@@ -8,13 +8,13 @@ jobs:
     docker:
       - image: maven:3.5.0-jdk-8
       - image: circleci/node:7.10
-    working_directory: ~/circleci-workflows
+    working_directory: ~/repo
     steps:
       - checkout
       - save_cache:
           key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
           paths:
-            - ~/circleci-workflows
+            - ~/repo
 
   build_and_test_backend:
     docker:
@@ -26,7 +26,7 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
 
-    working_directory: ~/circleci-workflows
+    working_directory: ~/repo
       #- run:
       #    name: install maven
       #    command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
@@ -150,21 +150,21 @@ workflows:
       - build_and_test_backend:
           requires:
             - checkout_code
-      - build_and_test_frontend:
-          requires:
-            - checkout_code
-            - build_and_test_backend
-      - deploy_live:
-          requires:
-            - build_and_test_frontend
-          filters:
-            branches:
-              only:
-                - master
-      - deploy_staging:
-          requires:
-            - build_and_test_frontend
-          filters:
-            branches:
-              only:
-                - develop
+      #- build_and_test_frontend:
+      #    requires:
+      #      - checkout_code
+      #      - build_and_test_backend
+      #- deploy_live:
+      #  requires:
+      #      - build_and_test_frontend
+      #  filters:
+      #      branches:
+      #        only:
+      #          - master
+      #- deploy_staging:
+      #    requires:
+      #      - build_and_test_frontend
+      #    filters:
+      #      branches:
+      #        only:
+      #          - develop
