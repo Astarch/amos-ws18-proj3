@@ -50,6 +50,52 @@ jobs:
             - ./web/big-data-ui/.cache/yarn
           key: v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
 
+  build_and_test_frontend:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:7.10
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
+          - v1-dependencies
+
+      - run:
+          name: install
+          command: cd web/big-data-ui; yarn install
+
+      - run:
+          name: install karma
+          command: cd web/big-data-ui; yarn add karma
+      - run:
+          name: run unit tests
+          command: cd web/big-data-ui; ./node_modules/karma/bin/karma start test/unit/karma.conf.js --single-run
+          environment:
+            JUNIT_REPORT_PATH: /junit
+            JUNIT_REPORT_NAME: test-results.xml
+      - store_test_results:
+          path: web/big-data-ui/test/unit/junit
+      - store_artifacts:
+          path: web/big-data-ui/test/unit/junit
+      - store_artifacts:
+          path: web/big-data-ui/test/unit/coverage
+
+      - save_cache:
+          paths:
+            - ./web/big-data-ui/.cache/yarn
+          key: v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
+
 
 
   deploy_live:
@@ -101,16 +147,19 @@ workflows:
   build_test_deploy:
     jobs:
       - build_and_test_backend
+      - build_and_test_frontend:
+        requires:
+          - build_and_test_backend
       - deploy_live:
           requires:
-            - build_and_test
+            - build_and_test_frontend
           filters:
             branches:
               only:
                 - master
       - deploy_staging:
           requires:
-            - build_and_test
+            - build_and_test_frontend
           filters:
             branches:
               only:
