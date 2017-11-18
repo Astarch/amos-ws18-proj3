@@ -4,27 +4,12 @@
 #
 version: 2
 jobs:
-    build:
-      working_directory: ~/repo
-      docker:
-      - image: circleci/openjdk:8-jdk-browsers
-      steps:
-      - checkout
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
-          - v1-dependencies
-      - run:
-          name: install maven
-          command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
-      - run:
-          name: run unit tests backend
-          command: cd backendRestDraft/; sudo mvn test
 
-  test1:
+  build:
     docker:
       # specify the version you desire here
       - image: circleci/node:7.10
+      - image: circleci/openjdk:8-jdk-browsers
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -35,6 +20,12 @@ jobs:
 
     steps:
       - checkout
+      - run:
+          name: install maven
+          command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
+      - run:
+          name: run unit tests backend
+          command: cd backendRestDraft/; sudo mvn test
       - run:
           name: install
           command: cd web/big-data-ui; yarn install
@@ -127,12 +118,9 @@ jobs:
 
 workflows:
   version: 2
-  build-test-and-deploy:
+  build-and-deploy:
     jobs:
       - build
-      - test1:
-          requires:
-            - build
       - deploy_live:
           requires:
             - build
@@ -142,7 +130,7 @@ workflows:
                 - master
       - deploy_staging:
           requires:
-            - buildandtestfrontend
+            - build
           filters:
             branches:
               only:
