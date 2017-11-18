@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build_and_test_frontend:
+  - build_and_test_frontend:
     docker:
       # specify the version you desire here
       - image: circleci/node:7.10
@@ -49,7 +49,7 @@ jobs:
             - ./web/big-data-ui/.cache/yarn
           key: v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
 
-    build_and_test_backend:
+    - build_and_test_backend:
       working_directory: ~/repo
       docker:
       - image: circleci/openjdk:8-jdk-browsers
