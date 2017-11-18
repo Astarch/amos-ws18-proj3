@@ -1,12 +1,15 @@
 <template>
   <div id="app">
+    <git-info></git-info>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+  import GitInfo from './components/GitInfo';
 
   export default {
+    components: { GitInfo },
     name: 'app',
   };
 </script>
