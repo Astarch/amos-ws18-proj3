@@ -136,7 +136,9 @@ workflows:
   build_test_deploy_pretrendr:
     jobs:
       - build_and_test_backend
-      - build_and_test_frontend
+      - build_and_test_frontend:
+          requires:
+            - build_and_test_backend
       - deploy_live:
           requires:
             - build_and_test_frontend
