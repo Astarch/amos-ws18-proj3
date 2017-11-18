@@ -19,6 +19,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: install sudo
+          command: su -; apt-get install sudo
+      - run:
           name: run unit tests backend
           command: cd backendRestDraft/; mvn test
 
@@ -110,6 +113,9 @@ jobs:
           keys:
           - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
           - v1-dependencies
+      - run:
+          name: install sudo
+          command: su -; apt-get install sudo
       - run:
           name: compile
           command: cd backendRestDraft/; mvn compile
