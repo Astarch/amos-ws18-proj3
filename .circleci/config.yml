@@ -7,7 +7,7 @@ jobs:
     build_and_test_backend:
       docker:
         # specify the version you desire here
-        - image: circleci/jdk8
+        - image: circleci/openjdk:latest
 
         # Specify service dependencies here if necessary
         # CircleCI maintains a library of pre-built images
@@ -141,6 +141,7 @@ workflows:
   build_test_deploy_pretrendr:
     jobs:
       - build_and_test_backend
+      - build_and_test_frontend
       - deploy_live:
           requires:
             - build_and_test_frontend
