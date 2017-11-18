@@ -39,6 +39,26 @@ jobs:
             - ./web/big-data-ui/.cache/yarn
           key: v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
 
+
+  backend_build_and_test:
+    docker:
+      # specify the version you desire here
+      - image: maven:3.5.0-jdk-8
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - run:
+          name: run unit tests backend
+          command: cd backendRestDraft/; mvn test
+      - run:
+          name: compile
+          command: cd backendRestDraft/; mvn compile
+      - run:
+          name: clean install
+          command: cd backendRestDraft/; mvn clean install
+
   frontend_deploy_staging:
     docker:
       # docker image with aws and node version 8.7 preinstalled!
@@ -98,6 +118,7 @@ workflows:
   build_test_deploy:
     jobs:
       - frontend_build_and_test
+      - backend_build_and_test
       - frontend_deploy_prod:
           requires:
             - frontend_build_and_test
