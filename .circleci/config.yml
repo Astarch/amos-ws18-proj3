@@ -39,7 +39,7 @@ jobs:
             - ./web/big-data-ui/.cache/yarn
           key: v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
 
-  frontend_deploy:
+  frontend_deploy_staging:
     docker:
       # docker image with aws and node version 8.7 preinstalled!
       - image: andrasszell/circleci-node-aws:8.7
@@ -61,20 +61,51 @@ jobs:
             - ./web/big-data-ui/.cache/yarn
           key: v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
       - run:
-          name: deploy frontend
-          command: sudo sh ~/repo/deployment/deploy_web.sh -y
-     # - run:
-      #    name: Install aws cli and deploy to aws
-       #   working_directory: /
-        #  command: |
-         #   aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --region us-east-2 --acl public-read --delete 
+          name: Deploy Frontend to AWS
+          working_directory: /
+          command: |
+            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --region us-east-2 --acl public-read --delete 
+
+  frontend_deploy_prod:
+    docker:
+      # docker image with aws and node version 8.7 preinstalled!
+      - image: andrasszell/circleci-node-aws:8.7
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
+          - v1-dependencies
+      - run:
+          name: install
+          command: cd web/big-data-ui; yarn install
+      - run:
+          name: create build
+          command: cd web/big-data-ui; yarn run build
+      - save_cache:
+          paths:
+            - ./web/big-data-ui/.cache/yarn
+          key: v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
+      - run:
+          name: Install aws cli and deploy to aws
+          working_directory: /
+          command: |
+            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend/ --region us-east-2 --acl public-read --delete 
 
 workflows:
   version: 2
   build_test_deploy:
     jobs:
       - frontend_build_and_test
-      - frontend_deploy:
+      - frontend_deploy_prod:
+          requires:
+            - frontend_build_and_test
+          filters:
+            branches:
+              only:
+                - master
+      - frontend_deploy_staging:
           requires:
             - frontend_build_and_test
           filters:
