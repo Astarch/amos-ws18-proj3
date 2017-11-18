@@ -20,8 +20,8 @@ jobs:
       - run:
           name: run unit tests backend
           command: cd backendRestDraft/; sudo mvn test
-          
-  buildandtestfrontend:
+
+  test1:
     docker:
       # specify the version you desire here
       - image: circleci/node:7.10
@@ -125,13 +125,12 @@ jobs:
             aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging.s3-website.us-east-2/ --delete
 
 
-
 workflows:
   version: 2
   build-test-and-deploy:
     jobs:
       - build
-      - buildandtestfrontend:
+      - test1:
           requires:
             - build
       - deploy_live:
