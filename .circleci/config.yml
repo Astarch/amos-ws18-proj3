@@ -41,7 +41,8 @@ jobs:
 
   deploy_staging_frontend:
     docker:
-      - image: circleci/node:7.10
+      # docker image with aws and node version 8.7 preinstalled!
+      - image: andrasszell/circleci-node-aws:8.7
     working_directory: ~/repo
     steps:
       - checkout
@@ -59,17 +60,16 @@ jobs:
           name: Install aws cli and deploy to aws
           working_directory: /
           command: |
-            sudo apt-get -y -qq install awscli
-            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --region us-east-2 --delete
+            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --region us-east-2 --acl public-read --delete 
 
 workflows:
   version: 2
   build_test_deploy:
     jobs:
-      - build_and_test_frontend
+      #- build_and_test_frontend
       - deploy_staging_frontend:
-          requires:
-            - build_and_test_frontend
+          #requires:
+            #- build_and_test_frontend
           filters:
             branches:
               only:
