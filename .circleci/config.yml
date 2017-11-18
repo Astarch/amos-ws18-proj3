@@ -128,7 +128,7 @@ jobs:
 
 workflows:
   version: 2
-  buildandtestbackend_buildandtestfrontend_deploy:
+  build-test-and-deploy:
     jobs:
       - buildandtestbackend
       - buildandtestfrontend:
