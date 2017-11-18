@@ -4,11 +4,29 @@
 #
 version: 2
 jobs:
-  build_and_test:
+  build_and_test_backend:
+    docker:
+      # specify the version you desire here
+      - image: maven:3.5.0-jdk-8
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - run:
+          name: run unit tests backend
+          command: cd backendRestDraft/; mvn test
+
+  build_and_test_frontend:
     docker:
       # specify the version you desire here
       - image: circleci/node:7.10
-      
+
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -25,15 +43,15 @@ jobs:
           - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
           - v1-dependencies
 
-      - run: 
+      - run:
           name: install
           command: cd web/big-data-ui; yarn install
 
-      - run: 
+      - run:
           name: install karma
           command: cd web/big-data-ui; yarn add karma
-      - run: 
-          name: run unit tests
+      - run:
+          name: run unit tests frontend
           command: cd web/big-data-ui; ./node_modules/karma/bin/karma start test/unit/karma.conf.js --single-run
           environment:
             JUNIT_REPORT_PATH: /junit
@@ -49,10 +67,80 @@ jobs:
           paths:
             - ./web/big-data-ui/.cache/yarn
           key: v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
-        
 
+  #deploy_staging_backend:
+  #  docker:
+  #    - image: maven:3.5.0-jdk-8
+  #  working_directory: ~/repo
+  #    - run:
+  #        name: compile
+  #        command: cd backendRestDraft/; mvn compile
+  #    - run:
+  #        name: clean install
+  #        command: cd backendRestDraft/; mvn clean install
+  #    #- run:
+  #    #    name: deploy to aws ec2
+  #    #    command: |
+  #    #      sudo apt-get -y -qq install awscli
+  #    #      aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend/ --delete
 
-  deploy_live:
+  #deploy_live_backend:
+  #  docker:
+  #    - image: maven:3.5.0-jdk-8
+  #  working_directory: ~/repo
+  #    - run:
+  #        name: compile
+  #        command: cd backendRestDraft/; mvn compile
+  #    - run:
+  #        name: clean install
+  #        command: cd backendRestDraft/; mvn clean install
+  #    #- run:
+  #    #    name: deploy to aws ec2
+  #    #    command: |
+  #    #      sudo apt-get -y -qq install awscli
+  #    #      aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend/ --delete
+
+  deploy_live_backend:
+    docker:
+      - image: maven:3.5.0-jdk-8
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
+          - v1-dependencies
+      - run:
+          name: compile
+          command: cd backendRestDraft/; mvn compile
+      - run:
+          name: clean install
+          command: cd backendRestDraft/; mvn clean install
+      - run:
+          name: deploy to AWS
+          command: sudo sh ~/repo/architecture/deployment/deploy_prod.sh
+
+  deploy_staging_backend:
+    docker:
+      - image: maven:3.5.0-jdk-8
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
+          - v1-dependencies
+      - run:
+          name: compile
+          command: cd backendRestDraft/; mvn compile
+      - run:
+          name: clean install
+          command: cd backendRestDraft/; mvn clean install
+      - run:
+          name: deploy to AWS
+          command: sudo sh ~/repo/architecture/deployment/deploy_staging.sh
+
+  deploy_live_frontend:
     docker:
       - image: circleci/node:7.10
     working_directory: ~/repo
@@ -62,20 +150,20 @@ jobs:
           keys:
           - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
           - v1-dependencies
-      - run: 
+      - run:
           name: install
           command: cd web/big-data-ui; yarn install
-      - run: 
+      - run:
           name: create build
           command: cd web/big-data-ui; yarn run build
       - run:
-          name: Install aws cli and deploy to aws
+          name: Install aws cli and deploy to aws S3
           working_directory: /
           command: |
             sudo apt-get -y -qq install awscli
-            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend/ --delete
+            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend.s3-website.us-east-2/ --delete
 
-  deploy_staging:
+  deploy_staging_frontend:
     docker:
       - image: circleci/node:7.10
     working_directory: ~/repo
@@ -85,36 +173,53 @@ jobs:
           keys:
           - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
           - v1-dependencies
-      - run: 
+      - run:
           name: install
           command: cd web/big-data-ui; yarn install
-      - run: 
+      - run:
           name: create build
           command: cd web/big-data-ui; yarn run build
       - run:
           name: Install aws cli and deploy to aws
           working_directory: /
           command: |
-            sudo apt-get -y -qq install awscli
-            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --delete
-
-
+            sudo apt-get -y -qq install awscli S3
+            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging.s3-website.us-east-2/ --delete
 
 workflows:
   version: 2
   build_test_deploy:
     jobs:
-      - build_and_test
-      - deploy_live:
+      - build_and_test_backend
+      - build_and_test_frontend
+      - deploy_live_frontend:
           requires:
-            - build_and_test
+            - build_and_test_backend
+            - build_and_test_frontend
           filters:
             branches:
               only:
                 - master
-      - deploy_staging:
+      - deploy_staging_frontend:
           requires:
-            - build_and_test
+            - build_and_test_backend
+            - build_and_test_frontend
+          filters:
+            branches:
+              only:
+                - develop
+      - deploy_live_backend:
+          requires:
+            - build_and_test_backend
+            - build_and_test_frontend
+          filters:
+            branches:
+              only:
+                - master
+      - deploy_staging_backend:
+          requires:
+            - build_and_test_backend
+            - build_and_test_frontend
           filters:
             branches:
               only:
