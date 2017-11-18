@@ -4,37 +4,7 @@
 #
 version: 2
 jobs:
-  checkout_code:
-    docker:
-      - image: maven:3.5.0-jdk-8
-      - image: circleci/node:7.10
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - save_cache:
-          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
-          paths:
-            - ~/repo
-
-  build_and_test_backend:
-    docker:
-      # specify the version you desire here
-      - image: maven:3.5.0-jdk-8
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
-    working_directory: ~/repo
-      #- run:
-      #    name: install maven
-      #    command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
-      - run:
-          name: run unit tests backend
-          command: cd backendRestDraft/; mvn test
-
-  build_and_test_frontend:
+  build_and_test:
     docker:
       # specify the version you desire here
       - image: circleci/node:7.10
@@ -44,21 +14,24 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
 
-    working_directory: ~/circleci-workflows
+    working_directory: ~/repo
 
     steps:
       - checkout
+
+      # Download and cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
           - v1-dependencies
+
       - run:
           name: install
           command: cd web/big-data-ui; yarn install
+
       - run:
           name: install karma
           command: cd web/big-data-ui; yarn add karma
-
       - run:
           name: run unit tests
           command: cd web/big-data-ui; ./node_modules/karma/bin/karma start test/unit/karma.conf.js --single-run
@@ -77,6 +50,8 @@ jobs:
             - ./web/big-data-ui/.cache/yarn
           key: v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
 
+
+
   deploy_live:
     docker:
       - image: circleci/node:7.10
@@ -94,21 +69,11 @@ jobs:
           name: create build
           command: cd web/big-data-ui; yarn run build
       - run:
-          name: install java sdk 8
-          command: cd backendRestDraft/; sudo add-apt-repository ppa:webupd8team/java; sudo apt-get update; sudo apt-get install oracle-java8-installer
-      - run:
-          name: install maven
-          command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
-      - run:
-          name: clean install backend
-          command: cd backendRestDraft/; sudo mvn install; sudo mvn clean install
-      - run:
           name: Install aws cli and deploy to aws
           working_directory: /
           command: |
             sudo apt-get -y -qq install awscli
             aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend/ --delete
-
   deploy_staging:
     docker:
       - image: circleci/node:7.10
@@ -120,15 +85,6 @@ jobs:
           - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
           - v1-dependencies
       - run:
-          name: install java sdk 8
-          command: cd backendRestDraft/; sudo add-apt-repository ppa:webupd8team/java; sudo apt-get update; sudo apt-get install oracle-java8-installer
-      - run:
-          name: install maven
-          command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
-      - run:
-          name: clean install backend
-          command: cd backendRestDraft/; sudo mvn install; sudo mvn clean install
-      - run:
           name: install
           command: cd web/big-data-ui; yarn install
       - run:
@@ -139,32 +95,23 @@ jobs:
           working_directory: /
           command: |
             sudo apt-get -y -qq install awscli
-            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging.s3-website.us-east-2/ --delete
-
-
+            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --delete
 workflows:
   version: 2
-  build-and-deploy:
+  build_test_deploy:
     jobs:
-      - checkout_code
-      - build_and_test_backend:
+      - build_and_test
+      - deploy_live:
           requires:
-            - checkout_code
-      #- build_and_test_frontend:
-      #    requires:
-      #      - checkout_code
-      #      - build_and_test_backend
-      #- deploy_live:
-      #  requires:
-      #      - build_and_test_frontend
-      #  filters:
-      #      branches:
-      #        only:
-      #          - master
-      #- deploy_staging:
-      #    requires:
-      #      - build_and_test_frontend
-      #    filters:
-      #      branches:
-      #        only:
-      #          - develop
+            - build_and_test
+          filters:
+            branches:
+              only:
+                - master
+      - deploy_staging:
+          requires:
+            - build_and_test
+          filters:
+            branches:
+              only:
+                - develop
