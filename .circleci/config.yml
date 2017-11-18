@@ -37,7 +37,7 @@ jobs:
           command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
       - run:
           name: run unit tests backend
-          command: cd backendRestDraft/; mvn test
+          command: cd backendRestDraft/; sudo mvn test
 
       - run:
           name: run unit tests
