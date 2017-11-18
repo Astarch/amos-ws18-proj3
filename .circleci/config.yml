@@ -15,9 +15,6 @@ jobs:
         # - image: circleci/mongo:3.4.4
 
       working_directory: ~/repo
-
-      steps:
-        - checkout
       - run:
           name: install maven
           command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
