@@ -115,7 +115,7 @@ jobs:
           - v1-dependencies
       - run:
           name: install sudo
-          command: su -; apt-get install sudo
+          command: su -; apt-get install sudo 
       - run:
           name: compile
           command: cd backendRestDraft/; mvn compile
