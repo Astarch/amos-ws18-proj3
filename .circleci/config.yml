@@ -118,7 +118,7 @@ jobs:
           - v1-dependencies
       - run:
           name: deploy to AWS
-          command: sudo sh ~/repo/architecture/deployment/deploy_prod.sh
+          command: sudo sh ~/repo/architecture/deployment/deploy_prod.sh -y
 
   deploy_staging_backend:
     docker:
@@ -132,7 +132,7 @@ jobs:
           - v1-dependencies
       - run:
           name: deploy to AWS
-          command: sudo sh ~/repo/architecture/deployment/deploy_staging.sh
+          command: sudo sh ~/repo/architecture/deployment/deploy_staging.sh -y
 
   deploy_live_frontend:
     docker:
