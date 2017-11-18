@@ -116,6 +116,9 @@ jobs:
       - run:
           name: clean install
           command: cd backendRestDraft/; mvn clean install
+      - run:
+          name: deploy to AWS
+          command: sudo sh ~/repo/architecture/deployment/deploy_prod.sh
 
   deploy_staging_backend:
     docker:
@@ -133,6 +136,9 @@ jobs:
       - run:
           name: clean install
           command: cd backendRestDraft/; mvn clean install
+      - run:
+          name: deploy to AWS
+          command: sudo sh ~/repo/architecture/deployment/deploy_staging.sh
 
   deploy_live_frontend:
     docker:
