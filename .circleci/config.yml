@@ -4,6 +4,23 @@
 #
 version: 2
 jobs:
+    build:
+      working_directory: ~/repo
+      docker:
+      - image: circleci/openjdk:8-jdk-browsers
+      steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
+          - v1-dependencies
+      - run:
+          name: install maven
+          command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
+      - run:
+          name: run unit tests backend
+          command: cd backendRestDraft/; sudo mvn test
+          
   buildandtestfrontend:
     docker:
       # specify the version you desire here
@@ -42,23 +59,6 @@ jobs:
           paths:
             - ./web/big-data-ui/.cache/yarn
           key: v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
-
-    buildandtestbackend:
-      working_directory: ~/repo
-      docker:
-      - image: circleci/openjdk:8-jdk-browsers
-      steps:
-      - checkout
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
-          - v1-dependencies
-      - run:
-          name: install maven
-          command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
-      - run:
-          name: run unit tests backend
-          command: cd backendRestDraft/; sudo mvn test
 
   deploy_live:
     docker:
@@ -130,13 +130,13 @@ workflows:
   version: 2
   build-test-and-deploy:
     jobs:
-      - buildandtestbackend
+      - build
       - buildandtestfrontend:
           requires:
-            - buildandtestbackend
+            - build
       - deploy_live:
           requires:
-            - buildandtestbackend
+            - build
           filters:
             branches:
               only:
