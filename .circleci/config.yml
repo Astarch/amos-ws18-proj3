@@ -100,7 +100,7 @@ jobs:
           - v1-dependencies
       - run:
           name: deploy to AWS
-          command: sudo ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no; sudo sh ~/repo/architecture/deployment/deploy_staging.sh -y
+          command: sudo sh ~/repo/architecture/deployment/deploy_staging.sh -y
 
   deploy_live_frontend:
     docker:
