@@ -181,7 +181,7 @@ workflows:
       - deploy_staging_backend:
           requires:
             #- build_and_test_backend
-            - build_and_test_frontend
+            - build_and_test_frontend 
           filters:
             branches:
               only:
