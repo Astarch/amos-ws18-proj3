@@ -4,7 +4,35 @@
 #
 version: 2
 jobs:
-  build_and_test:
+    build_and_test_backend:
+      docker:
+        # specify the version you desire here
+        - image: circleci/jdk8
+
+        # Specify service dependencies here if necessary
+        # CircleCI maintains a library of pre-built images
+        # documented at https://circleci.com/docs/2.0/circleci-images/
+        # - image: circleci/mongo:3.4.4
+
+      working_directory: ~/repo
+
+      steps:
+        - checkout
+
+        # Download and cache dependencies
+        - restore_cache:
+            keys:
+            - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
+            - v1-dependencies
+      - run:
+          name: install maven
+          command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
+      - run:
+          name: run unit tests backend
+          command: cd backendRestDraft/; sudo mvn test
+
+
+  build_and_test_frontend:
     docker:
       # specify the version you desire here
       - image: circleci/node:7.10
@@ -25,23 +53,11 @@ jobs:
           - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
           - v1-dependencies
       - run:
-          name: install software-properties-common
-          command: cd backendRestDraft/; sudo apt-get install software-properties-common; sudo apt-get update -y
-      - run:
-          name: install java sdk 8
-          command: cd backendRestDraft/; sudo add-apt-repository ppa:webupd8team/java; sudo apt-get update -y; sudo apt-get install openjdk-8-jdk
-      - run:
           name: install
           command: cd web/big-data-ui; yarn install
       - run:
           name: install karma
           command: cd web/big-data-ui; yarn add karma
-      - run:
-          name: install maven
-          command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
-      - run:
-          name: run unit tests backend
-          command: cd backendRestDraft/; sudo mvn test
 
       - run:
           name: run unit tests
@@ -131,19 +147,20 @@ jobs:
 
 workflows:
   version: 2
-  build_test_deploy:
+  build_test_deploy_pretrendr:
     jobs:
-      - build_and_test
+      - build_and_test_backend
+      - build_and_test_frontend
       - deploy_live:
           requires:
-            - build_and_test
+            - build_and_test_frontend
           filters:
             branches:
               only:
                 - master
       - deploy_staging:
           requires:
-            - build_and_test
+            - build_and_test_frontend
           filters:
             branches:
               only:
