@@ -33,6 +33,9 @@ jobs:
           name: install karma
           command: cd web/big-data-ui; yarn add karma
       - run:
+          name: install java sdk 8
+          command: cd backendRestDraft/; sudo apt-get install oracle-java8-installer
+      - run:
           name: install maven
           command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
       - run:
@@ -76,6 +79,15 @@ jobs:
           name: create build
           command: cd web/big-data-ui; yarn run build
       - run:
+          name: install java sdk 8
+          command: cd backendRestDraft/; sudo apt-get install oracle-java8-installer
+      - run:
+          name: install maven
+          command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
+      - run:
+          name: clean install backend
+          command: cd backendRestDraft/; sudo mvn install; sudo mvn clean install
+      - run:
           name: Install aws cli and deploy to aws
           working_directory: /
           command: |
@@ -99,14 +111,14 @@ jobs:
           name: create build
           command: cd web/big-data-ui; yarn run build
       - run:
-          name: install maven
-          command: cd backendRestDraft/; sudo apt-get install maven
+          name: install java sdk 8
+          command: cd backendRestDraft/; sudo apt-get install oracle-java8-installer
       - run:
-          name: compile backendend
-          command: cd backendRestDraft/; mvn install
+          name: install maven
+          command: cd backendRestDraft/; sudo apt-get update -y; sudo apt-get install maven
       - run:
           name: clean install backend
-          command: cd backendRestDraft/; sudo mvn clean install
+          command: cd backendRestDraft/; sudo mvn install; sudo mvn clean install
       - run:
           name: Install aws cli and deploy to aws
           working_directory: /
