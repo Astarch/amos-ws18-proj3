@@ -102,7 +102,7 @@ jobs:
 
   deploy_live_backend:
     docker:
-      - image: circleci/node:7.10
+      - image: maven:3.5.0-jdk-8
     working_directory: ~/repo
     steps:
       - checkout
