@@ -112,16 +112,7 @@ jobs:
           - v1-dependencies
       - run:
           name: install
-          command: cd web/big-data-ui; yarn install
-      - run:
-          name: create build
-          command: cd web/big-data-ui; yarn run build
-      - run:
-          name: Install aws cli and deploy to aws S3
-          working_directory: /
-          command: |
-            sudo apt-get -y -qq install awscli
-            aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend.s3-website.us-east-2/ --delete
+          command: cd web/big-data-ui
 
   deploy_live_frontend:
     docker:
