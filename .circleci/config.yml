@@ -117,6 +117,23 @@ jobs:
           name: clean install
           command: cd backendRestDraft/; mvn clean install
 
+  deploy_staging_backend:
+    docker:
+      - image: maven:3.5.0-jdk-8
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
+          - v1-dependencies
+      - run:
+          name: compile
+          command: cd backendRestDraft/; mvn compile
+      - run:
+          name: clean install
+          command: cd backendRestDraft/; mvn clean install
+
   deploy_live_frontend:
     docker:
       - image: circleci/node:7.10
@@ -193,11 +210,11 @@ workflows:
             branches:
               only:
                 - master
-      #- deploy_staging_backend:
-      #    requires:
-      #      - build_and_test_backend
-      #      - build_and_test_frontend
-      #    filters:
-      #      branches:
-      #        only:
-      #          - develop
+      - deploy_staging_backend:
+          requires:
+            - build_and_test_backend
+            - build_and_test_frontend
+          filters:
+            branches:
+              only:
+                - develop
