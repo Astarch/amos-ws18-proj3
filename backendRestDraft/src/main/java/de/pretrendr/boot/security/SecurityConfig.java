@@ -44,6 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private RESTAuthenticationSuccessHandler authenticationSuccessHandler;
 
 	@Autowired
+	private RestAuthenticationLogoutHandler authenticationLogoutHandler;
+
+	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(authenticationProvider());
 		auth.userDetailsService(userDetailsService());
@@ -74,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.logout()
 			.logoutUrl("/auth/logout")
-			.invalidateHttpSession(true)
+			.logoutSuccessHandler(authenticationLogoutHandler)
 		;
 		// @formatter:on
 	}
