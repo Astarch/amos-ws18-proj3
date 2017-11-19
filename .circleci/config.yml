@@ -121,7 +121,7 @@ workflows:
   build_test_deploy:
     jobs:
       - frontend_build_and_test
-      - backend_build_and_test
+     # - backend_build_and_test
       - frontend_deploy:
           requires:
             - frontend_build_and_test
@@ -130,12 +130,12 @@ workflows:
               only:
                 - develop
                 - master
-      - backend_deploy:
-          #requires:
-           # - backend_build_and_test
-          filters:
-            branches:
-              only:
-                - develop
-                - master
-                - feature/circleci9
+     # - backend_deploy:
+      #    requires:
+       #     - backend_build_and_test
+        #  filters:
+         #   branches:
+          #    only:
+           #     - develop
+            #    - master
+             #   #- feature/circleci9
