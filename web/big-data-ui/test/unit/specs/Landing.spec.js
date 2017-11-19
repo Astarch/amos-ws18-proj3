@@ -17,7 +17,7 @@ describe('LandingPage.vue', () => {
     const Constructor = Vue.extend(Landing);
     const vm = new Constructor().$mount();
     expect(vm.$el.querySelector('h1.display-3').textContent)
-      .to.equal('AMOS-Supercrunch');
+      .to.equal('pretrendr');
   });
 
   // test open and close function
