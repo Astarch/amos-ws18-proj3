@@ -1,26 +1,27 @@
 <template>
   <div id="landing-page">
-      <header-nav></header-nav>
+    <pretrendr-header/>
     <div class="py-5 gradient-overlay"
          style="background-image: url(&quot;https://pingendo.github.io/templates/sections/assets/cover_event.jpg&quot;);">
       <div class="container py-5">
         <div class="row">
           <div class="col-md-3 text-white">
             <img class="img-fluid d-block mx-auto mb-5"
-                 src="https://pingendo.github.io/templates/sections/assets/footer_logo2.png"></div>
+                 src="../../assets/logo.png"></div>
           <div class="col-md-9 text-white align-self-center">
-            <h1 class="display-3 mb-4">AMOS-Supercrunch</h1>
+            <h1 class="display-3 mb-4">pretrendr</h1>
             <p class="lead mb-5">To analyse and visualise your Data and find trends in it.&nbsp;
               <br></p>
             <div id=loginButtons>
-              <a href="#register" ref="register" class="btn btn-lg btn-primary mx-1" v-on:click.prevent="open('register')">Register</a>
+              <a href="#register" ref="register" class="btn btn-lg btn-primary mx-1"
+                 v-on:click.prevent="open('register')">Register</a>
               <a href="#login" class="btn btn-lg btn-primary mx-1" v-on:click.prevent="open('login')">Log In</a>
             </div>
           </div>
         </div>
       </div>
     </div>
-   <footer-fix></footer-fix>
+    <pretrendr-footer/>
 
     <login-modal
       :is-active="modalActive"
@@ -36,11 +37,13 @@
 
 <script>
   import LoginModal from './LoginModal';
+  import PretrendrHeader from './Header.vue';
+  import PretrendrFooter from './Footer.vue';
 
 
   export default {
     name: 'landing',
-    components: { LoginModal },
+    components: {LoginModal, PretrendrHeader, PretrendrFooter},
     data: () => ({
       modalActive: false,
       modalType: 'login',
@@ -57,7 +60,6 @@
       },
     },
   }
-
 
 
 </script>
