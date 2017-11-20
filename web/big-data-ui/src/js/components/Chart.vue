@@ -24,10 +24,21 @@
     props: ['data'],
     watch: {
       data: function (newData, oldData) {
-        this.buildGraph(newData);
+        this.prepareData(newData);
       }
     },
     methods: {
+      prepareData: function (newdata) {
+        var key; var data = []; var self = this;
+
+        for (key in newdata) {
+          if (newdata.hasOwnProperty(key)){
+            newdata[key] = Number(newdata[key]);
+            data.push({'label':key, 'count':newdata[key]});
+          }
+        }
+        this.buildGraph(data);
+      },
       // idea: http://zeroviscosity.com/d3-js-step-by-step/step-1-a-basic-pie-chart
       buildGraph: function (newdata) {
         var self = this;
@@ -35,7 +46,6 @@
         this.height = document.getElementById('chart').getBoundingClientRect().height;
         this.rad = Math.min(this.width, this.height) / 2;
         this.colorScale = d3.scaleOrdinal().range(['#A468D5', '#3F046F', '#582781', '#640CAB', '#200039', '#9D74BF']);
-
         this.svg = d3.select('#chart').append('g').attr('transform', 'translate(' + (this.width / 2) + ',' + (this.height / 2) + ')');
         var radius = d3.arc().innerRadius(this.rad - (0.45 * this.rad)).outerRadius(this.rad);
         var pie = d3.pie().value(function (d) {
