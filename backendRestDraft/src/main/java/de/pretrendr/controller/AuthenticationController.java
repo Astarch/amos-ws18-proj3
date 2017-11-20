@@ -3,13 +3,11 @@ package de.pretrendr.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.pretrendr.boot.git.GitRepositoryState;
 import de.pretrendr.businesslogic.UserService;
 import de.pretrendr.dataccess.UserDAO;
 import de.pretrendr.model.User;
@@ -21,11 +19,9 @@ import de.pretrendr.model.pojo.RegUser;
  */
 @RequestMapping("/auth")
 @RestController
-@CrossOrigin
 public class AuthenticationController {
 	private final UserService userService;
 	private final UserDAO userDAO;
-	private GitRepositoryState gitRepositoryState;
 
 	/**
 	 * Autowired constructor.
@@ -35,11 +31,9 @@ public class AuthenticationController {
 	 * @author Tristan Schneider
 	 */
 	@Autowired
-	public AuthenticationController(final UserService userService, final UserDAO userDAO,
-			GitRepositoryState gitRepositoryState) {
+	public AuthenticationController(final UserService userService, final UserDAO userDAO) {
 		this.userService = userService;
 		this.userDAO = userDAO;
-		this.gitRepositoryState = gitRepositoryState;
 	}
 
 	/**
@@ -57,16 +51,4 @@ public class AuthenticationController {
 			return new ResponseEntity<>(HttpStatus.FOUND);
 		}
 	}
-
-	/**
-	 * @param username
-	 * @param password
-	 * @return
-	 * @author Tristan Schneider
-	 */
-	@RequestMapping(value = "/version", method = RequestMethod.GET)
-	public ResponseEntity<GitRepositoryState> version() {
-		return new ResponseEntity<GitRepositoryState>(gitRepositoryState, HttpStatus.OK);
-	}
-
 }
