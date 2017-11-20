@@ -1,4 +1,4 @@
-package de.pretrendr.usermanagement.controller;
+package de.pretrendr.controller;
 
 import java.util.Map;
 import java.util.Random;
