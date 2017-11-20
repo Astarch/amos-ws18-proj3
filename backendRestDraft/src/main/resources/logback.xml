@@ -5,7 +5,7 @@
 		<file>log/pretrendr.log</file>
 		<append>false</append>
 		<encoder>
-			<pattern>%-5relative %-5level %logger{35} - %msg%n</pattern>
+			<pattern>%date{ISO8601} %-5relative %-5level %logger{35} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
@@ -13,7 +13,7 @@
 		<file>log/latest.log</file>
 		<append>false</append>
 		<encoder>
-			<pattern>%-5relative %-5level %logger{35} - %msg%n</pattern>
+			<pattern>%date{ISO8601} %-5relative %-5level %logger{35} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
@@ -21,13 +21,13 @@
 		<file>log/all.log</file>
 		<append>true</append>
 		<encoder>
-			<pattern>%-5relative %-5level %logger{35} - %msg%n</pattern>
+			<pattern>%date{ISO8601} %-5relative %-5level %logger{35} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<pattern>%-5relative %-5level %logger{35} - %msg%n</pattern>
+			<pattern>%date{HH:mm:ss.SSS} %-5relative %-5level %logger{35} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
@@ -42,6 +42,5 @@
 		<appender-ref ref="ALL" />
 		<appender-ref ref="LATEST" />
 		<appender-ref ref="STDOUT" />
-
 	</root>
 </configuration>
