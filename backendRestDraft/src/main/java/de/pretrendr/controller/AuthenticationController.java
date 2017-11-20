@@ -1,4 +1,4 @@
-package de.pretrendr.usermanagement.controller;
+package de.pretrendr.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.pretrendr.boot.git.GitRepositoryState;
-import de.pretrendr.usermanagement.businesslogic.UserService;
-import de.pretrendr.usermanagement.dataccess.UserDAO;
-import de.pretrendr.usermanagement.model.User;
-import de.pretrendr.usermanagement.model.pojo.RegUser;
+import de.pretrendr.businesslogic.UserService;
+import de.pretrendr.dataccess.UserDAO;
+import de.pretrendr.model.User;
+import de.pretrendr.model.pojo.RegUser;
 
 /*****
  * 

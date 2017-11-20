@@ -1,4 +1,4 @@
-package de.pretrendr.usermanagement.businesslogic;
+package de.pretrendr.businesslogic;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -13,14 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
-import de.pretrendr.usermanagement.dataccess.RoleDAO;
-import de.pretrendr.usermanagement.dataccess.UserDAO;
-import de.pretrendr.usermanagement.ex.EmailNotValidException;
-import de.pretrendr.usermanagement.model.QRole;
-import de.pretrendr.usermanagement.model.QUser;
-import de.pretrendr.usermanagement.model.Role;
-import de.pretrendr.usermanagement.model.User;
-import de.pretrendr.usermanagement.model.pojo.RegUser;
+import de.pretrendr.dataccess.RoleDAO;
+import de.pretrendr.dataccess.UserDAO;
+import de.pretrendr.ex.EmailNotValidException;
+import de.pretrendr.model.QRole;
+import de.pretrendr.model.QUser;
+import de.pretrendr.model.Role;
+import de.pretrendr.model.User;
+import de.pretrendr.model.pojo.RegUser;
 
 /**
  * @author Tristan Schneider

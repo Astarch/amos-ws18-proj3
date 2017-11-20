@@ -1,4 +1,4 @@
-package de.pretrendr.usermanagement.model.pojo;
+package de.pretrendr.model.pojo;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

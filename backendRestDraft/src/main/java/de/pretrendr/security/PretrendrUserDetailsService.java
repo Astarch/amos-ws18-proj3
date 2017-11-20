@@ -1,4 +1,4 @@
-package de.pretrendr.usermanagement.security;
+package de.pretrendr.security;
 
 import javax.transaction.Transactional;
 
@@ -8,9 +8,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import de.pretrendr.usermanagement.dataccess.UserDAO;
-import de.pretrendr.usermanagement.model.QUser;
-import de.pretrendr.usermanagement.model.User;
+import de.pretrendr.dataccess.UserDAO;
+import de.pretrendr.model.QUser;
+import de.pretrendr.model.User;
 
 @Service("customUserDetailsService")
 @Transactional

@@ -1,4 +1,4 @@
-package de.pretrendr.usermanagement.ex;
+package de.pretrendr.ex;
 
 public class EmailNotValidException extends RuntimeException {
 

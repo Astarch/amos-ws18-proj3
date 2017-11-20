@@ -1,4 +1,4 @@
-package de.pretrendr.usermanagement.model;
+package de.pretrendr.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;

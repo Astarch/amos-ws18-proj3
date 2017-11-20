@@ -17,8 +17,8 @@ import org.junit.Test;
 import com.google.common.collect.Lists;
 
 import de.pretrendr.PretrendrTestBase;
-import de.pretrendr.usermanagement.model.Role;
-import de.pretrendr.usermanagement.model.User;
+import de.pretrendr.model.Role;
+import de.pretrendr.model.User;
 
 public class UserControllerTest extends PretrendrTestBase {
 
