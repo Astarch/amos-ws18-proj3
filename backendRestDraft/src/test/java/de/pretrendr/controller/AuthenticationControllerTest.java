@@ -19,8 +19,8 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.http.MockHttpOutputMessage;
 
 import de.pretrendr.PretrendrTestBase;
-import de.pretrendr.usermanagement.model.Role;
-import de.pretrendr.usermanagement.model.User;
+import de.pretrendr.model.Role;
+import de.pretrendr.model.User;
 
 public class AuthenticationControllerTest extends PretrendrTestBase {
 

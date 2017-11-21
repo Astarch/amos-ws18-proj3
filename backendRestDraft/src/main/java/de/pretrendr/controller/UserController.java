@@ -1,4 +1,4 @@
-package de.pretrendr.usermanagement.controller;
+package de.pretrendr.controller;
 
 import java.util.UUID;
 
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.pretrendr.usermanagement.businesslogic.UserService;
-import de.pretrendr.usermanagement.model.User;
+import de.pretrendr.businesslogic.UserService;
+import de.pretrendr.model.User;
 
 /**
  * @author Tristan Schneider

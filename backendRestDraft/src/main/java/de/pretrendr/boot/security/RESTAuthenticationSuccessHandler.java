@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.pretrendr.usermanagement.dataccess.UserDAO;
-import de.pretrendr.usermanagement.model.QUser;
-import de.pretrendr.usermanagement.model.User;
+import de.pretrendr.dataccess.UserDAO;
+import de.pretrendr.model.QUser;
+import de.pretrendr.model.User;
 
 /**
  * @author Tristan Schneider

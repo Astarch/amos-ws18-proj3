@@ -21,8 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import de.pretrendr.boot.Application;
-import de.pretrendr.usermanagement.dataccess.RoleDAO;
-import de.pretrendr.usermanagement.dataccess.UserDAO;
+import de.pretrendr.dataccess.RoleDAO;
+import de.pretrendr.dataccess.UserDAO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)

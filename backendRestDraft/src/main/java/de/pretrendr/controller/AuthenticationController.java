@@ -1,18 +1,17 @@
-package de.pretrendr.usermanagement.controller;
+package de.pretrendr.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.pretrendr.usermanagement.businesslogic.UserService;
-import de.pretrendr.usermanagement.dataccess.UserDAO;
-import de.pretrendr.usermanagement.model.User;
-import de.pretrendr.usermanagement.model.pojo.RegUser;
+import de.pretrendr.businesslogic.UserService;
+import de.pretrendr.dataccess.UserDAO;
+import de.pretrendr.model.User;
+import de.pretrendr.model.pojo.RegUser;
 
 /*****
  * 
@@ -20,7 +19,6 @@ import de.pretrendr.usermanagement.model.pojo.RegUser;
  */
 @RequestMapping("/auth")
 @RestController
-@CrossOrigin
 public class AuthenticationController {
 	private final UserService userService;
 	private final UserDAO userDAO;
@@ -52,7 +50,5 @@ public class AuthenticationController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.FOUND);
 		}
-
 	}
-
 }

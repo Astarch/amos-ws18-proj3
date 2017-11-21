@@ -1,12 +1,12 @@
-package de.pretrendr.usermanagement.businesslogic;
+package de.pretrendr.businesslogic;
 
 import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.EntityNotFoundException;
 
-import de.pretrendr.usermanagement.model.User;
-import de.pretrendr.usermanagement.model.pojo.RegUser;
+import de.pretrendr.model.User;
+import de.pretrendr.model.pojo.RegUser;
 
 /**
  * @author Tristan Schneider

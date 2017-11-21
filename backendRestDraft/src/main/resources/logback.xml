@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+	<appender name="PRETRENDR" class="ch.qos.logback.core.FileAppender">
+		<file>log/pretrendr.log</file>
+		<append>false</append>
+		<encoder>
+			<pattern>%date{ISO8601} %-5relative %-5level %logger{35} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="LATEST" class="ch.qos.logback.core.FileAppender">
+		<file>log/latest.log</file>
+		<append>false</append>
+		<encoder>
+			<pattern>%date{ISO8601} %-5relative %-5level %logger{35} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="ALL" class="ch.qos.logback.core.FileAppender">
+		<file>log/all.log</file>
+		<append>true</append>
+		<encoder>
+			<pattern>%date{ISO8601} %-5relative %-5level %logger{35} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%date{HH:mm:ss.SSS} %-5relative %-5level %logger{35} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+
+	<logger name="de.pretrendr" level="ALL" additivity="false">
+		<appender-ref ref="PRETRENDR" />
+		<appender-ref ref="LATEST" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<root level="INFO">
+		<appender-ref ref="ALL" />
+		<appender-ref ref="LATEST" />
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>

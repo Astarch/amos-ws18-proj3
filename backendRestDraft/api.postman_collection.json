@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "pretrendr.de/api",
-		"_postman_id": "8b705960-24f8-a084-4ece-7e5b0058174b",
+		"_postman_id": "c17b80c5-69d8-5cbd-8fb6-46271ecde4b0",
 		"description": "This serves as a definition for the user management api for the backend.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -145,6 +145,29 @@
 							"raw": ""
 						},
 						"description": "Method: GET\r\nParameters\r\n    - id\r\nRequest Payload\r\n    - none\r\nResponse Payload:\r\n    - user (full json)\r\n    - x-auth-token"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/dummy",
+			"description": "",
+			"item": [
+				{
+					"name": "/register",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/dummy/graphData",
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Method: POST\r\nParameters\r\n    - none\r\nRequest Payload\r\n    - user (full json except ID)\r\n    - x-auth-token\r\nResponse Payload:\r\n    - user (full json with ID)"
 					},
 					"response": []
 				}
