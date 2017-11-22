@@ -73,12 +73,13 @@
         let port = "8081/"
         let localhostUrl = "http://localhost:" + port
         let stagingUrl = "http://staging.pretrendr.com:" + port
+        let liveUrl = "http://pretrendrfrontend.s3-website.us-east-2.amazonaws.com:"+port
 
         var username = 'user2';
         var password = 'pass2';
 
         let http = axios.create({
-          baseURL: localhostUrl,
+          baseURL: liveUrl,
           withCredentials: true,
           auth: qs.stringify({
             username: username,
