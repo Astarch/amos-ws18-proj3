@@ -26,7 +26,7 @@ public class S3Controller {
 	@RequestMapping(value = "/wordCountMap/{bucketname}", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Integer>> getDummyGraphData(@PathVariable(name = "bucketname") String bucketname)
 			throws IOException {
-		Map<String, Integer> map = s3Service.getWorkdCountMapFromBucketName(bucketname);
+		Map<String, Integer> map = s3Service.getWordCountMapFromBucketName(bucketname);
 
 		return new ResponseEntity<Map<String, Integer>>(map, HttpStatus.OK);
 	}

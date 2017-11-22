@@ -34,7 +34,7 @@ public class S3ServiceImpl implements S3Service {
 	}
 
 	@Override
-	public Map<String, Integer> getWorkdCountMapFromBucketName(String bucket_name) throws IOException {
+	public Map<String, Integer> getWordCountMapFromBucketName(String bucket_name) throws IOException {
 		Map<String, Integer> wordCounts = Maps.newHashMap();
 		ObjectListing ol = s3.listObjects(bucket_name);
 		List<S3ObjectSummary> objects = ol.getObjectSummaries(); // summary, contains names of files
