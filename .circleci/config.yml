@@ -89,11 +89,11 @@ jobs:
           working_directory: /
           command: |
             if [[ $CIRCLE_BRANCH == "master" ]]; then
-              aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend/ --region us-east-2 --acl public-read --delete 
+              aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend/ --region us-east-2 --acl public-read --delete
               echo "Deployed to production";
             else
-              aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --region us-east-2 --acl public-read --delete 
-              echo "deployed to staging"; 
+              aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --region us-east-2 --acl public-read --delete
+              echo "deployed to staging";
             fi
 
   backend_deploy:
@@ -113,7 +113,7 @@ jobs:
             else
               chmod +x ~/repo/architecture/deployment/deploy_staging.sh
               sudo sh ~/repo/architecture/deployment/deploy_staging.sh -y
-              echo "deployed to staging"; 
+              echo "deployed to test";
             fi
 
 workflows:
@@ -121,7 +121,7 @@ workflows:
   build_test_deploy:
     jobs:
       - frontend_build_and_test
-     # - backend_build_and_test
+      - backend_build_and_test
       - frontend_deploy:
           requires:
             - frontend_build_and_test
@@ -130,12 +130,12 @@ workflows:
               only:
                 - develop
                 - master
-     # - backend_deploy:
-      #    requires:
-       #     - backend_build_and_test
-        #  filters:
-         #   branches:
-          #    only:
-           #     - develop
-            #    - master
-             #   #- feature/circleci9
+      - backend_deploy:
+          requires:
+           - backend_build_and_test
+          filters:
+            branches:
+              only:
+                - develop
+                - master
+                - feature/circleci_backend_new
