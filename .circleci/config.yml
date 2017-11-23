@@ -18,10 +18,10 @@ jobs:
           - v1-dependencies
       - run:
           name: test backend
-          command: sudo chmod +x ./architecture/deployment/deploy_staging.sh
+          command: sudo chmod +x ./architecture/deployment/deploy_prod.sh
       - run:
           name: test backend
-          command: sudo sh ./architecture/deployment/deploy_staging.sh -y
+          command: sudo sh ./architecture/deployment/deploy_prod.sh -y
       - run:
           name: install
           command: cd web/big-data-ui; yarn install
@@ -113,12 +113,12 @@ jobs:
           working_directory: ~/repo
           command: |
             if [[ $CIRCLE_BRANCH == "master" ]]; then
-              chmod +x architecture/deployment/deploy_prod.sh
-              sudo sh architecture/deployment/deploy_prod.sh -y
+              chmod +x ./architecture/deployment/deploy_prod.sh
+              sudo sh ./architecture/deployment/deploy_prod.sh -y
               echo "Deployed to production";
             else
-              chmod +x architecture/deployment/deploy_staging.sh
-              sudo sh architecture/deployment/deploy_staging.sh -y
+              chmod +x ./architecture/deployment/deploy_staging.sh
+              sudo sh ./architecture/deployment/deploy_staging.sh -y
               echo "Deployed to test";
             fi
 
