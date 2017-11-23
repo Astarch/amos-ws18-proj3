@@ -8,12 +8,14 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component
+@Slf4j
 public class ScheduledTasks  implements ApplicationRunner {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ScheduledTasks.class);
 	
 	/**
 	 * Execute jobs after the system started
@@ -39,7 +41,7 @@ public class ScheduledTasks  implements ApplicationRunner {
 		
 		//Example
 		SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		LOGGER.info("The time is now " + dateFormat.format(new Date()));
+		log.info("The time is now " + dateFormat.format(new Date()));
 	}
 
 	
