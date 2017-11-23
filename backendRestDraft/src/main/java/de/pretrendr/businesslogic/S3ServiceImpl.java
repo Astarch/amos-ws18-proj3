@@ -33,10 +33,15 @@ import de.pretrendr.model.CachedS3Bucket;
 import de.pretrendr.model.CachedS3Object;
 import de.pretrendr.model.CachedS3WordCountPair;
 import de.pretrendr.model.QCachedS3Bucket;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
+@Transactional
+@Getter
+@Setter
 public class S3ServiceImpl implements S3Service {
 	@Autowired
 	final private AmazonS3 s3;
@@ -123,7 +128,6 @@ public class S3ServiceImpl implements S3Service {
 	}
 
 	@Override
-	@Transactional
 	public boolean updateCacheByBucket(UUID bucketId) {
 		CachedS3Bucket bucket = cachedS3BucketDAO.findOne(bucketId);
 		return updateCache(bucket);
@@ -136,7 +140,7 @@ public class S3ServiceImpl implements S3Service {
 		List<CachedS3Object> unvisitedObjects = Lists.newArrayList(bucket.getObjects());
 
 		ObjectListing ol = s3.listObjects(bucket.getName());
-		List<S3ObjectSummary> objects = ol.getObjectSummaries(); // summary, contains names of files
+		List<S3ObjectSummary> objects = ol.getObjectSummaries();
 		for (S3ObjectSummary os : objects) {
 			CachedS3Object cachedS3Object = null;
 			try {

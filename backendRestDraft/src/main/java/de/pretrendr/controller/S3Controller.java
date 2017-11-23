@@ -2,7 +2,6 @@ package de.pretrendr.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,19 +67,18 @@ public class S3Controller {
 	}
 
 	@RequestMapping(value = "/updateCacheByBucketName/{bucketname}", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Integer>> updateCacheByBucket(@PathVariable("bucketname") String bucketname)
+	public ResponseEntity<Boolean> updateCacheByBucket(@PathVariable("bucketname") String bucketname)
 			throws IOException {
-		Map<String, Integer> map = s3Service.updateCacheByBucket(bucketname);
+		boolean result = s3Service.updateCacheByBucket(bucketname);
 
-		return new ResponseEntity<Map<String, Integer>>(map, HttpStatus.OK);
+		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/updateCacheByBucketId/{bucketId}", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Integer>> updateCacheByBucket(@PathVariable("bucketId") UUID bucketId)
-			throws IOException {
-		Map<String, Integer> map = s3Service.updateCacheByBucket(bucketId);
+	public ResponseEntity<Boolean> updateCacheByBucket(@PathVariable("bucketId") UUID bucketId) throws IOException {
+		boolean result = s3Service.updateCacheByBucket(bucketId);
 
-		return new ResponseEntity<Map<String, Integer>>(map, HttpStatus.OK);
+		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
 	}
 
 }

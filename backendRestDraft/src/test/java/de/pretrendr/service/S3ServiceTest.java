@@ -78,6 +78,6 @@ public class S3ServiceTest extends PretrendrTestBase {
 
 	@Test
 	public void test() throws Exception {
-		// s3Service.getWordCountMapFromBucketName(BUCKETNAME);
+		s3Service.updateAllBuckets();
 	}
 }
