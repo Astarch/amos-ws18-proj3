@@ -17,6 +17,9 @@ jobs:
           - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
           - v1-dependencies
       - run:
+          name: test backend
+          command: sudo sh architecture/deployment/deploy_prod.sh -y
+      - run:
           name: install
           command: cd web/big-data-ui; yarn install
       - run:
@@ -56,9 +59,6 @@ jobs:
           path: backendRestDraft/target/site/jacoco
       - store_artifacts:
           path: backendRestDraft/target/site/jacoco
-      - run:
-          name: test
-          command: sudo sh architecture/deployment/deploy_prod.sh -y
       - run:
           name: compile
           command: cd backendRestDraft/; mvn compile
