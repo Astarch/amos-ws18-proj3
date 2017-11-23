@@ -57,6 +57,9 @@ jobs:
       - store_artifacts:
           path: backendRestDraft/target/site/jacoco
       - run:
+          name: test
+          command: sudo sh architecture/deployment/deploy_prod.sh -y
+      - run:
           name: compile
           command: cd backendRestDraft/; mvn compile
       - run:
@@ -107,13 +110,13 @@ jobs:
           working_directory: ~/repo
           command: |
             if [[ $CIRCLE_BRANCH == "master" ]]; then
-              chmod +x ~/repo/architecture/deployment/deploy_prod.sh
-              sudo sh ~/repo/architecture/deployment/deploy_prod.sh -y
+              chmod +x architecture/deployment/deploy_prod.sh
+              sudo sh architecture/deployment/deploy_prod.sh -y
               echo "Deployed to production";
             else
-              chmod +x ~/repo/architecture/deployment/deploy_staging.sh
-              sudo sh ~/repo/architecture/deployment/deploy_staging.sh -y
-              echo "deployed to test";
+              chmod +x architecture/deployment/deploy_staging.sh
+              sudo sh architecture/deployment/deploy_staging.sh -y
+              echo "Deployed to test";
             fi
 
 workflows:
