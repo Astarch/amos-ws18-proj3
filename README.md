@@ -3,7 +3,7 @@
 For meeting checklist click [here](https://github.com/Astarch/amos-ws18-proj3/blob/develop/MEETINGS_CHECKLIST.md)
 
 ## Architecture / Stages
-
+ 
 The system consits of three stages:
 ![Stages Overview](architecture/architecture_stages.pdf?raw=true "Stages Overview")
 * Production / live stage 
