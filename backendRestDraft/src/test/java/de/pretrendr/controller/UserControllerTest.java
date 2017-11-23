@@ -62,11 +62,6 @@ public class UserControllerTest extends PretrendrTestBase {
 	public void getUser_invalidId_404NOTFOUND() throws Exception {
 		mockMvc.perform(get("/api/user/get/" + new UUID(0L, 0L))).andExpect(status().isNotFound());
 	}
-	
-	@Test
-	public void getUser_invalidId_404NOTFOUND_Test() throws Exception {
-		mockMvc.perform(get("/api/user/get/" + new UUID(0L, 0L))).andExpect(status().isFound());
-	}
 
 	@Test
 	public void getAllUser_valueCheck_success() throws Exception {
