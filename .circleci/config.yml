@@ -17,12 +17,6 @@ jobs:
           - v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
           - v1-dependencies
       - run:
-          name: test backend
-          command: sudo chmod +x ./architecture/deployment/deploy_prod.sh
-      - run:
-          name: test backend
-          command: sudo sh ./architecture/deployment/deploy_prod.sh -y
-      - run:
           name: install
           command: cd web/big-data-ui; yarn install
       - run:
@@ -138,7 +132,7 @@ workflows:
                 - master
       - backend_deploy:
           requires:
-           - backend_build_and_test
+            - backend_build_and_test
           filters:
             branches:
               only:
