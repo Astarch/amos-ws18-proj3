@@ -18,10 +18,10 @@ jobs:
           - v1-dependencies
       - run:
           name: test backend
-          command: sudo chmod +x /architecture/deployment/deploy_staging.sh
+          command: sudo chmod +x ./architecture/deployment/deploy_staging.sh
       - run:
           name: test backend
-          command: sudo sh /architecture/deployment/deploy_staging.sh -y
+          command: sudo sh ./architecture/deployment/deploy_staging.sh -y
       - run:
           name: install
           command: cd web/big-data-ui; yarn install
