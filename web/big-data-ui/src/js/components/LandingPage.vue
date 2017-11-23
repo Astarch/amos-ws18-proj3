@@ -46,7 +46,7 @@
   import LoginModal from './LoginModal';
   import PretrendrHeader from './Header.vue';
   import PretrendrFooter from './Footer.vue';
-  import axios from 'axios';
+  import http, {api} from '../utils/api';
   import qs from 'qs';
 
 
@@ -70,36 +70,30 @@
       },
 
       getAllUsers() {
-        let port = "8081/"
-        let localhostUrl = "http://localhost:" + port
-        let stagingUrl = "http://staging.pretrendr.com:" + port
-        let liveUrl = "http://pretrendrfrontend.s3-website.us-east-2.amazonaws.com:"+port
-
-        var username = 'user2';
-        var password = 'pass2';
-
-        let http = axios.create({
-          baseURL: liveUrl,
-          withCredentials: true,
-          auth: qs.stringify({
-            username: username,
-            password: password
-          }),
-        });
-
+        let username = 'user2';
+        let password = 'pass2';
         http.post('/auth/login', qs.stringify({
           username: username,
           password: password
         }))
-            .then(response => {
-              console.log(response);
-              this.requestAnswer = response.data;
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-
-
+           .then(response => {
+             console.log(response);
+             this.requestAnswer = response.data;
+            // get all user
+             api.user.getAll()
+                    .then(resp => {
+                      console.log(resp);
+                      // do logout
+                      api.auth.getLogout().then(res =>
+                        console.log(res))
+                    })
+                    .catch(function (error) {
+                      console.log(error);
+                    })
+           })
+           .catch(function (error) {
+             console.log(error);
+           });
       },
     },
   }
