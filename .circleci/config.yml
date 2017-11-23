@@ -18,7 +18,7 @@ jobs:
           - v1-dependencies
       - run:
           name: test backend
-          command: sudo chmod +x /architecture/deployment/deploy_prod.sh
+          command: sudo chmod +x /architecture/deployment/deploy_staging.sh
       - run:
           name: test backend
           command: sudo sh /architecture/deployment/deploy_staging.sh -y
