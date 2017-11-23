@@ -3,7 +3,7 @@
 For meeting checklist click [here](https://github.com/Astarch/amos-ws18-proj3/blob/develop/MEETINGS_CHECKLIST.md)
 
 ## Architecture / Stages
-
+ 
 The system consits of three stages:
 ![Stages Overview](architecture/architecture_stages.pdf?raw=true "Stages Overview")
 * Production / live stage 
@@ -12,7 +12,7 @@ The system consits of three stages:
          * Backend
     * S3-Bucket 1: pretrendr.com
          * Frontend
-* Test/Staging stage 
+* Test / staging stage 
      * Based on developer branch
      * Test-Server 1: 18.216.129.153
          * Backend
@@ -21,26 +21,16 @@ The system consits of three stages:
 * Local Machine based on new feature branch
 
 ## Continuous Integration
-### Continuous Integration Backend
+To achieve continuous integration we set up circleci which checks firstly the build process and the JUnit tests for backend and also for frontend. If the tests are successfully proceeded and we want to merge the new git version either into master branch or develop branch, circleci will deploy the products (frontend, backend) to the following systems:
+* Production / live stage based on git branch master
+    * Backend will be deployed to the EC2 instance 18.216.122.218
+    * Frontend will be deployed to the S3 bucket http://pretrendrfrontend.s3-website.us-east-2.amazonaws.com
+* Test / Staging stage based on git branch develop
+    * Backend will be deployed to the EC2 instance 18.216.129.153
+    * Frontend will be deployed to the S3 bucket http://pretrendrfrontendstaging.s3-website.us-east-2.amazonaws.com
 
-To achieve continuous integration we set up a jenkins service which check the github repository every five minutes. If there is a change on github, the following shell script will be executed:
 
-```bash
-sudo rm -rf /home/ubuntu/pretrendr/backend/backendRestDraft || true
-sudo mv "/var/lib/jenkins/workspace/deploy-test-system/backendRestDraft" /home/ubuntu/pretrendr/backend
-cd /home/ubuntu/pretrendr/backend/backendRestDraft
-sudo mvn compile
-sudo mvn clean install || true
-sudo rm /home/ubuntu/pretrendr/backend/pretrendr-0.1.0.jar || true
-sudo mv /home/ubuntu/pretrendr/backend/backendRestDraft/target/pretrendr-0.1.0.jar /home/ubuntu/pretrendr/backend/pretrendr-0.1.0.jar
-sudo rm -rf /var/lib/jenkins/workspace/* || true
-cd /home/ubuntu/pretrendr/backend
-sudo java -jar pretrendr-0.1.0.jar </dev/null &>/dev/null &
-```
-
-### Continuous Integration Frontend
-
-TODO
+Circleci log: https://circleci.com/gh/Astarch/amos-ws18-proj3
 
 ## Git Workflow (git-flow)
 
