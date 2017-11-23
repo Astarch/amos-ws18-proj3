@@ -3,6 +3,7 @@ package de.pretrendr.model;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +15,9 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.collect.Sets;
 
 import de.pretrendr.util.CustomDateSerializer;
 import lombok.AllArgsConstructor;
@@ -31,6 +34,12 @@ import lombok.ToString;
 @ToString(exclude = { "objects", "wordCount" })
 @EqualsAndHashCode(exclude = { "objects", "wordCount" })
 public class CachedS3Bucket {
+	public CachedS3Bucket(String name) {
+		this.name = name;
+		this.created = DateTime.now();
+		this.lastModified = DateTime.now();
+	}
+
 	@Id
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -50,9 +59,11 @@ public class CachedS3Bucket {
 	@JsonSerialize(using = CustomDateSerializer.class)
 	private DateTime lastModified;
 
-	@OneToMany(mappedBy = "bucket")
-	Set<CachedS3Object> objects;
+	@JsonIgnore
+	@OneToMany(mappedBy = "bucket", cascade = { CascadeType.ALL })
+	Set<CachedS3Object> objects = Sets.newHashSet();
 
-	@OneToMany(mappedBy = "bucket")
-	Set<CachedS3WordCountPair> wordCount;
+	@JsonIgnore
+	@OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL)
+	Set<CachedS3WordCountPair> wordCount = Sets.newHashSet();;
 }

@@ -1,6 +1,7 @@
 package de.pretrendr.boot.git;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import org.springframework.context.annotation.Bean;
@@ -14,8 +15,10 @@ public class GitRepositoryConfig {
 	@Bean
 	public GitRepositoryState gitRepositoryState() throws IOException {
 		Properties properties = new Properties();
-		properties.load(getClass().getClassLoader().getResourceAsStream("git.properties"));
-
+		InputStream stream = getClass().getClassLoader().getResourceAsStream("git.properties");
+		if (stream != null) {
+			properties.load(stream);
+		}
 		return new GitRepositoryState(properties);
 	}
 }

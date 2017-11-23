@@ -8,7 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.pretrendr.model.CachedS3WordCountPair.CachedS3WordCountPairId;
 import lombok.AllArgsConstructor;
@@ -34,7 +37,9 @@ public class CachedS3WordCountPair {
 	}
 
 	@Id
-	@JoinColumn
+	@ManyToOne
+	@JoinColumn(insertable = false, updatable = false)
+	@JsonIgnore
 	private CachedS3Bucket bucket;
 
 	@Id
