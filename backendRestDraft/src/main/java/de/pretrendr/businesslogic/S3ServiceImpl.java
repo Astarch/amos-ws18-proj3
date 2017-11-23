@@ -5,14 +5,17 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 
 import org.apache.commons.io.FileUtils;
 import org.assertj.core.util.Lists;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -113,15 +116,94 @@ public class S3ServiceImpl implements S3Service {
 	}
 
 	@Override
-	public Map<String, Integer> updateCacheByBucket(String bucketName) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean updateCacheByBucket(String bucketName) {
+		CachedS3Bucket bucket = cachedS3BucketDAO
+				.findOne(QCachedS3Bucket.cachedS3Bucket.name.equalsIgnoreCase(bucketName));
+		return updateCache(bucket);
 	}
 
 	@Override
-	public Map<String, Integer> updateCacheByBucket(UUID bucketId) {
-		// TODO Auto-generated method stub
-		return null;
+	@Transactional
+	public boolean updateCacheByBucket(UUID bucketId) {
+		CachedS3Bucket bucket = cachedS3BucketDAO.findOne(bucketId);
+		return updateCache(bucket);
+	}
+
+	private boolean updateCache(CachedS3Bucket bucket) {
+		boolean doWordCount = false;
+		Map<String, Integer> wordCounts = Maps.newHashMap();
+
+		List<CachedS3Object> unvisitedObjects = Lists.newArrayList(bucket.getObjects());
+
+		ObjectListing ol = s3.listObjects(bucket.getName());
+		List<S3ObjectSummary> objects = ol.getObjectSummaries(); // summary, contains names of files
+		for (S3ObjectSummary os : objects) {
+			CachedS3Object cachedS3Object = null;
+			try {
+				cachedS3Object = bucket.getObjects().stream().filter(o -> o.getName().equals(os.getKey())).findFirst()
+						.get();
+				unvisitedObjects.remove(cachedS3Object);
+			} catch (Exception e) {
+				cachedS3Object = new CachedS3Object(bucket, os.getKey(), DateTime.now(),
+						new DateTime(os.getLastModified()));
+				bucket.getObjects().add(cachedS3Object);
+				doWordCount = true;
+			}
+			if (cachedS3Object == null) {
+			} else {
+				if (new DateTime(os.getLastModified()).isAfter(cachedS3Object.getLastModified())) {
+					cachedS3Object.setLastModified(new DateTime(os.getLastModified()));
+					cachedS3ObjectDAO.save(cachedS3Object);
+					doWordCount = true;
+				}
+			}
+		}
+		bucket.getObjects().removeAll(unvisitedObjects);
+		if (doWordCount) {
+			for (S3ObjectSummary os : objects) {
+				try {
+					S3Object s3Object = s3.getObject(bucket.getName(), os.getKey());
+					S3ObjectInputStream inputStream = s3Object.getObjectContent();
+					File file = new File(os.getKey());
+					FileUtils.copyInputStreamToFile(inputStream, file);
+					try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+						String line;
+						while ((line = br.readLine()) != null) {
+							String[] wordAndCount = line.split("\t");
+							if (wordAndCount.length == 2) {
+								wordCounts.put(wordAndCount[0], Integer.parseInt(wordAndCount[1]));
+							} else {
+								log.error(MessageFormat.format(
+										"Could not parse S3 entry:'{0}' in bucket:'{1}' file:'{2}'", line,
+										bucket.getName(), os.getKey()));
+							}
+						}
+					}
+
+					FileUtils.forceDelete(file);
+				} catch (IOException e) {
+					log.error(MessageFormat.format(
+							"Could not work with file while updating cache for bucket {0} and object {1}",
+							bucket.getName(), os.getKey()));
+				}
+			}
+			bucket.getWordCount().clear();
+			for (String word : wordCounts.keySet()) {
+				bucket.getWordCount().add(new CachedS3WordCountPair(bucket, word, wordCounts.get(word)));
+			}
+			cachedS3BucketDAO.save(bucket);
+		}
+
+		return true;
+	}
+
+	@Override
+	public void updateAllBuckets() {
+		Iterable<CachedS3Bucket> buckets = cachedS3BucketDAO.findAll();
+		for (Iterator<CachedS3Bucket> iter = buckets.iterator(); iter.hasNext();) {
+			CachedS3Bucket bucket = iter.next();
+			boolean result = updateCache(bucket);
+		}
 	}
 
 }

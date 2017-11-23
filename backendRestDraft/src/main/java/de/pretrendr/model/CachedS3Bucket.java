@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -60,10 +61,10 @@ public class CachedS3Bucket {
 	private DateTime lastModified;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "bucket", cascade = { CascadeType.ALL })
+	@OneToMany(mappedBy = "bucket", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	Set<CachedS3Object> objects = Sets.newHashSet();
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	Set<CachedS3WordCountPair> wordCount = Sets.newHashSet();;
 }
