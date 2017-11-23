@@ -138,4 +138,3 @@ workflows:
               only:
                 - develop
                 - master
-                - feature/circleci_backend_new
