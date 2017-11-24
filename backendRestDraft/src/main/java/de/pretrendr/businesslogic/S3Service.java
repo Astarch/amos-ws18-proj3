@@ -5,26 +5,33 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import de.pretrendr.ex.InvalidBucketNameException;
 import de.pretrendr.model.CachedS3Bucket;
 import de.pretrendr.model.CachedS3Object;
 import de.pretrendr.model.CachedS3WordCountPair;
 
 public interface S3Service {
-	public List<CachedS3WordCountPair> getWordCountMapByBucket(String bucketName) throws IOException;
+	List<CachedS3WordCountPair> getWordCountMapByBucket(String bucketName) throws IOException;
 
-	public List<CachedS3Bucket> getAllBuckets();
+	List<CachedS3Bucket> getAllBuckets();
 
-	public List<CachedS3Object> getAllObjectsByBucketId(UUID bucketId);
+	List<CachedS3Object> getAllObjectsByBucketId(UUID bucketId);
 
-	public List<CachedS3Object> getAllObjectsByBucket(String bucketName);
+	List<CachedS3Object> getAllObjectsByBucketName(String bucketName);
 
-	public List<CachedS3WordCountPair> getWordCountMapByBucket(UUID bucketId);
+	List<CachedS3WordCountPair> getWordCountMapByBucket(UUID bucketId);
 
-	public boolean updateCacheByBucket(String bucketName);
+	CachedS3Bucket updateCacheByBucket(String bucketName);
 
-	public boolean updateCacheByBucket(UUID bucketId);
+	CachedS3Bucket updateCacheByBucket(UUID bucketId);
 
-	void updateAllBuckets();
+	boolean updateAllBuckets();
 
 	Map<String, Integer> getWordCountMapFromBucketName(String bucket_name) throws IOException;
+
+	CachedS3Bucket createBucket(String bucketName) throws InvalidBucketNameException;
+
+	boolean deleteBucket(String bucketName);
+
+	boolean deleteBucket(UUID bucketId);
 }

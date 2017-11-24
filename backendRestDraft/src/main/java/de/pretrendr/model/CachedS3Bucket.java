@@ -38,7 +38,12 @@ public class CachedS3Bucket {
 	public CachedS3Bucket(String name) {
 		this.name = name;
 		this.created = DateTime.now();
-		this.lastModified = DateTime.now();
+	}
+
+	public CachedS3Bucket(String name, DateTime created, DateTime lastModified) {
+		this.name = name;
+		this.created = created;
+		this.lastModified = lastModified;
 	}
 
 	@Id
@@ -51,6 +56,9 @@ public class CachedS3Bucket {
 	private String name;
 
 	@Column
+	private boolean stillAvailable = true;
+
+	@Column
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	@JsonSerialize(using = CustomDateSerializer.class)
 	private DateTime created;
@@ -61,10 +69,10 @@ public class CachedS3Bucket {
 	private DateTime lastModified;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "bucket", cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "bucket", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	Set<CachedS3Object> objects = Sets.newHashSet();
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "bucket", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	Set<CachedS3WordCountPair> wordCount = Sets.newHashSet();;
 }

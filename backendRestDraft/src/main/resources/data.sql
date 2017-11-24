@@ -95,21 +95,24 @@ INTO
         id,
         name,
         created,
-        last_modified
+        last_modified,
+        still_available
     )
     VALUES
     (
         '5ef77322-d069-11e7-8fab-cec278b6b50a',
         'test-bucket-small',
         '2017-11-15 14:10:47.661000',
-        '2017-11-15 14:10:47.661000'
+        '2017-11-15 14:10:47.661000',
+        'true'
     )
     ,
     (
         '90d5d53c-d069-11e7-8fab-cec278b6b50a',
         'test-bucket-large',
         '2017-11-15 14:10:47.661000',
-        '2017-11-15 14:10:47.661000'
+        '2017-11-15 14:10:47.661000',
+        'true'
     );
 INSERT
 INTO
