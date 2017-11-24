@@ -2,6 +2,7 @@ package de.pretrendr.service;
 
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +19,6 @@ import de.pretrendr.businesslogic.S3ServiceImpl;
 import de.pretrendr.model.CachedS3Bucket;
 import de.pretrendr.model.CachedS3Object;
 import de.pretrendr.model.CachedS3WordCountPair;
-import de.pretrendr.model.CachedS3WordCountPair.CachedS3WordCountPairId;
 import io.findify.s3mock.S3Mock;
 
 public class S3ServiceTest extends PretrendrTestBase {
@@ -33,7 +33,7 @@ public class S3ServiceTest extends PretrendrTestBase {
 
 	private CachedS3Bucket bucket;
 	private List<CachedS3Object> objects;
-	private List<CachedS3WordCountPairId> wordCountPairs;
+	private List<CachedS3WordCountPair> wordCountPairs;
 
 	@Before
 	public void setup() throws Exception {
@@ -52,13 +52,18 @@ public class S3ServiceTest extends PretrendrTestBase {
 					"word11\t1" + n + "word12\t2" + n + "word13\t3" + n + "word14\t4" + n);
 			client.putObject(BUCKETNAME, "file0003", "word24\t1" + n + "word23\t2" + n + "word22\t3" + n + "word21\t4");
 			client.putObject(BUCKETNAME, "file0004", "word31\t1" + n + "word34\t2" + n + "word32\t3" + n + "word33\t4");
-			client.putObject(BUCKETNAME, "file0005", "word43\t1" + n + "word42\t2" + n + "word41\t3" + n + "word44\t4");
-			s3Service = new S3ServiceImpl(client);
+			client.putObject(BUCKETNAME, "file0005createme",
+					"word43\t1" + n + "word42\t2" + n + "word41\t3" + n + "word44\t4");
+			s3Service = new S3ServiceImpl(client, cachedS3BucketDAO, cachedS3ObjectDAO, cachedS3WordCountPairDAO);
 		}
 
 		cachedS3BucketDAO.deleteAll();
 		cachedS3ObjectDAO.deleteAll();
 		cachedS3WordCountPairDAO.deleteAll();
+
+		DateTime oneHourAgo = DateTime.now().minusHours(1);
+		DateTime now = DateTime.now();
+		DateTime twoHoursAgo = DateTime.now().minusHours(2);
 
 		bucket = new CachedS3Bucket(BUCKETNAME);
 		// cachedS3BucketDAO.save(new CachedS3Bucket(BUCKETNAME));
@@ -66,7 +71,7 @@ public class S3ServiceTest extends PretrendrTestBase {
 		bucket.getObjects()
 				.addAll(Lists.newArrayList(new CachedS3Object(this.bucket, "file0001"),
 						new CachedS3Object(this.bucket, "file0002"), new CachedS3Object(this.bucket, "file0003"),
-						new CachedS3Object(this.bucket, "file0004")));
+						new CachedS3Object(this.bucket, "file0004"), new CachedS3Object(this.bucket, "file0005delme")));
 
 		bucket.getWordCount()
 				.addAll(Lists.newArrayList(new CachedS3WordCountPair(bucket, "word1", 1),
@@ -79,5 +84,7 @@ public class S3ServiceTest extends PretrendrTestBase {
 	@Test
 	public void test() throws Exception {
 		s3Service.updateAllBuckets();
+		List<CachedS3Bucket> buckets = s3Service.getAllBuckets();
+		System.out.println(buckets);
 	}
 }

@@ -46,18 +46,21 @@ public class S3ServiceImpl implements S3Service {
 	@Autowired
 	final private AmazonS3 s3;
 
-	@Autowired
 	private CachedS3BucketDAO cachedS3BucketDAO;
-	@Autowired
 	private CachedS3ObjectDAO cachedS3ObjectDAO;
-	@Autowired
 	private CachedS3WordCountPairDAO cachedS3WordCountPairDAO;
 
 	@Autowired
-	public S3ServiceImpl(AmazonS3 s3) {
+	public S3ServiceImpl(AmazonS3 s3, CachedS3BucketDAO cachedS3BucketDAO, CachedS3ObjectDAO cachedS3ObjectDAO,
+			CachedS3WordCountPairDAO cachedS3WordCountPairDAO) {
 		this.s3 = s3;
+		this.cachedS3BucketDAO = cachedS3BucketDAO;
+		this.cachedS3ObjectDAO = cachedS3ObjectDAO;
+		this.cachedS3WordCountPairDAO = cachedS3WordCountPairDAO;
+
 	}
 
+	@Override
 	public Map<String, Integer> getWordCountMapFromBucketName(String bucket_name) throws IOException {
 		Map<String, Integer> wordCounts = Maps.newHashMap();
 		ObjectListing ol = s3.listObjects(bucket_name);
@@ -155,14 +158,16 @@ public class S3ServiceImpl implements S3Service {
 			}
 			if (cachedS3Object == null) {
 			} else {
-				if (new DateTime(os.getLastModified()).isAfter(cachedS3Object.getLastModified())) {
+				if (cachedS3Object.getLastModified() == null
+						|| new DateTime(os.getLastModified()).isAfter(cachedS3Object.getLastModified())) {
 					cachedS3Object.setLastModified(new DateTime(os.getLastModified()));
-					cachedS3ObjectDAO.save(cachedS3Object);
+					// cachedS3ObjectDAO.save(cachedS3Object);
 					doWordCount = true;
 				}
 			}
 		}
 		bucket.getObjects().removeAll(unvisitedObjects);
+		cachedS3ObjectDAO.delete(unvisitedObjects);
 		if (doWordCount) {
 			for (S3ObjectSummary os : objects) {
 				try {
@@ -207,6 +212,7 @@ public class S3ServiceImpl implements S3Service {
 		for (Iterator<CachedS3Bucket> iter = buckets.iterator(); iter.hasNext();) {
 			CachedS3Bucket bucket = iter.next();
 			boolean result = updateCache(bucket);
+			bucket = cachedS3BucketDAO.findOne(bucket.getId());
 		}
 	}
 

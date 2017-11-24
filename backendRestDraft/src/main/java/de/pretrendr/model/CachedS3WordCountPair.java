@@ -1,19 +1,19 @@
 package de.pretrendr.model;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import de.pretrendr.model.CachedS3WordCountPair.CachedS3WordCountPairId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,22 +27,25 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString(exclude = { "bucket" })
 @EqualsAndHashCode(exclude = { "bucket" })
-@IdClass(CachedS3WordCountPairId.class)
 public class CachedS3WordCountPair {
-	@Data
-	public static class CachedS3WordCountPairId implements Serializable {
-		private static final long serialVersionUID = 1L;
-		private UUID bucket;
-		private String word;
+
+	public CachedS3WordCountPair(CachedS3Bucket bucket, String word, int count) {
+		this.bucket = bucket;
+		this.word = word;
+		this.count = count;
 	}
 
 	@Id
+	@GeneratedValue(generator = "UUID")
+	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	@Column(length = 16)
+	private UUID id;
+
 	@ManyToOne
-	@JoinColumn(insertable = false, updatable = false)
+	@JoinColumn(insertable = true, updatable = false)
 	@JsonIgnore
 	private CachedS3Bucket bucket;
 
-	@Id
 	@Column
 	private String word;
 

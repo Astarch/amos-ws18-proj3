@@ -61,10 +61,10 @@ public class CachedS3Bucket {
 	private DateTime lastModified;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "bucket", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "bucket", cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
 	Set<CachedS3Object> objects = Sets.newHashSet();
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	Set<CachedS3WordCountPair> wordCount = Sets.newHashSet();;
 }

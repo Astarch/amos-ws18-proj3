@@ -2,6 +2,7 @@ package de.pretrendr.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,14 @@ public class S3Controller {
 
 	@Autowired
 	S3Service s3Service;
+
+	@RequestMapping(value = "/wordCountMap/{bucketname}", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Integer>> getDummyGraphData(@PathVariable(name = "bucketname") String bucketname)
+			throws IOException {
+		Map<String, Integer> map = s3Service.getWordCountMapFromBucketName(bucketname);
+
+		return new ResponseEntity<Map<String, Integer>>(map, HttpStatus.OK);
+	}
 
 	@RequestMapping(value = "/wordCountMapByBucketName/{bucketname}", method = RequestMethod.GET)
 	public ResponseEntity<List<CachedS3WordCountPair>> getWordCountByBucketName(

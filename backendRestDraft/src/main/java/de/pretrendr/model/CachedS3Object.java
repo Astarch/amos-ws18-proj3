@@ -1,23 +1,22 @@
 package de.pretrendr.model;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import de.pretrendr.model.CachedS3Object.CachedS3ObjectId;
 import de.pretrendr.util.CustomDateSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,29 +31,30 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString(exclude = { "bucket" })
 @EqualsAndHashCode(exclude = { "bucket" })
-@IdClass(CachedS3ObjectId.class)
 public class CachedS3Object {
 	public CachedS3Object(CachedS3Bucket bucket, String name) {
 		this.bucket = bucket;
 		this.name = name;
-		this.created = DateTime.now();
-		this.lastModified = DateTime.now();
 	}
 
-	@Data
-	public static class CachedS3ObjectId implements Serializable {
-		private static final long serialVersionUID = 1L;
-		private UUID bucket;
-		private String name;
+	public CachedS3Object(CachedS3Bucket bucket, String name, DateTime created, DateTime lastModified) {
+		this.created = created;
+		this.lastModified = lastModified;
+		this.bucket = bucket;
+		this.name = name;
 	}
 
 	@Id
+	@GeneratedValue(generator = "UUID")
+	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	@Column(length = 16)
+	private UUID id;
+
 	@ManyToOne
-	@JoinColumn(insertable = false, updatable = false)
+	@JoinColumn(insertable = true, updatable = false)
 	@JsonIgnore
 	private CachedS3Bucket bucket;
 
-	@Id
 	@Column
 	private String name;
 

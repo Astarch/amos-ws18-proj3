@@ -2,6 +2,7 @@ package de.pretrendr.businesslogic;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import de.pretrendr.model.CachedS3Bucket;
@@ -24,4 +25,6 @@ public interface S3Service {
 	public boolean updateCacheByBucket(UUID bucketId);
 
 	void updateAllBuckets();
+
+	Map<String, Integer> getWordCountMapFromBucketName(String bucket_name) throws IOException;
 }
