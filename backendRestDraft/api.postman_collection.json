@@ -1,8 +1,8 @@
 {
 	"variables": [],
 	"info": {
-		"name": "pretrendr.de/api",
-		"_postman_id": "c17b80c5-69d8-5cbd-8fb6-46271ecde4b0",
+		"name": "pretrendr.de/api copy",
+		"_postman_id": "18c7f883-efa6-0863-eefe-a5fe5b3fefe0",
 		"description": "This serves as a definition for the user management api for the backend.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -155,7 +155,7 @@
 			"description": "",
 			"item": [
 				{
-					"name": "/register",
+					"name": "/graphData",
 					"request": {
 						"url": "http://{{baseurl}}:{{baseport}}/api/dummy/graphData",
 						"method": "GET",
@@ -166,8 +166,237 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": "Method: POST\r\nParameters\r\n    - none\r\nRequest Payload\r\n    - user (full json except ID)\r\n    - x-auth-token\r\nResponse Payload:\r\n    - user (full json with ID)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/s3",
+			"description": "",
+			"item": [
+				{
+					"name": "/wordCountMap/{bucketName}",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/s3/wordCountMap/amos-pretrendr-commoncrawl-sample",
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/wordCountMapByBucketName/{bucketname}",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/s3/wordCountMapByBucketName/amos-pretrendr-commoncrawl-sample",
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/wordCountMapByBucketId/{bucketId}",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/s3/wordCountMapByBucketId/5ef77322-d069-11e7-8fab-cec278b6b50a",
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/bucket/getAll",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/s3/bucket/getAll",
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/bucket/create/{bucketName}",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/s3/bucket/create/amos-pretrendr-commoncrawl-sample",
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/bucket/deleteByName/{bucketName}",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/s3/bucket/deleteByName/new-test-bucket",
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/bucket/deleteById/{bucketId}",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/s3/bucket/deleteById/7c8eaaca-8247-4e3f-8d01-cc48233a0093",
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/object/getAllByBucketId/{bucketId}",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/s3/object/getAllByBucketId/5ef77322-d069-11e7-8fab-cec278b6b50a",
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/object/getAllByBucketName/{bucketName}",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/s3/object/getAllByBucketName/test-bucket-small",
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/bucket/updateByName/{bucketname}",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/s3/bucket/updateByName/amos-pretrendr-commoncrawl-sample",
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/bucket/updateById/{bucketId}",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/s3/bucket/updateById/5ef77322-d069-11e7-8fab-cec278b6b50a",
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
 					},
 					"response": []
 				}
