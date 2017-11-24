@@ -204,6 +204,6 @@ public class S3ServiceTest extends PretrendrTestBase {
 		assertNotNull(
 				bucket.getWordCount().stream().filter(o -> o.getWord().equals("unchangedword5")).findFirst().get());
 		assertEquals(true, bucket.isStillAvailable());
-		assertEquals(inOneHour, bucket.getLastModified());
+		assertNotEquals(inOneHour, bucket.getLastModified());
 	}
 }
