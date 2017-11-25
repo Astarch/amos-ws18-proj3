@@ -32,7 +32,14 @@ public class S3Controller {
 	@Autowired
 	S3Service s3Service;
 
+	/**
+	 * Default Items-Per-Page. This is a string, because the request expects an
+	 * input of type String. It will be parsed by the framework.
+	 */
+	public static final String DEFAULT_IPP = "10";
+
 	@RequestMapping(value = "/wordCountMap/{bucketname}", method = RequestMethod.GET)
+	@Deprecated
 	public ResponseEntity<Map<String, Integer>> getDummyGraphData(@PathVariable(name = "bucketname") String bucketname)
 			throws IOException {
 		Map<String, Integer> map = s3Service.getWordCountMapFromBucketName(bucketname);
@@ -44,7 +51,7 @@ public class S3Controller {
 	public ResponseEntity<Page<CachedS3WordCountPair>> getWordCountByBucketName(
 			@PathVariable("bucketname") String bucketname,
 			@RequestParam(value = "number", defaultValue = "0") final int number,
-			@RequestParam(value = "size", defaultValue = "10") final int size) throws IOException {
+			@RequestParam(value = "size", defaultValue = DEFAULT_IPP) final int size) throws IOException {
 
 		Page<CachedS3WordCountPair> list = s3Service.getWordCountMapByBucketName(bucketname, number, size);
 
@@ -54,7 +61,7 @@ public class S3Controller {
 	@RequestMapping(value = "/wordCountMapByBucketId/{bucketId}", method = RequestMethod.GET)
 	public ResponseEntity<Page<CachedS3WordCountPair>> getWordCountByBucketId(@PathVariable("bucketId") UUID bucketId,
 			@RequestParam(value = "number", defaultValue = "0") final int number,
-			@RequestParam(value = "size", defaultValue = "10") final int size) throws IOException {
+			@RequestParam(value = "size", defaultValue = DEFAULT_IPP) final int size) throws IOException {
 		Page<CachedS3WordCountPair> list = s3Service.getWordCountMapByBucketId(bucketId, number, size);
 
 		return new ResponseEntity<Page<CachedS3WordCountPair>>(list, HttpStatus.OK);
@@ -122,5 +129,4 @@ public class S3Controller {
 
 		return new ResponseEntity<CachedS3Bucket>(result, HttpStatus.OK);
 	}
-
 }

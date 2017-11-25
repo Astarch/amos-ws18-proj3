@@ -52,7 +52,7 @@ public class CachedS3Bucket {
 	@Column(name = "id", length = 16)
 	private UUID id;
 
-	@Column(name = "name")
+	@Column(name = "name", unique = true)
 	private String name;
 
 	@Column(name = "stillavailable")

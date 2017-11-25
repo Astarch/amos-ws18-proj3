@@ -8,13 +8,15 @@ CREATE TABLE
         lastname VARCHAR(255),
         email VARCHAR(255),
         address VARCHAR(255),
-        phone VARCHAR(255)
+        phone VARCHAR(255),
+        UNIQUE(username),
+        unique(email)
     );
 CREATE TABLE
     ROLE
     (
         id UUID PRIMARY KEY,
-        role VARCHAR(255)
+        role VARCHAR(255) UNIQUE
     );
 CREATE TABLE
     USER_ROLE
@@ -30,7 +32,7 @@ CREATE TABLE
         created TIMESTAMP,
         lastmodified TIMESTAMP,
         stillavailable BOOLEAN,
-        name VARCHAR(255)
+        name VARCHAR(255) UNIQUE
     );
 CREATE TABLE
     CACHEDS3OBJECT

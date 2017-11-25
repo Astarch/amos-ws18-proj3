@@ -72,6 +72,8 @@ public class User implements Serializable, UserDetails {
 	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	@Column(name = "id", length = 16)
 	private UUID id;
+
+	@Column(name = "username", unique = true)
 	private String username;
 
 	@JsonIgnore
@@ -84,7 +86,7 @@ public class User implements Serializable, UserDetails {
 	@Column(name = "lastname")
 	private String lastname;
 
-	@Column(name = "email")
+	@Column(name = "email", unique = true)
 	private String email;
 
 	@Column(name = "address")

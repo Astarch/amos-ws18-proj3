@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
@@ -55,6 +56,8 @@ public class S3ServiceImpl implements S3Service {
 	private CachedS3BucketDAO cachedS3BucketDAO;
 	private CachedS3ObjectDAO cachedS3ObjectDAO;
 	private CachedS3WordCountPairDAO cachedS3WordCountPairDAO;
+
+	private final static String ERR_MSG_404_BUCKET = "Bucket '{1}' could not be found.";
 
 	@Autowired
 	public S3ServiceImpl(AmazonS3 s3, CachedS3BucketDAO cachedS3BucketDAO, CachedS3ObjectDAO cachedS3ObjectDAO,
@@ -105,8 +108,7 @@ public class S3ServiceImpl implements S3Service {
 		if (bucket != null) {
 			return getWordCountMapByBucketId(bucket.getId(), number, size);
 		} else {
-			throw new EntityNotFoundException(
-					MessageFormat.format("{0} with name {1} could not be found.", "Bucket", bucketName));
+			throw new EntityNotFoundException(MessageFormat.format(ERR_MSG_404_BUCKET, bucketName));
 		}
 	}
 
@@ -114,7 +116,7 @@ public class S3ServiceImpl implements S3Service {
 	public Page<CachedS3WordCountPair> getWordCountMapByBucketId(UUID bucketId, int number, int size) {
 		CachedS3Bucket bucket = cachedS3BucketDAO.findOne(bucketId);
 		if (bucket == null) {
-			throw new EntityNotFoundException(MessageFormat.format("Bucket with id {0} could not be found.", bucketId));
+			throw new EntityNotFoundException(MessageFormat.format(ERR_MSG_404_BUCKET, bucketId));
 		}
 		Page<CachedS3WordCountPair> wordCountPairs = cachedS3WordCountPairDAO.findAll(
 				QCachedS3WordCountPair.cachedS3WordCountPair.bucket.id.eq(bucketId)
@@ -127,7 +129,7 @@ public class S3ServiceImpl implements S3Service {
 	public List<CachedS3Object> getAllObjectsByBucketId(UUID bucketId) {
 		CachedS3Bucket bucket = cachedS3BucketDAO.findOne(bucketId);
 		if (bucket == null) {
-			throw new EntityNotFoundException(MessageFormat.format("Bucket with id {0} could not be found.", bucketId));
+			throw new EntityNotFoundException(MessageFormat.format(ERR_MSG_404_BUCKET, bucketId));
 		}
 		return Lists.newArrayList(bucket.getObjects());
 	}
@@ -137,8 +139,7 @@ public class S3ServiceImpl implements S3Service {
 		CachedS3Bucket bucket = cachedS3BucketDAO
 				.findOne(QCachedS3Bucket.cachedS3Bucket.name.equalsIgnoreCase(bucketName));
 		if (bucket == null) {
-			throw new EntityNotFoundException(
-					MessageFormat.format("Bucket with name {0} could not be found.", bucketName));
+			throw new EntityNotFoundException(MessageFormat.format(ERR_MSG_404_BUCKET, bucketName));
 		}
 		return getAllObjectsByBucketId(bucket.getId());
 
@@ -149,8 +150,7 @@ public class S3ServiceImpl implements S3Service {
 		CachedS3Bucket bucket = cachedS3BucketDAO
 				.findOne(QCachedS3Bucket.cachedS3Bucket.name.equalsIgnoreCase(bucketName));
 		if (bucket == null) {
-			throw new EntityNotFoundException(
-					MessageFormat.format("Bucket with name {0} could not be found.", bucketName));
+			throw new EntityNotFoundException(MessageFormat.format(ERR_MSG_404_BUCKET, bucketName));
 		}
 		updateCache(bucket, true);
 		return bucket;
@@ -160,7 +160,7 @@ public class S3ServiceImpl implements S3Service {
 	public CachedS3Bucket updateCacheByBucket(UUID bucketId) {
 		CachedS3Bucket bucket = cachedS3BucketDAO.findOne(bucketId);
 		if (bucket == null) {
-			throw new EntityNotFoundException(MessageFormat.format("Bucket with id {0} could not be found.", bucketId));
+			throw new EntityNotFoundException(MessageFormat.format(ERR_MSG_404_BUCKET, bucketId));
 		}
 		updateCache(bucket, true);
 		return bucket;
@@ -296,7 +296,11 @@ public class S3ServiceImpl implements S3Service {
 	@Override
 	public CachedS3Bucket createBucket(String bucketName) throws InvalidBucketNameException {
 		validateBucketName(bucketName);
-		CachedS3Bucket bucket = new CachedS3Bucket(bucketName);
+		CachedS3Bucket bucket = cachedS3BucketDAO.findOne(QCachedS3Bucket.cachedS3Bucket.name.eq(bucketName));
+		if (bucket != null) {
+			throw new EntityExistsException(MessageFormat.format(ERR_MSG_404_BUCKET, bucketName));
+		}
+		bucket = new CachedS3Bucket(bucketName);
 		cachedS3BucketDAO.save(bucket);
 		return bucket;
 	}
@@ -322,7 +326,7 @@ public class S3ServiceImpl implements S3Service {
 	public boolean deleteBucket(String bucketName) {
 		CachedS3Bucket bucket = cachedS3BucketDAO.findOne(QCachedS3Bucket.cachedS3Bucket.name.eq(bucketName));
 		if (bucket == null) {
-			return false;
+			throw new EntityNotFoundException(MessageFormat.format(ERR_MSG_404_BUCKET, bucketName));
 		}
 		cachedS3BucketDAO.delete(bucket);
 		return true;
@@ -332,7 +336,9 @@ public class S3ServiceImpl implements S3Service {
 	public boolean deleteBucket(UUID bucketId) {
 		CachedS3Bucket bucket = cachedS3BucketDAO.findOne(bucketId);
 		if (bucket == null) {
-			return false;
+			if (bucket == null) {
+				throw new EntityNotFoundException(MessageFormat.format(ERR_MSG_404_BUCKET, bucketId));
+			}
 		}
 		cachedS3BucketDAO.delete(bucket);
 		return true;

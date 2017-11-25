@@ -1,8 +1,6 @@
 package de.pretrendr.jobs;
 
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
@@ -50,6 +48,7 @@ public class ScheduledTasks implements ApplicationRunner {
 	 */
 	@Scheduled(cron = "0 0 0 * * ?")
 	public void updateCacheAtMidNight() {
+		log.info("Cache update invoked by scheduler.");
 		startS3WordCountJob();
 	}
 
@@ -57,14 +56,10 @@ public class ScheduledTasks implements ApplicationRunner {
 	 * Word count: job to update the database from S3 buckets
 	 */
 	private void startS3WordCountJob() {
-
-		// Example
-		SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		DateTime start = DateTime.now();
 
-		// update S3 cache
-		log.info("Starting cache update. The time is now " + dateFormat.format(new Date()));
 		s3Service.updateAllBuckets();
+
 		log.info(MessageFormat.format("Finished cache update after {0} seconds.",
 				new Duration(start, DateTime.now()).getStandardSeconds()));
 	}
