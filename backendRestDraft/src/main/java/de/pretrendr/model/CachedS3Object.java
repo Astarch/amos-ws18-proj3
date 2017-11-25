@@ -25,7 +25,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Table(name = "CachedS3Object")
+@Table(name = "CACHEDS3OBJECT")
 @Entity
 @Data
 @NoArgsConstructor
@@ -49,20 +49,20 @@ public class CachedS3Object {
 
 	@Id
 	@ManyToOne
-	@JoinColumn
+	@JoinColumn(name = "bucketid")
 	@JsonIgnore
 	private CachedS3Bucket bucket;
 
 	@Id
-	@Column
+	@Column(name = "name")
 	private String name;
 
-	@Column(updatable = false)
+	@Column(name = "created", updatable = false)
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	@JsonSerialize(using = CustomDateSerializer.class)
 	private DateTime created;
 
-	@Column
+	@Column(name = "lastmodified")
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	@JsonSerialize(using = CustomDateSerializer.class)
 	private DateTime lastModified;

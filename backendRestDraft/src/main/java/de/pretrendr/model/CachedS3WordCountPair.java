@@ -20,7 +20,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Table(name = "CachedS3WordCountPair")
+@Table(name = "CACHEDS3WORDCOUNTPAIR")
 @Entity
 @Data
 @NoArgsConstructor
@@ -38,14 +38,14 @@ public class CachedS3WordCountPair {
 
 	@Id
 	@ManyToOne
-	@JoinColumn
+	@JoinColumn(name = "bucketid")
 	@JsonIgnore
 	private CachedS3Bucket bucket;
 
 	@Id
-	@Column
+	@Column(name = "word")
 	private String word;
 
-	@Column
+	@Column(name = "count")
 	private int count;
 }

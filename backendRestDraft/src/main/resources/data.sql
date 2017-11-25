@@ -1,6 +1,6 @@
 INSERT
 INTO
-    USER
+    ACCOUNT
     (
         id,
         username,
@@ -63,10 +63,10 @@ INTO
     );
 INSERT
 INTO
-    USER_ROLES
+    USER_ROLE
     (
-        user_id,
-        role_id
+        userid,
+        roleid
     )
     VALUES
     (
@@ -90,13 +90,13 @@ INTO
     );
 INSERT
 INTO
-    cacheds3bucket
+    CACHEDS3BUCKET
     (
         id,
         name,
         created,
-        last_modified,
-        still_available
+        lastmodified,
+        stillavailable
     )
     VALUES
     (
@@ -116,12 +116,12 @@ INTO
     );
 INSERT
 INTO
-    cacheds3object
+    CACHEDS3OBJECT
     (
-        bucket_id,
+        bucketid,
         name,
         created,
-        last_modified
+        lastmodified
     )
     VALUES
     (
@@ -230,9 +230,9 @@ INTO
     );
 INSERT
 INTO
-    cacheds3word_count_pair
+    CACHEDS3WORDCOUNTPAIR
     (
-        bucket_id,
+        bucketid,
         word,
         COUNT
     )

@@ -35,7 +35,7 @@ import lombok.ToString;
 /**
  * @author Tristan Schneider
  */
-@Table(name = "User")
+@Table(name = "ACCOUNT")
 @Entity
 @Data
 @NoArgsConstructor
@@ -70,21 +70,32 @@ public class User implements Serializable, UserDetails {
 	@Id
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-	@Column(length = 16)
+	@Column(name = "id", length = 16)
 	private UUID id;
 	private String username;
 
 	@JsonIgnore
+	@Column(name = "password")
 	private String password;
+
+	@Column(name = "firstname")
 	private String firstname;
+
+	@Column(name = "lastname")
 	private String lastname;
+
+	@Column(name = "email")
 	private String email;
+
+	@Column(name = "address")
 	private String address;
+
+	@Column(name = "phone")
 	private String phone;
 
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "userid"), inverseJoinColumns = @JoinColumn(name = "roleid"))
 	private Set<Role> roles = Sets.newHashSet();
 
 	@Override

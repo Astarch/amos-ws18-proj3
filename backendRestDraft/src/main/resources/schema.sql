@@ -1,5 +1,5 @@
 CREATE TABLE
-    USER
+    ACCOUNT
     (
         id UUID PRIMARY KEY,
         username VARCHAR(255),
@@ -17,39 +17,37 @@ CREATE TABLE
         role VARCHAR(255)
     );
 CREATE TABLE
-    USER_ROLES
+    USER_ROLE
     (
-        user_id UUID REFERENCES USER(id),
-        role_id UUID REFERENCES role(id),
-        PRIMARY KEY(user_id, role_id)
+        userid UUID REFERENCES ACCOUNT(id),
+        roleid UUID REFERENCES ROLE(id),
+        PRIMARY KEY(userid, roleid)
     );
 CREATE TABLE
     CACHEDS3BUCKET
     (
-        ID UUID NOT NULL PRIMARY KEY,
-        CREATED TIMESTAMP,
-        LAST_MODIFIED TIMESTAMP,
-		STILL_AVAILABLE BOOLEAN,
-        NAME VARCHAR(255)
+        id UUID NOT NULL PRIMARY KEY,
+        created TIMESTAMP,
+        lastmodified TIMESTAMP,
+        stillavailable BOOLEAN,
+        name VARCHAR(255)
     );
 CREATE TABLE
     CACHEDS3OBJECT
     (
-        NAME VARCHAR(255) NOT NULL,
-        CREATED TIMESTAMP,
-        LAST_MODIFIED TIMESTAMP,
-        BUCKET_ID UUID NOT NULL,
-        PRIMARY KEY(BUCKET_ID,NAME),
-        CONSTRAINT CACHEDS3OBJECT_TO_CACHEDS3BUCKET FOREIGN KEY(BUCKET_ID) REFERENCES
-        CACHEDS3BUCKET(ID)
+        name VARCHAR(255) NOT NULL,
+        created TIMESTAMP,
+        lastmodified TIMESTAMP,
+        bucketid UUID NOT NULL,
+        PRIMARY KEY(bucketid, name),
+        CONSTRAINT s3o_to_s3b FOREIGN KEY(bucketid) REFERENCES CACHEDS3BUCKET(id)
     );
 CREATE TABLE
-    CACHEDS3WORD_COUNT_PAIR
+    CACHEDS3WORDCOUNTPAIR
     (
-        WORD VARCHAR(255) NOT NULL,
+        word VARCHAR(255) NOT NULL,
         COUNT INTEGER,
-        BUCKET_ID UUID NOT NULL,
-        PRIMARY KEY(BUCKET_ID,WORD),
-        CONSTRAINT CACHEDS3WORD_COUNT_PAIR_TO_CACHEDS3BUCKET FOREIGN KEY(BUCKET_ID) REFERENCES
-        CACHEDS3BUCKET(ID)
+        bucketid UUID NOT NULL,
+        PRIMARY KEY(bucketid,word),
+        CONSTRAINT s3wcp_to_s3b FOREIGN KEY(bucketid) REFERENCES CACHEDS3BUCKET(id)
     );

@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Table(name = "CachedS3Bucket")
+@Table(name = "CACHEDS3BUCKET")
 @Entity
 @Data
 @NoArgsConstructor
@@ -49,21 +49,21 @@ public class CachedS3Bucket {
 	@Id
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-	@Column(length = 16)
+	@Column(name = "id", length = 16)
 	private UUID id;
 
-	@Column
+	@Column(name = "name")
 	private String name;
 
-	@Column
+	@Column(name = "stillavailable")
 	private boolean stillAvailable = true;
 
-	@Column
+	@Column(name = "created", updatable = false)
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	@JsonSerialize(using = CustomDateSerializer.class)
 	private DateTime created;
 
-	@Column
+	@Column(name = "lastmodified")
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	@JsonSerialize(using = CustomDateSerializer.class)
 	private DateTime lastModified;
