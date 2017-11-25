@@ -8,12 +8,14 @@ import java.util.UUID;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.pretrendr.businesslogic.S3Service;
@@ -39,19 +41,23 @@ public class S3Controller {
 	}
 
 	@RequestMapping(value = "/wordCountMapByBucketName/{bucketname}", method = RequestMethod.GET)
-	public ResponseEntity<List<CachedS3WordCountPair>> getWordCountByBucketName(
-			@PathVariable("bucketname") String bucketname) throws IOException {
-		List<CachedS3WordCountPair> list = s3Service.getWordCountMapByBucket(bucketname);
+	public ResponseEntity<Page<CachedS3WordCountPair>> getWordCountByBucketName(
+			@PathVariable("bucketname") String bucketname,
+			@RequestParam(value = "number", defaultValue = "0") final int number,
+			@RequestParam(value = "size", defaultValue = "10") final int size) throws IOException {
 
-		return new ResponseEntity<List<CachedS3WordCountPair>>(list, HttpStatus.OK);
+		Page<CachedS3WordCountPair> list = s3Service.getWordCountMapByBucketName(bucketname, number, size);
+
+		return new ResponseEntity<Page<CachedS3WordCountPair>>(list, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/wordCountMapByBucketId/{bucketId}", method = RequestMethod.GET)
-	public ResponseEntity<List<CachedS3WordCountPair>> getWordCountByBucketId(@PathVariable("bucketId") UUID bucketId)
-			throws IOException {
-		List<CachedS3WordCountPair> list = s3Service.getWordCountMapByBucket(bucketId);
+	public ResponseEntity<Page<CachedS3WordCountPair>> getWordCountByBucketId(@PathVariable("bucketId") UUID bucketId,
+			@RequestParam(value = "number", defaultValue = "0") final int number,
+			@RequestParam(value = "size", defaultValue = "10") final int size) throws IOException {
+		Page<CachedS3WordCountPair> list = s3Service.getWordCountMapByBucketId(bucketId, number, size);
 
-		return new ResponseEntity<List<CachedS3WordCountPair>>(list, HttpStatus.OK);
+		return new ResponseEntity<Page<CachedS3WordCountPair>>(list, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/bucket/getAll", method = RequestMethod.GET)

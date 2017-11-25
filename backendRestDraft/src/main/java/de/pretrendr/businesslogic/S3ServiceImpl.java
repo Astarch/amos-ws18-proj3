@@ -17,6 +17,9 @@ import org.apache.commons.io.FileUtils;
 import org.assertj.core.util.Lists;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.s3.AmazonS3;
@@ -35,6 +38,7 @@ import de.pretrendr.model.CachedS3Bucket;
 import de.pretrendr.model.CachedS3Object;
 import de.pretrendr.model.CachedS3WordCountPair;
 import de.pretrendr.model.QCachedS3Bucket;
+import de.pretrendr.model.QCachedS3WordCountPair;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -63,6 +67,7 @@ public class S3ServiceImpl implements S3Service {
 	}
 
 	@Override
+	@Deprecated
 	public Map<String, Integer> getWordCountMapFromBucketName(String bucket_name) throws IOException {
 		Map<String, Integer> wordCounts = Maps.newHashMap();
 		ObjectListing ol = s3.listObjects(bucket_name);
@@ -94,15 +99,28 @@ public class S3ServiceImpl implements S3Service {
 	}
 
 	@Override
-	public List<CachedS3WordCountPair> getWordCountMapByBucket(String bucketName) throws IOException {
+	public Page<CachedS3WordCountPair> getWordCountMapByBucketName(String bucketName, int number, int size) {
 		CachedS3Bucket bucket = cachedS3BucketDAO
 				.findOne(QCachedS3Bucket.cachedS3Bucket.name.equalsIgnoreCase(bucketName));
 		if (bucket != null) {
-			return Lists.newArrayList(bucket.getWordCount());
+			return getWordCountMapByBucketId(bucket.getId(), number, size);
 		} else {
 			throw new EntityNotFoundException(
 					MessageFormat.format("{0} with name {1} could not be found.", "Bucket", bucketName));
 		}
+	}
+
+	@Override
+	public Page<CachedS3WordCountPair> getWordCountMapByBucketId(UUID bucketId, int number, int size) {
+		CachedS3Bucket bucket = cachedS3BucketDAO.findOne(bucketId);
+		if (bucket == null) {
+			throw new EntityNotFoundException(MessageFormat.format("Bucket with id {0} could not be found.", bucketId));
+		}
+		Page<CachedS3WordCountPair> wordCountPairs = cachedS3WordCountPairDAO.findAll(
+				QCachedS3WordCountPair.cachedS3WordCountPair.bucket.id.eq(bucketId)
+						.and(QCachedS3WordCountPair.cachedS3WordCountPair.count.gt(100)),
+				new PageRequest(number, size, new Sort(Sort.Direction.DESC, "count")));
+		return wordCountPairs;
 	}
 
 	@Override
@@ -124,15 +142,6 @@ public class S3ServiceImpl implements S3Service {
 		}
 		return getAllObjectsByBucketId(bucket.getId());
 
-	}
-
-	@Override
-	public List<CachedS3WordCountPair> getWordCountMapByBucket(UUID bucketId) {
-		CachedS3Bucket bucket = cachedS3BucketDAO.findOne(bucketId);
-		if (bucket == null) {
-			throw new EntityNotFoundException(MessageFormat.format("Bucket with id {0} could not be found.", bucketId));
-		}
-		return Lists.newArrayList(bucket.getWordCount());
 	}
 
 	@Override
@@ -159,95 +168,115 @@ public class S3ServiceImpl implements S3Service {
 
 	@Transactional
 	private boolean updateCache(CachedS3Bucket bucket, boolean forceUpdate) {
-		log.debug(MessageFormat.format("Updating cache for {0}, force update is {1}", bucket.getName(), forceUpdate));
-		boolean doWordCount = false;
-		Map<String, Integer> wordCounts = Maps.newHashMap();
+		if (bucket.isStillAvailable() || forceUpdate) {
+			log.debug(MessageFormat.format("CacheUpdate: {0}: Updating with forceUpdate={1}", bucket.getName(),
+					forceUpdate));
 
-		List<CachedS3Object> unvisitedObjects = Lists.newArrayList(bucket.getObjects());
+			boolean doWordCount = false;
+			Map<String, Integer> wordCounts = Maps.newHashMap();
 
-		try {
-			ObjectListing ol = s3.listObjects(bucket.getName());
-			log.debug("Found bucket in Amazon S3.");
-			List<S3ObjectSummary> objects = ol.getObjectSummaries();
-			log.debug(MessageFormat.format("Checking {0} objects now.", ol.getObjectSummaries().size()));
-			for (S3ObjectSummary os : objects) {
-				CachedS3Object cachedS3Object = null;
-				try {
-					cachedS3Object = bucket.getObjects().stream().filter(o -> o.getName().equals(os.getKey()))
-							.findFirst().get();
-					log.debug(MessageFormat.format("Object {0} exists.", os.getKey()));
-					unvisitedObjects.remove(cachedS3Object);
-					if (forceUpdate || cachedS3Object.getLastModified() == null
-							|| new DateTime(os.getLastModified()).isAfter(cachedS3Object.getLastModified())) {
-						cachedS3Object.setLastModified(DateTime.now());
+			List<CachedS3Object> unvisitedObjects = Lists.newArrayList(bucket.getObjects());
+
+			try {
+				ObjectListing ol = s3.listObjects(bucket.getName());
+				log.debug(MessageFormat.format("CacheUpdate: {0}: Found bucket in Amazon S3.", bucket.getName()));
+				List<S3ObjectSummary> objects = ol.getObjectSummaries();
+				log.debug(MessageFormat.format("CacheUpdate: {0}: Checking {1} objects now.", bucket.getName(),
+						ol.getObjectSummaries().size()));
+				for (S3ObjectSummary os : objects) {
+					CachedS3Object cachedS3Object = null;
+					try {
+						cachedS3Object = bucket.getObjects().stream().filter(o -> o.getName().equals(os.getKey()))
+								.findFirst().get();
+						unvisitedObjects.remove(cachedS3Object);
+						if (forceUpdate || cachedS3Object.getLastModified() == null
+								|| new DateTime(os.getLastModified()).isAfter(cachedS3Object.getLastModified())) {
+							log.debug(MessageFormat.format("CacheUpdate: {0}: Object {1} exists and will be updated.",
+									bucket.getName(), os.getKey()));
+							cachedS3Object.setLastModified(DateTime.now());
+							cachedS3Object = cachedS3ObjectDAO.save(cachedS3Object);
+							doWordCount = true;
+						} else {
+							log.debug(
+									MessageFormat.format("CacheUpdate: {0}: Object {1} exists and is still up-to-date.",
+											bucket.getName(), os.getKey()));
+						}
+					} catch (Exception e) {
+						log.debug(MessageFormat.format("CacheUpdate: {0}: Object {1} does not exist. Will be created.",
+								bucket.getName(), os.getKey()));
+						cachedS3Object = new CachedS3Object(bucket, os.getKey(), DateTime.now(), DateTime.now());
 						cachedS3Object = cachedS3ObjectDAO.save(cachedS3Object);
+						bucket.getObjects().add(cachedS3Object);
 						doWordCount = true;
 					}
-				} catch (Exception e) {
-					log.debug(MessageFormat.format("Object {0} does not exist. Will be created.", os.getKey()));
-					cachedS3Object = new CachedS3Object(bucket, os.getKey(), DateTime.now(), DateTime.now());
-					cachedS3Object = cachedS3ObjectDAO.save(cachedS3Object);
-					bucket.getObjects().add(cachedS3Object);
-					doWordCount = true;
 				}
-			}
-			bucket.getObjects().removeAll(unvisitedObjects);
-			log.debug(MessageFormat.format(
-					"{0} objects are no longer needed. Will be removed. This leads to a total of {1} objects in cache.",
-					unvisitedObjects.size(), bucket.getObjects().size()));
-			cachedS3ObjectDAO.delete(unvisitedObjects);
+				bucket.getObjects().removeAll(unvisitedObjects);
+				log.debug(MessageFormat.format(
+						"CacheUpdate: {0}: This leads to a total of {2} objects in cache. (Outdated and removed: {1})",
+						bucket.getName(), unvisitedObjects.size(), bucket.getObjects().size()));
+				cachedS3ObjectDAO.delete(unvisitedObjects);
 
-			if (doWordCount) {
-				int count = 0;
-				log.debug("Starting with wordcount now.");
-				for (S3ObjectSummary os : objects) {
-					try {
-						log.debug(MessageFormat.format("Parsing file {0}...", os.getKey()));
-						S3Object s3Object = s3.getObject(bucket.getName(), os.getKey());
-						S3ObjectInputStream inputStream = s3Object.getObjectContent();
-						File file = new File(os.getKey());
-						FileUtils.copyInputStreamToFile(inputStream, file);
-						try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-							String line;
-							int innercount = 0;
-							while ((line = br.readLine()) != null) {
-								String[] wordAndCount = line.split("\t");
-								if (wordAndCount.length == 2) {
-									wordCounts.put(wordAndCount[0], Integer.parseInt(wordAndCount[1]));
-									innercount++;
-								} else {
-									log.error(MessageFormat.format(
-											"Could not parse S3 entry:'{0}' in bucket:'{1}' file:'{2}'", line,
-											bucket.getName(), os.getKey()));
+				if (doWordCount) {
+					int count = 0;
+					log.debug(MessageFormat.format("CacheUpdate: {0}: Starting with wordcount.", bucket.getName()));
+					for (S3ObjectSummary os : objects) {
+						try {
+							log.debug(MessageFormat.format("CacheUpdate: {0}: Parsing file {1}.", bucket.getName(),
+									os.getKey()));
+							S3Object s3Object = s3.getObject(bucket.getName(), os.getKey());
+							S3ObjectInputStream inputStream = s3Object.getObjectContent();
+							File file = new File(os.getKey());
+							FileUtils.copyInputStreamToFile(inputStream, file);
+							try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+								String line;
+								int innercount = 0;
+								while ((line = br.readLine()) != null) {
+									String[] wordAndCount = line.split("\t");
+									if (wordAndCount.length == 2) {
+										wordCounts.put(wordAndCount[0], Integer.parseInt(wordAndCount[1]));
+										innercount++;
+									} else {
+										log.debug(MessageFormat.format(
+												"CacheUpdate: {0}: Could not parse S3 entry:'{1}' in bucket:'{2}' file:'{3}'",
+												bucket.getName(), line, bucket.getName(), os.getKey()));
+									}
 								}
+								count += innercount;
+								log.debug(MessageFormat.format(
+										"CacheUpdate: {0}: Parsing file {1} resulted in {2} pairs. {3} in total",
+										bucket.getName(), os.getKey(), innercount, count));
 							}
-							count += innercount;
-							log.debug(MessageFormat.format("Parsing file {0} resulted in {1} pairs. {2} in total",
-									os.getKey(), innercount, count));
-						}
 
-						FileUtils.forceDelete(file);
-					} catch (IOException e) {
-						log.error(MessageFormat.format(
-								"Could not work with file while updating cache for bucket {0} and object {1}",
-								bucket.getName(), os.getKey()));
+							FileUtils.forceDelete(file);
+						} catch (IOException e) {
+							log.error(MessageFormat.format(
+									"CacheUpdate: {0}: Could not work with file while updating cache of object {1}",
+									bucket.getName(), os.getKey()));
+						}
 					}
+					bucket.getWordCount().clear();
+					for (String word : wordCounts.keySet()) {
+						bucket.getWordCount().add(new CachedS3WordCountPair(bucket, word, wordCounts.get(word)));
+					}
+					bucket.setStillAvailable(true);
+					bucket.setLastModified(DateTime.now());
+					log.debug(MessageFormat.format("CacheUpdate: {0}: All files parsed. {1} pairs in total.",
+							bucket.getName(), count));
 				}
-				bucket.getWordCount().clear();
-				for (String word : wordCounts.keySet()) {
-					bucket.getWordCount().add(new CachedS3WordCountPair(bucket, word, wordCounts.get(word)));
-				}
-				bucket.setStillAvailable(true);
+			} catch (AmazonS3Exception s3e) {
+				log.debug(MessageFormat.format("CacheUpdate: {0}: Bucket is no longer available on Amazon S3.",
+						bucket.getName()));
+				bucket.setStillAvailable(false);
 				bucket.setLastModified(DateTime.now());
-				log.error(MessageFormat.format("All files parsed. {0} pairs in total.", count));
 			}
-		} catch (AmazonS3Exception s3e) {
-			bucket.setStillAvailable(false);
-			bucket.setLastModified(DateTime.now());
+			log.debug(MessageFormat.format("CacheUpdate: {0}: Updating database.", bucket.getName()));
+			cachedS3BucketDAO.save(bucket);
+			log.info(MessageFormat.format("CacheUpdate: {0}: Bucket is now up-to-date.", bucket.getName()));
+		} else {
+			log.info(MessageFormat.format(
+					"CacheUpdate: {0}: Bucket is skipped, because it was not available on Amazon S3 during last cache update.",
+					bucket.getName()));
 		}
-		log.error("Updating database.");
-		cachedS3BucketDAO.save(bucket);
-		log.error(MessageFormat.format("Bucket {0} is now up-to-date.", bucket.getName()));
 
 		return true;
 	}
