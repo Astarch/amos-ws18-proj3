@@ -27,15 +27,29 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 @EnableJpaRepositories(basePackages = { "de.pretrendr" })
 @EnableTransactionManagement
 public class DbConfig {
+	/**
+	 * {@link DataSource} based on configuration file. See
+	 * <i>usermanagement.datasource</i> in <b>application.properties</b> for more
+	 * details.
+	 * 
+	 * @return {@link DataSource} used for JPA persistence layer.
+	 */
 	@Bean
 	@ConfigurationProperties("usermanagement.datasource")
 	public DataSource dataSource() {
 		return DataSourceBuilder.create().build();
 	}
 
+	/**
+	 * {@link AmazonS3} based on credentials provided in
+	 * <b>application.properties<b>.
+	 * 
+	 * @return {@link AmazonS3} with configured credentials.
+	 */
 	@Bean
 	public AmazonS3 amazonS3() {
 		AmazonS3 s3;
+		// TODO read credentials from property file and use them here
 		// AWSCredentials credentials = new BasicAWSCredentials("accessKey",
 		// "secretKey");
 		s3 = AmazonS3ClientBuilder.standard()// .withCredentials(new AWSStaticCredentialsProvider(credentials))

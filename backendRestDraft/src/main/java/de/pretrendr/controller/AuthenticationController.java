@@ -25,10 +25,11 @@ public class AuthenticationController {
 
 	/**
 	 * Autowired constructor.
-	 *
+	 * 
 	 * @param userService
+	 *            autowired UserService
 	 * @param userDAO
-	 * @author Tristan Schneider
+	 *            autowired UserDAO
 	 */
 	@Autowired
 	public AuthenticationController(final UserService userService, final UserDAO userDAO) {
@@ -37,10 +38,13 @@ public class AuthenticationController {
 	}
 
 	/**
-	 * @param username
-	 * @param password
-	 * @return
-	 * @author Tristan Schneider
+	 * Creates a user based on the information provided in the given {@link RegUser}
+	 * POJO.
+	 * 
+	 * @param userReg
+	 *            POJO containing user information like username, password, email
+	 *            etc
+	 * @return {@link ResponseEntity}
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<User> register(@RequestBody final RegUser userReg) {

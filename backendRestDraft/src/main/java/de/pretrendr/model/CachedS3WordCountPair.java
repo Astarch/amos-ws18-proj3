@@ -20,6 +20,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/**
+ * Represents a Word-Count-Pair from an imported S3 Bucket.
+ * 
+ * @author Tristan Schneider
+ *
+ */
 @Table(name = "CACHEDS3WORDCOUNTPAIR")
 @Entity
 @Data
@@ -29,6 +35,12 @@ import lombok.ToString;
 @EqualsAndHashCode(exclude = { "bucket" })
 @IdClass(CachedS3WordCountPairId.class)
 public class CachedS3WordCountPair {
+	/**
+	 * Most convenient constructor. Other constructors are provided by
+	 * {@link AllArgsConstructor} and {@link NoArgsConstructor}.
+	 * 
+	 * @author Tristan Schneider
+	 */
 	@Data
 	public static class CachedS3WordCountPairId implements Serializable {
 		private static final long serialVersionUID = 1L;
