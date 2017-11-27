@@ -181,26 +181,6 @@
 			"description": "",
 			"item": [
 				{
-					"name": "/wordCountMap/{bucketName}",
-					"request": {
-						"url": "http://{{baseurl}}:{{baseport}}/api/s3/wordCountMap/amos-pretrendr-commoncrawl-sample",
-						"method": "GET",
-						"header": [
-							{
-								"key": "x-auth-token",
-								"value": "{{currentToken}}",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
 					"name": "/bucket/{buckitId}/wordCount",
 					"request": {
 						"url": "http://{{baseurl}}:{{baseport}}/api/s3/bucket/8cec40c2-f750-48fb-ace2-7c12fa61f88e/wordCount",
