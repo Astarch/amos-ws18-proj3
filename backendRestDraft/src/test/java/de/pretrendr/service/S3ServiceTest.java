@@ -5,8 +5,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.util.List;
-
 import javax.transaction.Transactional;
 
 import org.joda.time.DateTime;
@@ -43,8 +41,6 @@ public class S3ServiceTest extends PretrendrTestBase {
 	private static AmazonS3 client = null;
 
 	private CachedS3Bucket bucket;
-	private List<CachedS3Object> objects;
-	private List<CachedS3WordCountPair> wordCountPairs;
 
 	private CachedS3Bucket otherBucket;
 
