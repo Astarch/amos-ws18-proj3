@@ -23,6 +23,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(basePackages = { "de.pretrendr" })
 @EnableTransactionManagement
 public class DbConfig {
+	/**
+	 * {@link DataSource} based on configuration file. See
+	 * <i>usermanagement.datasource</i> in <b>application.properties</b> for more
+	 * details.
+	 * 
+	 * @return {@link DataSource} used for JPA persistence layer.
+	 */
 	@Bean
 	@ConfigurationProperties("usermanagement.datasource")
 	public DataSource dataSource() {

@@ -1,25 +1,55 @@
 CREATE TABLE
-    USER
+    ACCOUNT
     (
-        id UUID primary key,
+        id UUID PRIMARY KEY,
         username VARCHAR(255),
         password VARCHAR(255),
         firstname VARCHAR(255),
         lastname VARCHAR(255),
         email VARCHAR(255),
         address VARCHAR(255),
-        phone VARCHAR(255)
+        phone VARCHAR(255),
+        UNIQUE(username),
+        unique(email)
     );
 CREATE TABLE
     ROLE
     (
         id UUID PRIMARY KEY,
-        role VARCHAR(255)
+        role VARCHAR(255) UNIQUE
     );
 CREATE TABLE
-    USER_ROLES
+    USER_ROLE
     (
-        user_id UUID REFERENCES USER(id),
-        role_id UUID REFERENCES role(id),
-        PRIMARY KEY(user_id, role_id)  
+        userid UUID REFERENCES ACCOUNT(id),
+        roleid UUID REFERENCES ROLE(id),
+        PRIMARY KEY(userid, roleid)
+    );
+CREATE TABLE
+    CACHEDS3BUCKET
+    (
+        id UUID NOT NULL PRIMARY KEY,
+        created TIMESTAMP,
+        lastmodified TIMESTAMP,
+        stillavailable BOOLEAN,
+        name VARCHAR(255) UNIQUE
+    );
+CREATE TABLE
+    CACHEDS3OBJECT
+    (
+        name VARCHAR(255) NOT NULL,
+        created TIMESTAMP,
+        lastmodified TIMESTAMP,
+        bucketid UUID NOT NULL,
+        PRIMARY KEY(bucketid, name),
+        CONSTRAINT s3o_to_s3b FOREIGN KEY(bucketid) REFERENCES CACHEDS3BUCKET(id)
+    );
+CREATE TABLE
+    CACHEDS3WORDCOUNTPAIR
+    (
+        word VARCHAR(255) NOT NULL,
+        COUNT INTEGER,
+        bucketid UUID NOT NULL,
+        PRIMARY KEY(bucketid,word),
+        CONSTRAINT s3wcp_to_s3b FOREIGN KEY(bucketid) REFERENCES CACHEDS3BUCKET(id)
     );
