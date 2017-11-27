@@ -2,7 +2,6 @@ package de.pretrendr.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
@@ -38,31 +37,11 @@ public class S3Controller {
 	 */
 	public static final String DEFAULT_IPP = "10";
 
-	@RequestMapping(value = "/wordCountMap/{bucketname}", method = RequestMethod.GET)
-	@Deprecated
-	public ResponseEntity<Map<String, Integer>> getDummyGraphData(@PathVariable(name = "bucketname") String bucketname)
-			throws IOException {
-		Map<String, Integer> map = s3Service.getWordCountMapFromBucketName(bucketname);
-
-		return new ResponseEntity<Map<String, Integer>>(map, HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/wordCountMapByBucketName/{bucketname}", method = RequestMethod.GET)
-	public ResponseEntity<Page<CachedS3WordCountPair>> getWordCountByBucketName(
-			@PathVariable("bucketname") String bucketname,
-			@RequestParam(value = "number", defaultValue = "0") final int number,
-			@RequestParam(value = "size", defaultValue = DEFAULT_IPP) final int size) throws IOException {
-
-		Page<CachedS3WordCountPair> list = s3Service.getWordCountMapByBucketName(bucketname, number, size);
-
-		return new ResponseEntity<Page<CachedS3WordCountPair>>(list, HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/wordCountMapByBucketId/{bucketId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/bucket/{bucketId}/wordCount", method = RequestMethod.GET)
 	public ResponseEntity<Page<CachedS3WordCountPair>> getWordCountByBucketId(@PathVariable("bucketId") UUID bucketId,
 			@RequestParam(value = "number", defaultValue = "0") final int number,
 			@RequestParam(value = "size", defaultValue = DEFAULT_IPP) final int size) throws IOException {
-		Page<CachedS3WordCountPair> list = s3Service.getWordCountMapByBucketId(bucketId, number, size);
+		Page<CachedS3WordCountPair> list = s3Service.getWordCount(bucketId, number, size);
 
 		return new ResponseEntity<Page<CachedS3WordCountPair>>(list, HttpStatus.OK);
 	}
@@ -74,6 +53,13 @@ public class S3Controller {
 		return new ResponseEntity<List<CachedS3Bucket>>(bucketList, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/bucket/{bucketId}", method = RequestMethod.GET)
+	public ResponseEntity<CachedS3Bucket> getBucket(@PathVariable("bucketId") UUID bucketId) throws IOException {
+		CachedS3Bucket bucketList = s3Service.getBucket(bucketId);
+
+		return new ResponseEntity<CachedS3Bucket>(bucketList, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/bucket/create/{bucketName}", method = RequestMethod.POST)
 	public ResponseEntity<CachedS3Bucket> createBucket(@PathVariable("bucketName") String bucketName)
 			throws IOException, InvalidBucketNameException {
@@ -82,15 +68,7 @@ public class S3Controller {
 		return new ResponseEntity<CachedS3Bucket>(bucket, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/bucket/deleteByName/{bucketName}", method = RequestMethod.POST)
-	public ResponseEntity<Boolean> deleteBucket(@PathVariable("bucketName") String bucketName)
-			throws IOException, InvalidBucketNameException {
-		boolean success = s3Service.deleteBucket(bucketName);
-
-		return new ResponseEntity<Boolean>(success, HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/bucket/deleteById/{bucketId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/bucket/{bucketId}/delete", method = RequestMethod.POST)
 	public ResponseEntity<Boolean> deleteBucket(@PathVariable("bucketId") UUID bucketId)
 			throws IOException, InvalidBucketNameException {
 		boolean success = s3Service.deleteBucket(bucketId);
@@ -98,34 +76,18 @@ public class S3Controller {
 		return new ResponseEntity<Boolean>(success, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/object/getAllByBucketId/{bucketId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/bucket/{bucketId}/object/getAll", method = RequestMethod.GET)
 	public ResponseEntity<List<CachedS3Object>> getAllObjectsByBucketId(@PathVariable("bucketId") final UUID bucketId)
 			throws IOException {
-		List<CachedS3Object> bucketList = s3Service.getAllObjectsByBucketId(bucketId);
+		List<CachedS3Object> bucketList = s3Service.getAllObjects(bucketId);
 
 		return new ResponseEntity<List<CachedS3Object>>(bucketList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/object/getAllByBucketName/{bucketName}", method = RequestMethod.GET)
-	public ResponseEntity<List<CachedS3Object>> getAllObjectsByBucketName(@PathVariable("bucketName") String bucketName)
-			throws IOException {
-		List<CachedS3Object> bucketList = s3Service.getAllObjectsByBucketName(bucketName);
-
-		return new ResponseEntity<List<CachedS3Object>>(bucketList, HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/bucket/updateByName/{bucketname}", method = RequestMethod.GET)
-	public ResponseEntity<CachedS3Bucket> updateCacheByBucket(@PathVariable("bucketname") String bucketname)
-			throws IOException {
-		CachedS3Bucket result = s3Service.updateCacheByBucket(bucketname);
-
-		return new ResponseEntity<CachedS3Bucket>(result, HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/bucket/updateById/{bucketId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/bucket/{bucketId}/update", method = RequestMethod.GET)
 	public ResponseEntity<CachedS3Bucket> updateCacheByBucket(@PathVariable("bucketId") UUID bucketId)
 			throws IOException {
-		CachedS3Bucket result = s3Service.updateCacheByBucket(bucketId);
+		CachedS3Bucket result = s3Service.updateCache(bucketId);
 
 		return new ResponseEntity<CachedS3Bucket>(result, HttpStatus.OK);
 	}

@@ -1,8 +1,6 @@
 package de.pretrendr.businesslogic;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.EntityNotFoundException;
@@ -39,41 +37,7 @@ public interface S3Service {
 	 *             will be thrown, if there is no {@link CachedS3Bucket} with the
 	 *             given id
 	 */
-	List<CachedS3Object> getAllObjectsByBucketId(UUID bucketId) throws EntityNotFoundException;
-
-	/**
-	 * Retrieves all {@link CachedS3Object}s belonging to a {@link CachedS3Bucket}
-	 * with the given <i>bucketName</b>
-	 * 
-	 * @param bucketName
-	 *            name of the parent {@link CachedS3Bucket}
-	 * @return list of all {@link CachedS3Object} belonging to the given
-	 *         {@link CachedS3Bucket}
-	 * @throws EntityNotFoundException
-	 *             will be thrown, if there is no {@link CachedS3Bucket} with the
-	 *             given name
-	 */
-	List<CachedS3Object> getAllObjectsByBucketName(String bucketName) throws EntityNotFoundException;
-
-	/**
-	 * Retrieves all word-count-data of a {@link CachedS3Bucket} with the given
-	 * name. The results are paged using Spring {@link Page}. Use <i>number</i> to
-	 * specify the page number, and <i>size</i> to specify the items-per-page.
-	 * 
-	 * @param bucketName
-	 *            name of the parent {@link CachedS3Bucket}
-	 * @param number
-	 *            number of mape, beginning with zero
-	 * @param size
-	 *            items per page
-	 * @return {@link Page} containing a partion of the result set, based on
-	 *         parameters <i>number</i> and <i>size</i>.
-	 * @throws EntityNotFoundException
-	 *             will be thrown, if there is no {@link CachedS3Bucket} with the
-	 *             given name
-	 */
-	Page<CachedS3WordCountPair> getWordCountMapByBucketName(String bucketName, int number, int size)
-			throws EntityNotFoundException;
+	List<CachedS3Object> getAllObjects(UUID bucketId) throws EntityNotFoundException;
 
 	/**
 	 * Retrieves all word-count-data of a {@link CachedS3Bucket} with the given id.
@@ -92,19 +56,7 @@ public interface S3Service {
 	 *             will be thrown, if there is no {@link CachedS3Bucket} with the
 	 *             given id
 	 */
-	Page<CachedS3WordCountPair> getWordCountMapByBucketId(UUID bucketId, int number, int size);
-
-	/**
-	 * Updates cached information of a {@link CachedS3Bucket} with the given name.
-	 * This will also cascade down to {@link CachedS3Object} and
-	 * {@link CachedS3WordCountPair}. This will force an update, even if the objects
-	 * modification date has not changed since last cache update.
-	 * 
-	 * @param bucketName
-	 *            name of the {@link CachedS3Bucket}
-	 * @return the updated {@link CachedS3Bucket}
-	 */
-	CachedS3Bucket updateCacheByBucket(String bucketName);
+	Page<CachedS3WordCountPair> getWordCount(UUID bucketId, int number, int size);
 
 	/**
 	 * Updates cached information of a {@link CachedS3Bucket} with the given id.
@@ -116,10 +68,7 @@ public interface S3Service {
 	 *            id of the {@link CachedS3Bucket}
 	 * @return the updated {@link CachedS3Bucket}
 	 */
-	CachedS3Bucket updateCacheByBucket(UUID bucketId);
-
-	@Deprecated
-	Map<String, Integer> getWordCountMapFromBucketName(String bucket_name) throws IOException;
+	CachedS3Bucket updateCache(UUID bucketId);
 
 	/**
 	 * Creates a {@link CachedS3Bucket} with the given name. The created Entity will
@@ -144,18 +93,6 @@ public interface S3Service {
 	boolean updateAllBuckets();
 
 	/**
-	 * Deletes {@link CachedS3Bucket} based on the given name.
-	 * 
-	 * @param bucketName
-	 *            name of the bucket
-	 * @return true iff success, else false
-	 * @throws EntityNotFoundException
-	 *             will be thrown there is no {@link CachedS3Bucket} with the given
-	 *             name
-	 */
-	boolean deleteBucket(String bucketName) throws EntityNotFoundException;
-
-	/**
 	 * Deletes {@link CachedS3Bucket} based on the given id.
 	 * 
 	 * @param bucketId
@@ -166,4 +103,6 @@ public interface S3Service {
 	 *             id
 	 */
 	boolean deleteBucket(UUID bucketId);
+
+	CachedS3Bucket getBucket(UUID bucketId);
 }
