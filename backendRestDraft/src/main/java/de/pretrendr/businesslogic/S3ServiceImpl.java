@@ -265,9 +265,7 @@ public class S3ServiceImpl implements S3Service {
 	public boolean deleteBucket(UUID bucketId) {
 		CachedS3Bucket bucket = cachedS3BucketDAO.findOne(bucketId);
 		if (bucket == null) {
-			if (bucket == null) {
-				throw new EntityNotFoundException(MessageFormat.format(ERR_MSG_404_BUCKET, bucketId));
-			}
+			throw new EntityNotFoundException(MessageFormat.format(ERR_MSG_404_BUCKET, bucketId));
 		}
 		cachedS3BucketDAO.delete(bucket);
 		return true;
