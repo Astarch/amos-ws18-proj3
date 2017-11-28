@@ -17,6 +17,13 @@
                  v-on:click.prevent="open('register')">Register</a>
               <a href="#login" class="btn btn-lg btn-primary mx-1" v-on:click.prevent="open('login')">Log In</a>
             </div>
+
+            <div id=apiTestButtons>
+              <a href="#getAll" ref="getAll" class="btn btn-lg btn-primary mx-1" v-on:click.prevent="getAllUsers()">doLogin</a>
+              <div class="card">
+                <div class="card-body text-dark">{{requestAnswer}}</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -39,6 +46,8 @@
   import LoginModal from './LoginModal';
   import PretrendrHeader from './Header.vue';
   import PretrendrFooter from './Footer.vue';
+  import http, {api} from '../utils/api';
+  import qs from 'qs';
 
 
   export default {
@@ -47,6 +56,7 @@
     data: () => ({
       modalActive: false,
       modalType: 'login',
+      requestAnswer: ''
     }),
     methods: {
       open(which) {
@@ -58,9 +68,35 @@
         event.preventDefault();
         this.modalActive = false;
       },
+
+      getAllUsers() {
+        let username = 'user2';
+        let password = 'pass2';
+        http.post('/auth/login', qs.stringify({
+          username: username,
+          password: password
+        }))
+           .then(response => {
+             console.log(response);
+             this.requestAnswer = response.data;
+            // get all user
+             api.user.getAll()
+                    .then(resp => {
+                      console.log(resp);
+                      // do logout
+                      api.auth.getLogout().then(res =>
+                        console.log(res))
+                    })
+                    .catch(function (error) {
+                      console.log(error);
+                    })
+           })
+           .catch(function (error) {
+             console.log(error);
+           });
+      },
     },
   }
-
 
 </script>
 
