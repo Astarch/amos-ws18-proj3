@@ -1,14 +1,21 @@
 package de.pretrendr.service;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-
-import java.util.List;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import javax.transaction.Transactional;
 
+import org.hamcrest.Matchers;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,8 +50,6 @@ public class S3ServiceTest extends PretrendrTestBase {
 	private static AmazonS3 client = null;
 
 	private CachedS3Bucket bucket;
-	private List<CachedS3Object> objects;
-	private List<CachedS3WordCountPair> wordCountPairs;
 
 	private CachedS3Bucket otherBucket;
 
@@ -133,7 +138,7 @@ public class S3ServiceTest extends PretrendrTestBase {
 		// arrange
 
 		// act
-		s3Service.updateCacheByBucket(bucket.getId());
+		s3Service.updateCache(bucket.getId());
 		CachedS3Bucket bucket = cachedS3BucketDAO.findOne(this.bucket.getId());
 
 		// assert
@@ -156,7 +161,7 @@ public class S3ServiceTest extends PretrendrTestBase {
 		// arrange
 
 		// act
-		s3Service.updateCacheByBucket(otherBucket.getId());
+		s3Service.updateCache(otherBucket.getId());
 		CachedS3Bucket bucket = cachedS3BucketDAO.findOne(this.otherBucket.getId());
 
 		// assert
@@ -183,7 +188,7 @@ public class S3ServiceTest extends PretrendrTestBase {
 		// arrange
 
 		// act
-		s3Service.updateCacheByBucket(unchangedBucket.getId());
+		s3Service.updateCache(unchangedBucket.getId());
 		CachedS3Bucket bucket = cachedS3BucketDAO.findOne(this.unchangedBucket.getId());
 
 		// assert
@@ -205,5 +210,82 @@ public class S3ServiceTest extends PretrendrTestBase {
 				bucket.getWordCount().stream().filter(o -> o.getWord().equals("unchangedword5")).findFirst().get());
 		assertEquals(true, bucket.isStillAvailable());
 		assertNotEquals(inOneHour, bucket.getLastModified());
+	}
+
+	@Test
+	public void getAllBuckets_valid_checkCount() throws Exception {
+		mockMvc.perform(get("/api/s3/bucket/getAll")).andExpect(status().isOk())
+		// @formatter:off
+				.andExpect(content().contentType(jsonContentType))
+				.andExpect(jsonPath("$", Matchers.hasSize(3)));
+		// @formatter:on
+	}
+
+	@Test
+	public void getBucket_validId_checkJSON() throws Exception {
+		// arrange
+		mockMvc.perform(get("/api/s3/bucket/" + bucket.getId())).andExpect(status().isOk())
+		// @formatter:off
+				.andExpect(content().contentType(jsonContentType))
+				.andExpect(jsonPath("$.id", is(bucket.getId().toString())))
+				.andExpect(jsonPath("$.name", is(bucket.getName())))
+				.andExpect(jsonPath("$.created", notNullValue()))
+				.andExpect(jsonPath("$.lastModified", notNullValue()));
+		// @formatter:on
+	}
+
+	@Test
+	public void deleteBucket_validId_checkJSON() throws Exception {
+		// arrange
+		mockMvc.perform(post("/api/s3/bucket/" + bucket.getId() + "/delete")).andExpect(status().isOk())
+		// @formatter:off
+				.andExpect(content().contentType(jsonContentType))
+				.andExpect(jsonPath("$", is(true)));
+		// @formatter:on
+
+		mockMvc.perform(get("/api/s3/bucket/" + bucket.getId())).andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void createBucket_valid_checkJSON() throws Exception {
+		// arrange
+		String validBucketName = "test-bucket";
+
+		// act
+		mockMvc.perform(post("/api/s3/bucket/create/" + validBucketName)).andExpect(status().isOk())
+		// @formatter:off
+				.andExpect(content().contentType(jsonContentType))
+				.andExpect(jsonPath("$.id", notNullValue()))
+				.andExpect(jsonPath("$.name", is(validBucketName)))
+				.andExpect(jsonPath("$.created", notNullValue()))
+				.andExpect(jsonPath("$.lastModified", nullValue()));
+		// @formatter:on
+	}
+
+	@Test
+	public void getWordCount_valid_checkJSON() throws Exception {
+		// arrange
+
+		// act
+		mockMvc.perform(get("/api/s3/bucket/" + bucket.getId() + "/wordCount")).andExpect(status().isOk())
+		// @formatter:off
+				.andExpect(content().contentType(jsonContentType))
+				.andExpect(jsonPath("$.content", notNullValue()))
+				.andExpect(jsonPath("$.totalElements", is(bucket.getWordCount().size())))
+				.andExpect(jsonPath("$.numberOfElements", is(5)))
+				.andExpect(jsonPath("$.size", is(10)));
+		// @formatter:on
+	}
+
+	@Test
+	public void getAllObjects_valid_checkJSON() throws Exception {
+		// arrange
+
+		// act
+		mockMvc.perform(get("/api/s3/bucket/" + bucket.getId() + "/object/getAll")).andExpect(status().isOk())
+		// @formatter:off
+				.andExpect(content().contentType(jsonContentType))
+				.andExpect(jsonPath("$", Matchers.hasSize(5)));
+		// @formatter:on
 	}
 }
