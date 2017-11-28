@@ -2,7 +2,7 @@
   <div id="landing-page">
     <pretrendr-header/>
     <div class="py-5 gradient-overlay"
-         style="background-image: url(&quot;https://pingendo.github.io/templates/sections/assets/cover_event.jpg&quot;);">
+         style="background-image: url(/src/assets/background.png);">
       <div class="container py-5">
         <div class="row">
           <div class="col-md-3 text-white">
