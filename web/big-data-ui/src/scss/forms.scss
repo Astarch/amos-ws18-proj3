@@ -1,0 +1,50 @@
+.onboarding-form {
+  &.form-login, &.form-register {
+    padding: 75px 25px 25px;
+    display: none;
+
+    &.active {
+      display: block;
+    }
+
+    .alert {
+      border-radius: 0;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #eeeeee;
+
+      &[type="submit"] {
+        color: #f6f6f6;
+        border: 0;
+        margin-bottom: 0;
+        background-color: map-get($theme-colors, 'primary');
+        cursor: pointer;
+
+        &:hover {
+          background-color: #4667e2;
+        }
+        &:active {
+          background-color: #4667e2;
+        }
+        &.disabled {
+          background-color: #a2b3f0;
+        }
+
+      }
+    }
+
+    .links {
+      text-align: center;
+      padding-top: 25px;
+
+      a {
+        color: #1842db;
+      }
+    }
+  }
+}
+
