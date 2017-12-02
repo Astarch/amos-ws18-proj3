@@ -16,6 +16,7 @@
 
 <style lang="scss">
   @import '~bootstrap/dist/css/bootstrap.css';
+  @import '../scss/base';
 
   body {
     background: map-get($theme-colors, 'dark');

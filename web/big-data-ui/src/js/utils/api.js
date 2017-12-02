@@ -38,13 +38,13 @@ const postLogin = (username, password) => axiosInstance.post('/auth/login', qs.s
   password: password
 }));
 
-const postRegister = (username,
-                      password,
-                      firstname = username,
-                      lastname = username,
-                      email = username + "@test.com",
-                      address = "addres1",
-                      phone = "phoneNr") => axiosInstance.post('/auth/register', qs.stringify({
+const postCompleteRegistration = (username,
+                                  password,
+                                  firstname = username,
+                                  lastname = username,
+                                  email = username + "@test.com",
+                                  address = "addres1",
+                                  phone = "phoneNr") => axiosInstance.post('/auth/register', {
   "username": username,
   "password": password,
   "firstname": firstname,
@@ -52,14 +52,23 @@ const postRegister = (username,
   "email": email,
   "address": address,
   "phone": phone
-}));
+});
 
-const getLogout = () => axiosInstance.get('/auth/logout');
+const postRegistration = (username,
+                          email,
+                          password) => axiosInstance.post('/auth/register', {
+  "username": username,
+  "password": password,
+  "email": email,
+});
+
+const doLogout = () => axiosInstance.get('/auth/logout');
 
 const auth = {
   postLogin,
-  postRegister,
-  getLogout
+  postRegistration,
+  postCompleteRegistration,
+  doLogout
 };
 
 /***** user *****/

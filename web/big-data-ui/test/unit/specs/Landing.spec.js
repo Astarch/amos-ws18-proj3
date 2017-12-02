@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Landing from '../../../src/js/components/LandingPage';
+import {FormTypeEnum} from '../../../src/js/utils/constants';
 
 
 describe('LandingPage.vue', () => {
@@ -9,7 +10,7 @@ describe('LandingPage.vue', () => {
     expect(Landing.data()).to.be.a('object');
     const defaultData = Landing.data();
     expect(defaultData.modalActive).to.be.false;
-    expect(defaultData.modalType).to.be.equal('login');
+    expect(defaultData.modalType).to.be.equal(FormTypeEnum.login);
   });
 
   // Check rendered output
@@ -25,7 +26,7 @@ describe('LandingPage.vue', () => {
     const Constructor = Vue.extend(Landing);
     const vm = new Constructor().$mount();
 
-    vm.open('register');
+    vm.open(FormTypeEnum.register);
 
     Vue.nextTick(() => {
       const defaultData = Landing.data();
