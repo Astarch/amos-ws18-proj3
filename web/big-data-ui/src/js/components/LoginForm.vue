@@ -59,27 +59,24 @@
           this.doLogin(this.username, this.password);
         }
       },
-      doLogin(name, password){
+      doLogin(name, password) {
         this.isSubmitting = true;
-        http.post('/auth/login', qs.stringify({
-          username: name,
-          password: password
-        }))
-            .then(response => {
-              this.isSubmitting = false;
-              console.log(response);
-            })
-            .catch(error => {
-              this.isSubmitting = false;
-              let errorCode = error.response.status;
-              if(errorCode < 500){
-                this.showLoginError('Login failure - please try again!')
-              }else{
-                this.showLoginError('Server error - please try again later!')
-              }
-              console.log(error.response);
+        api.auth.postLogin(name, password)
+           .then(response => {
+             this.isSubmitting = false;
+             console.log(response);
+           })
+           .catch(error => {
+             this.isSubmitting = false;
+             let errorCode = error.response.status;
+             if (errorCode < 500) {
+               this.showLoginError('Login failure - please try again!')
+             } else {
+               this.showLoginError('Server error - please try again later!')
+             }
+             console.log(error.response);
 
-            });
+           });
       },
       validateLogin(name, password) {
         let isValid = false;
@@ -107,7 +104,7 @@
       hideLoginError() {
         this.hasError = false;
       },
-      openRegistration(){
+      openRegistration() {
         this.$emit('openRegistration')
       }
     }

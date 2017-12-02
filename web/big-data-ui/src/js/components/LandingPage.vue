@@ -14,15 +14,8 @@
               <br></p>
             <div id=loginButtons>
               <a href="#register" ref="register" class="btn btn-lg btn-primary mx-1"
-                 v-on:click.prevent="open('register')">Register</a>
-              <a href="#login" class="btn btn-lg btn-primary mx-1" v-on:click.prevent="open('login')">Log In</a>
-            </div>
-
-            <div id=apiTestButtons>
-              <a href="#getAll" ref="getAll" class="btn btn-lg btn-primary mx-1" v-on:click.prevent="getAllUsers()">doLogin</a>
-              <div class="card">
-                <div class="card-body text-dark">{{requestAnswer}}</div>
-              </div>
+                 v-on:click.prevent="open(FormTypeEnum.register)">Register</a>
+              <a href="#login" class="btn btn-lg btn-primary mx-1" v-on:click.prevent="open(FormTypeEnum.login)">Log In</a>
             </div>
           </div>
         </div>
@@ -34,7 +27,7 @@
       :is-active="modalActive"
       :type="modalType"
       v-on:close="modalActive = false"
-      v-on:changeType="newType => modalType = newType"/>
+      v-on:changeType="newType => modalType = newType"></login-modal>
 
   </div>
 
@@ -46,6 +39,7 @@
   import LoginModal from './LoginModal';
   import PretrendrHeader from './Header.vue';
   import PretrendrFooter from './Footer.vue';
+  import {FormTypeEnum} from './../utils/constants';
   import http, {api} from '../utils/api';
   import qs from 'qs';
 
@@ -55,45 +49,18 @@
     components: {LoginModal, PretrendrHeader, PretrendrFooter},
     data: () => ({
       modalActive: false,
-      modalType: 'login',
-      requestAnswer: ''
+      modalType: FormTypeEnum.login,
+      requestAnswer: '',
+      FormTypeEnum
     }),
     methods: {
       open(which) {
         this.modalActive = true;
         this.modalType = which;
       },
-
       close(event) {
         event.preventDefault();
         this.modalActive = false;
-      },
-
-      getAllUsers() {
-        let username = 'user2';
-        let password = 'pass2';
-        http.post('/auth/login', qs.stringify({
-          username: username,
-          password: password
-        }))
-           .then(response => {
-             console.log(response);
-             this.requestAnswer = response.data;
-            // get all user
-             api.user.getAll()
-                    .then(resp => {
-                      console.log(resp);
-                      // do logout
-                      api.auth.getLogout().then(res =>
-                        console.log(res))
-                    })
-                    .catch(function (error) {
-                      console.log(error);
-                    })
-           })
-           .catch(function (error) {
-             console.log(error);
-           });
       },
     },
   }

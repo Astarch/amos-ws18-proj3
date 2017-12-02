@@ -76,8 +76,8 @@ const webpackConfig = {
         options: {
           extractCSS: config.isProd,
           loaders: {
-            sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax=1&data=@import "./src/assets/base"',
-            scss: 'vue-style-loader!css-loader!sass-loader?data=@import "./src/assets/base";'
+            sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax=1&data=@import "./src/scss/base"',
+            scss: 'vue-style-loader!css-loader!sass-loader?data=@import "./src/scss/base";'
           },
         },
       },

@@ -17,7 +17,10 @@ module.exports = function (config) {
     files: [
       require.resolve('jquery'),
       require.resolve('popper.js'),
-      './index.js'],
+      './index.js',
+
+    ],
+
     preprocessors: {
       './index.js': ['webpack', 'sourcemap'],
     },
@@ -32,9 +35,10 @@ module.exports = function (config) {
         {type: 'text-summary'},
       ]
     },
-     junitReporter: {
-      outputDir: './junit', // results will be saved as $outputDir/$browserName.xml 
-      outputFile: 'test-results.xml', // if included, results will be saved as $outputDir/$browserName/$outputFile 
-      useBrowserName: false,  }
+    junitReporter: {
+      outputDir: './junit', // results will be saved as $outputDir/$browserName.xml
+      outputFile: 'test-results.xml', // if included, results will be saved as $outputDir/$browserName/$outputFile
+      useBrowserName: false,
+    }
   });
 };
