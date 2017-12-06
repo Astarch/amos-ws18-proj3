@@ -2,18 +2,31 @@
 
 For meeting checklist click [here](https://github.com/Astarch/amos-ws18-proj3/blob/develop/MEETINGS_CHECKLIST.md)
 
-## Architecture / Stages
+## Architecture
+
+Pretrendr consists of five components:
+* Frontend (main focus: user interface for the prediction and evaluation of trends)
+* Backend (main focus: simplifies the communication between frontend and EMR; saves intermediate results)
+* Database for user and trend management
+* EMR (main focus: analyse common crawl data based on specifying settings)
+* Common Crawl (data source)
+
+The following picture shows the interaction between the five components:
+![Pretrendr architecture](architecture/pretrendr_advanced.jpeg?raw=true "Pretrendr architecture")
+
+
+## Staging (test / production system)
  
-The system consits of three stages:
+The system consits of three stages (hosting via AWS):
 ![Stages Overview](architecture/architecture_stages.pdf?raw=true "Stages Overview")
 * Production / live stage 
-    * Based on master branch
+    * Based on master branch (see section: Continuous Integration)
     * Prod-Server 1: 18.216.122.218
          * Backend
     * S3-Bucket 1: pretrendr.com
          * Frontend
 * Test / staging stage 
-     * Based on developer branch
+     * Based on developer branch (see section: Continuous Integration)
      * Test-Server 1: 18.216.129.153
          * Backend
     * S3-Bucket 1: staging.pretrendr.com
