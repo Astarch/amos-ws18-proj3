@@ -20,13 +20,13 @@ The following picture shows the interaction between the five components:
 The system consits of three stages (hosting via AWS):
 ![Stages Overview](architecture/architecture_stages.pdf?raw=true "Stages Overview")
 * Production / live stage 
-    * Based on master branch
+    * Based on master branch (see section: Continuous Integration)
     * Prod-Server 1: 18.216.122.218
          * Backend
     * S3-Bucket 1: pretrendr.com
          * Frontend
 * Test / staging stage 
-     * Based on developer branch
+     * Based on developer branch (see section: Continuous Integration)
      * Test-Server 1: 18.216.129.153
          * Backend
     * S3-Bucket 1: staging.pretrendr.com
