@@ -64,7 +64,10 @@
         api.auth.postLogin(name, password)
            .then(response => {
              this.isSubmitting = false;
-             console.log(response);
+             this.$router.push({
+               path: 'graph'
+             }),
+               console.log(response);
            })
            .catch(error => {
              this.isSubmitting = false;
