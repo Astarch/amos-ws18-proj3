@@ -26,7 +26,7 @@
 <script>
   import LoginForm from './LoginForm';
   import RegisterForm from './RegisterForm';
-  import {FormTypeEnum} from './../utils/constants';
+  import {FormTypeEnum} from '../../../utils/constants';
 
 
   export default {
@@ -64,7 +64,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-  @import './../../scss/forms.scss';
+  @import '../../../../scss/forms';
 
   .user-modal-container {
     position: fixed;

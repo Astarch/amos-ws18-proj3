@@ -7,7 +7,7 @@
         <div class="row">
           <div class="col-md-3 text-white">
             <img class="img-fluid d-block mx-auto mb-5"
-                 src="../../assets/logo.png"></div>
+                 src="../../../assets/logo.png"></div>
           <div class="col-md-9 text-white align-self-center">
             <h1 class="display-3 mb-4">pretrendr</h1>
             <p class="lead mb-5">To analyse and visualise your Data and find trends in it.&nbsp;
@@ -36,11 +36,11 @@
 
 
 <script>
-  import LoginModal from './LoginModal';
+  import LoginModal from './modal/LoginModal';
   import PretrendrHeader from './Header.vue';
   import PretrendrFooter from './Footer.vue';
-  import {FormTypeEnum} from './../utils/constants';
-  import http, {api} from '../utils/api';
+  import {FormTypeEnum} from './../../utils/constants';
+  import http, {api} from '../../utils/api';
   import qs from 'qs';
 
 

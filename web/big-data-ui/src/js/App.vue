@@ -6,7 +6,7 @@
 </template>
 
 <script>
-  import GitInfo from './components/GitInfo';
+  import GitInfo from './components/common/GitInfo';
 
   export default {
     components: { GitInfo },
@@ -17,6 +17,7 @@
 <style lang="scss">
   @import '~bootstrap/dist/css/bootstrap.css';
   @import '../scss/base';
+  @import '../scss/paper-dashboard';
 
   body {
     background: map-get($theme-colors, 'dark');

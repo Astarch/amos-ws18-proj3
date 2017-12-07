@@ -5,8 +5,14 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 
+import SideBar from './components/common/sidebar'
+import GlobalComponents from './globalComponents'
+
 
 Vue.config.productionTip = false;
+
+Vue.use(SideBar);
+Vue.use(GlobalComponents);
 
 
 /* eslint-disable no-new */
