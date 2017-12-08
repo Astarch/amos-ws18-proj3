@@ -19,7 +19,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 @EnableJpaRepositories(basePackages = { "de.pretrendr" })
 @PropertySource("classpath:awscli.properties")
 public class AWSCLIConnector {
-	//TODO Florian: Doku + Clean up
+	//TODO Florian: Doku + Clean up 
 	
 	@Value("${credentials.awscli.AWS_ACCESS_KEY_ID}")
 	private String awscliAccessKey;
