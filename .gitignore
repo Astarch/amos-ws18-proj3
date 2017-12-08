@@ -157,6 +157,6 @@ fabric.properties
 .idea/sonarlint
 
 #Save the aws cli secret
-/src/main/resources/awscli.properties
+#/src/main/resources/awscli.properties
 
 # End of https://www.gitignore.io/api/web,node,macos,webstorm
