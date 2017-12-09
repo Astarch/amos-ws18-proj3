@@ -8,7 +8,7 @@
     "port": 3000
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development NODE_APP_MODE=app webpack-dashboard -c magenta -- webpack-dev-server --open --hot",
+    "dev": "cross-env NODE_ENV=development NODE_APP_MODE=app webpack-dev-server --open --hot",
     "build": "cross-env NODE_ENV=production NODE_APP_MODE=app webpack --progress --hide-modules",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit",
@@ -81,7 +81,6 @@
     "vue-test-utils": "^1.0.0-beta.6",
     "webpack": "^3.5.4",
     "webpack-bundle-analyzer": "^2.9.0",
-    "webpack-dashboard": "^1.0.0",
     "webpack-dev-server": "^2.7.1",
     "webpack-merge": "^4.1.0"
   },
