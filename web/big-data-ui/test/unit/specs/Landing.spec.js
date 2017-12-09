@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Landing from '../../../src/js/components/LandingPage';
+import Landing from '../../../src/js/components/onboarding/LandingPage';
 import {FormTypeEnum} from '../../../src/js/utils/constants';
 
 

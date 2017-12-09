@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { mount } from 'vue-test-utils'
-import LoginModal from '../../../src/js/components/LoginModal';
+import LoginModal from '../../../src/js/components/onboarding/modal/LoginModal';
 import {FormTypeEnum} from '../../../src/js/utils/constants';
 
 describe('LoginModal.vue', () => {
