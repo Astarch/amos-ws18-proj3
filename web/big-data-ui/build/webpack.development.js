@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
-const DashboardPlugin = require('webpack-dashboard/plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 const pkg = require('../package.json');
@@ -26,7 +25,6 @@ const webpackConfig = {
     },
     plugins: [
         new webpack.NoEmitOnErrorsPlugin(),
-        new DashboardPlugin({ port: pkg.config.port }),
         new BrowserSyncPlugin({
             host: 'localhost',
             port: pkg.config.port,

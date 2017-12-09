@@ -2,7 +2,7 @@
   <nav id="pretrendr-header" class="navbar navbar-expand-md bg-primary navbar-dark">
     <div class="container">
       <a class="navbar-brand" href="#">
-        <img class="icon" src="../../assets/icon_white.svg">
+        <img class="icon" src="../../../assets/icon_white.svg">
         <b>PRETRENDR</b>
       </a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"

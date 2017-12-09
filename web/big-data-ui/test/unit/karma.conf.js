@@ -18,6 +18,7 @@ module.exports = function (config) {
       require.resolve('jquery'),
       require.resolve('popper.js'),
       './index.js',
+      './../../node_modules/bootstrap/dist/css/bootstrap.css'
 
     ],
 

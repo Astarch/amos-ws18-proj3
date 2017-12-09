@@ -34,6 +34,9 @@
 <style lang="scss" scoped>
   #git-info {
     color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
   }
 
 </style>

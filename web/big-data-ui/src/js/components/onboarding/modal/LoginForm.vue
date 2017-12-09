@@ -30,8 +30,8 @@
 </template>
 
 <script>
-  import {isPasswordValid, isNameValid} from '../utils/validation'
-  import http, {api} from '../utils/api';
+  import {isPasswordValid, isNameValid} from '../../../utils/validation'
+  import http, {api} from '../../../utils/api';
   import qs from 'qs';
 
   export default {
@@ -115,5 +115,5 @@
 </script>
 
 <style lang='scss'>
-  @import './../../scss/forms.scss';
+  @import '../../../../scss/forms';
 </style>
