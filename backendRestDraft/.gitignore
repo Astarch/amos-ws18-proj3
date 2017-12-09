@@ -44,3 +44,6 @@ atlassian-ide-plugin.xml
 .factorypath
 
 log/*
+
+#Save the aws cli secret
+/src/main/resources/awscli.properties
