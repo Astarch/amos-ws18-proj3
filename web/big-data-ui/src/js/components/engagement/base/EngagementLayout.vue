@@ -6,24 +6,24 @@
     <div class="main-panel">
       <top-navbar></top-navbar>
 
-      <dashboard-content @click.native="toggleSidebar">
+      <engagement-content @click.native="toggleSidebar">
 
-      </dashboard-content>
+      </engagement-content>
 
       <content-footer></content-footer>
     </div>
   </div>
 </template>
 <script>
-  import TopNavbar from './TopNavbar.vue'
-  import ContentFooter from './ContentFooter.vue'
-  import DashboardContent from './Content.vue'
+  import TopNavbar from './TopNavbar'
+  import ContentFooter from './ContentFooter'
+  import EngagementContent from './EngagementContent'
 
   export default {
     components: {
       TopNavbar,
       ContentFooter,
-      DashboardContent
+      EngagementContent
     },
     methods: {
       toggleSidebar () {

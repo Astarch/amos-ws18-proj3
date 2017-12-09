@@ -9,9 +9,9 @@
     <!-- -->
     <div class="sidebar-wrapper" id="style-3">
       <div class="logo">
-        <a href="#" class="simple-text">
+        <a href="" class="simple-text">
           <div class="logo-img">
-            <img src="/static/favicon.ico" alt="">
+            <img src="/src/assets/icon_white.svg" alt="">
           </div>
           pretrendr Dashboard
         </a>
@@ -21,7 +21,13 @@
       </slot>
       <ul :class="navClasses">
         <!--By default vue-router adds an active class to each route link. This way the links are colored when clicked-->
-        <router-link v-for="(link,index) in sidebarLinks" :to="link.path" tag="li" :ref="link.name" :key="link.name + index">
+        <router-link
+          v-for="(link, index) in sidebarLinks"
+          :to="link.path"
+          tag="li"
+          :ref="link.name"
+          :key="link.name + index"
+          active-class="active">
           <a>
             <i :class="link.icon"></i>
 
@@ -127,6 +133,9 @@
   }
 
 </script>
-<style>
+<style lang="scss" scoped>
+  .logo-img{
+    background: transparent!important;
+  }
 
 </style>

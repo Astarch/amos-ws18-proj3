@@ -6,13 +6,18 @@ const SidebarStore = {
     {
       name: 'Dashboard',
       icon: 'ti-panel',
-      path: '/dashboard/overview'
+      path: '/engagement/dashboard'
     },
     {
       name: 'User Profile',
       icon: 'ti-user',
-      path: '/dashboard/stats'
-    }
+      path: '/engagement/stats'
+    },
+    {
+      name: 'Table List',
+      icon: 'ti-view-list-alt',
+      path: '/engagement/table-list'
+    },
   ],
   displaySidebar (value) {
     this.showSidebar = value

@@ -17,15 +17,35 @@
           </div>
         </stats-card>
       </div>
+      <div class="col-lg-6 col-sm-6">
+        <graph-card>
+          <div slot="title">
+            Header
+          </div>
+          <div slot="subTitle">
+            Subheader
+          </div>
+          <div class="ct-chart" slot="content">
+            <graph-container></graph-container>
+          </div>
+          <div class="stats" slot="footer">
+            Footer
+          </div>
+        </graph-card>
+      </div>
     </div>
 
   </div>
 </template>
 <script>
-  import StatsCard from './../../../common/StatsCard'
+  import StatsCard from './StatsCard'
+  import GraphCard from './GraphCard'
+  import GraphContainer from './../graph/GraphContainer'
   export default {
     components: {
-      StatsCard
+      StatsCard,
+      GraphCard,
+      GraphContainer
     },
     /**
      * Chart data used to render stats, charts. Should be replaced with server data
