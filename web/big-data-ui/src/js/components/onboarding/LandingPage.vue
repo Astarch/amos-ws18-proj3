@@ -1,5 +1,6 @@
 <template>
   <div id="landing-page">
+    <git-info></git-info>
     <pretrendr-header/>
     <div class="py-5 gradient-overlay"
          style="background-image: url(/src/assets/background.png);">
@@ -36,6 +37,7 @@
 
 
 <script>
+  import GitInfo from './../../components/common/GitInfo';
   import LoginModal from './modal/LoginModal';
   import PretrendrHeader from './Header.vue';
   import PretrendrFooter from './Footer.vue';
@@ -46,7 +48,7 @@
 
   export default {
     name: 'landing',
-    components: {LoginModal, PretrendrHeader, PretrendrFooter},
+    components: {GitInfo, LoginModal, PretrendrHeader, PretrendrFooter},
     data: () => ({
       modalActive: false,
       modalType: FormTypeEnum.login,

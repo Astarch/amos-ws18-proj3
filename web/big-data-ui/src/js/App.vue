@@ -1,6 +1,5 @@
 <template>
   <div id="app" :class="{'nav-open': $sidebar.showSidebar}">
-    <git-info></git-info>
     <router-view></router-view>
     <!--This sidebar appears only for screens smaller than 992px-->
     <side-bar type="navbar" :sidebar-links="$sidebar.sidebarLinks">
@@ -33,10 +32,8 @@
 </template>
 
 <script>
-  import GitInfo from './components/common/GitInfo';
 
   export default {
-    components: {GitInfo},
     name: 'app',
   };
 </script>
