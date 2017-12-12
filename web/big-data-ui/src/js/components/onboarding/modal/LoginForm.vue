@@ -65,7 +65,7 @@
            .then(response => {
              this.isSubmitting = false;
              this.$router.push({
-               path: 'graph'
+               path: 'engagement'
              }),
                console.log(response);
            })
