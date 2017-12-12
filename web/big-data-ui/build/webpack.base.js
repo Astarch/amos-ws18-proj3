@@ -48,6 +48,10 @@ const webpackConfig = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       vue$: 'vue/dist/vue.esm.js',
+      assets: path.resolve(__dirname, '../src/assets'),
+      js: path.resolve(__dirname, '../src/js'),
+      components: path.resolve(__dirname, '../src/js/components'),
+      src: path.resolve(__dirname, '../src'),
     },
   },
   plugins: [
@@ -85,7 +89,7 @@ const webpackConfig = {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
-          limit: 100,
+          limit: 8000,
           name: path.posix.join(config.assetsSubDirectory, './img/[name].[hash:7].[ext]'),
         },
       },
