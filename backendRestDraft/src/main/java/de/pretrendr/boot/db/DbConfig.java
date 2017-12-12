@@ -2,12 +2,15 @@ package de.pretrendr.boot.db;
 
 import javax.sql.DataSource;
 
+import org.elasticsearch.node.NodeBuilder;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -34,5 +37,16 @@ public class DbConfig {
 	@ConfigurationProperties("usermanagement.datasource")
 	public DataSource dataSource() {
 		return DataSourceBuilder.create().build();
+	}
+
+	@Bean
+	public NodeBuilder nodeBuilder() {
+		return new NodeBuilder();
+	}
+
+	// Embedded Elasticsearch Server
+	@Bean
+	public ElasticsearchOperations elasticsearchTemplate() {
+		return new ElasticsearchTemplate(nodeBuilder().local(true).node().client());
 	}
 }
