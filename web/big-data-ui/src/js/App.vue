@@ -17,7 +17,7 @@
  // @import '../scss/paper-dashboard';
 
   body {
-    background: map-get($theme-colors, 'dark');
+   // background: map-get($theme-colors, 'dark');
 
   }
 

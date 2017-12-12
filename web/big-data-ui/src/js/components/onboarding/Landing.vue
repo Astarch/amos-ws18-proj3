@@ -1,39 +1,9 @@
 <template>
-  <div id="app">
-    <!-- Navigation -->
-    <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
-      <div class="container topnav">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse"
-                  data-target="#bs-example-navbar-collapse-1">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand topnav" href="#">
-            <img class="icon" src="~assets/logo/icon_white.svg">
-            <b>PRETRENDR</b>
-          </a>
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav navbar-right">
-            <li>
-              <a href="#register" ref="register" >Register</a>
-            </li>
-            <li>
-              <a href="#login">Login</a>
-            </li>
-          </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-      </div>
-      <!-- /.container -->
-    </nav>
+  <div id="landing-page">
 
-
+    <landing-header>
+      <git-info></git-info>
+    </landing-header>
     <!-- Header -->
     <a name="about"></a>
     <div class="intro-header">
@@ -50,10 +20,13 @@
               <hr class="intro-divider">
               <ul class="list-inline intro-social-buttons">
                 <li>
-                  <a href="#register" ref="register"  class="btn btn-default btn-lg">Register Now</a>
+                  <a href="#register" ref="register"
+                     class="btn btn-default btn-lg"
+                     v-on:click.prevent="open(FormTypeEnum.register)">Register Now</a>
                 </li>
                 <li>
-                  <a href="#login" class="btn btn-default btn-lg">Login</a>
+                  <a href="#login" class="btn btn-default btn-lg"
+                     v-on:click.prevent="open(FormTypeEnum.login)">Login</a>
                 </li>
               </ul>
             </div>
@@ -62,12 +35,10 @@
 
       </div>
       <!-- /.container -->
-
     </div>
     <!-- /.intro-header -->
 
     <!-- Page Content -->
-
     <a name="services"></a>
     <div class="content-section-a">
 
@@ -173,39 +144,47 @@
     </div>
     <!-- /.banner -->
 
-    <!-- Footer -->
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <ul class="list-inline">
-              <li>
-                <a href="#">Home</a>
-              </li>
-              <li class="footer-menu-divider">&sdot;</li>
-              <li>
-                <a href="#about">About</a>
-              </li>
-              <li class="footer-menu-divider">&sdot;</li>
-              <li>
-                <a href="#services">Services</a>
-              </li>
-              <li class="footer-menu-divider">&sdot;</li>
-              <li>
-                <a href="#contact">Contact</a>
-              </li>
-            </ul>
-            <p class="copyright text-muted small">Copyright &copy; pretrendr 2017. All Rights Reserved</p>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <landing-footer></landing-footer>
+
+    <login-modal
+      :is-active="modalActive"
+      :type="modalType"
+      v-on:close="modalActive = false"
+      v-on:changeType="newType => modalType = newType"></login-modal>
+
+
   </div>
 </template>
 
 <script>
+  import GitInfo from './../../components/common/GitInfo';
+  import LoginModal from './modal/LoginModal';
+  import LandingHeader from './LandingHeader';
+  import LandingFooter from './LandingFooter';
+
+  import {FormTypeEnum} from './../../utils/constants';
+
   export default {
     name: 'Landing',
+    components: {
+      GitInfo, LoginModal, LandingHeader, LandingFooter
+    },
+    data: () => ({
+      modalActive: false,
+      modalType: FormTypeEnum.login,
+      requestAnswer: '',
+      FormTypeEnum
+    }),
+    methods: {
+      open(which) {
+        this.modalActive = true;
+        this.modalType = which;
+      },
+      close(event) {
+        event.preventDefault();
+        this.modalActive = false;
+      },
+    },
   }
 </script>
 
@@ -229,9 +208,9 @@
 
   .topnav {
     font-size: 14px;
-     .icon {
+    .icon {
       height: 30px;
-       display:inline-block;
+      display: inline-block;
     }
   }
 
@@ -248,9 +227,10 @@
     background: url(~assets/background.png) no-repeat center center;
     background-size: cover;
   }
-  .intro-logo > img{
+
+  .intro-logo > img {
     position: relative;
-    max-width:200px;
+    max-width: 200px;
 
   }
 
@@ -372,15 +352,6 @@
     ul.banner-social-buttons > li:last-child {
       margin-bottom: 0;
     }
-  }
-
-  footer {
-    padding: 50px 0;
-    background-color: #f8f8f8;
-  }
-
-  p.copyright {
-    margin: 15px 0 0;
   }
 
 </style>
