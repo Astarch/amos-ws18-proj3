@@ -3,7 +3,7 @@ import Router from 'vue-router';
 import VueResource from 'vue-resource';
 import LandingPage from '../components/onboarding/LandingPage';
 import GraphContainer from '../components/engagement/graph/GraphContainer';
-import EngagementLayout from '../components/engagement/base/EngagementLayout';
+import EngagementLayout from '../components/engagement/EngagementLayout';
 import Dashboard from '../components/engagement/dashboard/Dashboard';
 import UserProfile from '../components/engagement/user-profile/UserProfile';
 import TableList from '../components/engagement/table-list/TableList';

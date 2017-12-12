@@ -11,7 +11,7 @@
       <div class="logo">
         <a href="" class="simple-text">
           <div class="logo-img">
-            <img src="/src/assets/icon_white.svg" alt="">
+            <img src="~assets/logo/icon_white.svg" alt="">
           </div>
           pretrendr Dashboard
         </a>

@@ -15,8 +15,8 @@
   </div>
 </template>
 <script>
-  import TopNavbar from './TopNavbar'
-  import ContentFooter from './ContentFooter'
+  import TopNavbar from './base/TopNavbar'
+  import ContentFooter from './base/ContentFooter'
   import EngagementContent from './EngagementContent'
 
   export default {
