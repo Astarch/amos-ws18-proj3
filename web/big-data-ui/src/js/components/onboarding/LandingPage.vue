@@ -37,7 +37,7 @@
 
 <script>
   import GitInfo from './../../components/common/GitInfo';
-  import LoginModal from './modal/LoginModal';
+  import LoginModal from './modal/OnboardingModal';
   import PretrendrHeader from './Header.vue';
   import PretrendrFooter from './Footer.vue';
   import {FormTypeEnum} from './../../utils/constants';

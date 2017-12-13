@@ -1,7 +1,9 @@
 <template>
   <div id="landing-page">
 
-    <landing-header>
+    <landing-header
+      v-on:openRegistration="open(FormTypeEnum.register)"
+      v-on:openLogin="open(FormTypeEnum.login)">
       <git-info></git-info>
     </landing-header>
     <!-- Header -->
@@ -118,21 +120,13 @@
 
         <div class="row">
           <div class="col-lg-6">
-            <h2>Connect to Start Bootstrap:</h2>
+            <h2>Connect to pretrendr:</h2>
           </div>
           <div class="col-lg-6">
             <ul class="list-inline banner-social-buttons">
               <li>
-                <a href="https://twitter.com/SBootstrap" class="btn btn-default btn-lg"><i
-                  class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
-              </li>
-              <li>
-                <a href="https://github.com/IronSummitMedia/startbootstrap" class="btn btn-default btn-lg"><i
+                <a href="https://github.com/Astarch/amos-ws18-proj3" class="btn btn-default btn-lg"><i
                   class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
-              </li>
-              <li>
-                <a href="#" class="btn btn-default btn-lg"><i class="fa fa-linkedin fa-fw"></i> <span
-                  class="network-name">Linkedin</span></a>
               </li>
             </ul>
           </div>
@@ -158,7 +152,7 @@
 
 <script>
   import GitInfo from './../../components/common/GitInfo';
-  import LoginModal from './modal/LoginModal';
+  import LoginModal from './modal/OnboardingModal';
   import LandingHeader from './LandingHeader';
   import LandingFooter from './LandingFooter';
 
@@ -195,24 +189,6 @@
     height: 100%;
   }
 
-  body,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 700;
-  }
-
-  .topnav {
-    font-size: 14px;
-    .icon {
-      height: 30px;
-      display: inline-block;
-    }
-  }
 
   .lead {
     font-size: 18px;
@@ -224,7 +200,7 @@
     padding-bottom: 50px;
     text-align: center;
     color: #f8f8f8;
-    background: url(~assets/background.png) no-repeat center center;
+    background: url(~assets/blur.png) no-repeat center center;
     background-size: cover;
   }
 

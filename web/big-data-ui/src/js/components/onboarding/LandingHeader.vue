@@ -13,7 +13,7 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand topnav" href="#">
-          <img class="icon" src="~assets/logo/icon_white.svg">
+          <img class="icon" src="~assets/logo/icon_primary.svg">
           <b>PRETRENDR</b>
         </a>
       </div>
@@ -21,10 +21,10 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <a href="#register" ref="register">Register</a>
+            <a href="#register" v-on:click.prevent.stop="openRegister()">Register</a>
           </li>
           <li>
-            <a href="#login">Login</a>
+            <a href="#login" v-on:click.prevent.stop="openLogin()">Login</a>
           </li>
         </ul>
       </div>
@@ -36,7 +36,15 @@
 
 <script>
   export default {
-    name: 'landing-header'
+    name: 'landing-header',
+    methods: {
+      openRegister() {
+        this.$emit('openRegistration')
+      },
+      openLogin() {
+        this.$emit('openLogin')
+      }
+    }
   }
 
 
@@ -46,7 +54,8 @@
 
   .topnav {
     font-size: 14px;
-    background-color: #053948;
+    background-color: white;
+    color: map_get($theme-colors, primary);
     .icon {
       height: 30px;
       display: inline-block;

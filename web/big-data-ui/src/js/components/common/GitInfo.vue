@@ -1,6 +1,6 @@
 <template>
   <div id="git-info" v-if="isActive" class="border border-primary">
-    {{branch}} : <i>({{commit}})</i> <b>by</b> <i>{{author}}</i> <b>on</b> <i>{{date}}</i>
+    <span>{{branch}} : <i>({{commit}})</i> <b>by</b> <i>{{author}}</i> <b>on</b> <i>{{date}}</i></span>
   </div>
 </template>
 
@@ -33,7 +33,7 @@
 
 <style lang="scss" scoped>
   #git-info {
-    color: white;
+    color: grey;
     display: flex;
     flex-direction: row;
     justify-content: center;
