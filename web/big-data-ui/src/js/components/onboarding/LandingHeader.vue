@@ -60,6 +60,19 @@
       height: 30px;
       display: inline-block;
     }
+    a.topnav{
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      b {
+        margin-left:5px;
+      }
+    }
+
+    div.collapse  a{
+      padding: 5px 15px;
+    }
   }
 
 

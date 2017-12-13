@@ -8,35 +8,40 @@
 
   export default {
     name: 'GitInfo',
+    props: [
+      'isActive'
+    ],
     data() {
       return {
         date: '',
         author: '',
         commit: '',
         branch: '',
-        isActive: false
       }
     },
     mounted() {
-      if (GIT && GIT.BRANCH && !GIT.BRANCH.includes("master")) {
-        this.isActive = true;
-        let date = new Date(GIT.DATE).toLocaleString("de-DE");
-        this.date = date;
-        this.author = GIT.AUTHOR;
-        this.commit = GIT.COMMIT;
-        this.branch = GIT.BRANCH;
-      }
+      let date = new Date(GIT.DATE).toLocaleString("de-DE");
+      this.date = date;
+      this.author = GIT.AUTHOR;
+      this.commit = GIT.COMMIT;
+      this.branch = GIT.BRANCH;
+
 
     }
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   #git-info {
     color: grey;
     display: flex;
     flex-direction: row;
     justify-content: center;
+  }
+
+  // fix to shift everything down to make space for the gitinfo
+  #landing-page .intro-header {
+    //padding-top: 80px;
   }
 
 </style>

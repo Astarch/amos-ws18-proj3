@@ -4,11 +4,11 @@
     <landing-header
       v-on:openRegistration="open(FormTypeEnum.register)"
       v-on:openLogin="open(FormTypeEnum.login)">
-      <git-info></git-info>
+      <git-info :isActive="isGitInfoShown"></git-info>
     </landing-header>
     <!-- Header -->
     <a name="about"></a>
-    <div class="intro-header">
+    <div class="intro-header" v-bind:style="{'padding-top': isGitInfoShown ? '80px': '50px'}">
       <div class="container">
 
         <div class="row">
@@ -179,6 +179,11 @@
         this.modalActive = false;
       },
     },
+    computed:{
+      isGitInfoShown(){
+        return GIT && GIT.BRANCH && !GIT.BRANCH.includes("master")
+      }
+    }
   }
 </script>
 

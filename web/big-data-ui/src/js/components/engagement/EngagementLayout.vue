@@ -66,5 +66,4 @@
 
 </script>
 <style lang="scss">
-  @import '../../../scss/paper-dashboard';
 </style>

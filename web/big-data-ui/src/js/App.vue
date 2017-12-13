@@ -14,7 +14,7 @@
 <style lang="scss">
   @import '~bootstrap/dist/css/bootstrap.css';
   @import '../scss/base';
- // @import '../scss/paper-dashboard';
+  @import '../scss/paper-dashboard';
 
   body {
    // background: map-get($theme-colors, 'dark');
