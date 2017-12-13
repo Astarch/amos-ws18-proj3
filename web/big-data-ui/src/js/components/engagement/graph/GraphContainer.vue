@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-
+  import http, {api} from 'js/utils/api';
   import chart from "./Chart"
   import * as d3 from 'd3'
 
@@ -18,42 +18,72 @@
       return {
         dataset: new Array(),
         options: {
-        host: 'localhost:8081',
-        path: '/api/dummy',
-        method: 'GET',
-        user: '',
-        password: '',
-        apiKey: '',
-        sessionID: ''
+        origin: window.location.origin,
+        dummypath: '/api/dummy',
+        path:'/api/s3/bucket/8cec40c2-f750-48fb-ace2-7c12fa61f88e/wordCount',
+        size: '&size=10',
+        num: '?number=',
+        totalPages : 1,
+        user: 'user2',
+        pwd: 'pass2'
         }
       };
     },
-    mounted: function () {
-      var self = this;
+   computed: {
 
-      // http GET
-      this.$http.get('http://localhost:8081/api/dummy/graphData').then(response => {
-        // status: ok
-        if(response.status ==200){
-          console.log("status: " + response.status);
-          self.dataset = response.body;
-        } else {
-          self.readCSV();
-        }
-      }, response => {
-        console.log("error: " + response.status);
-        self.readJSON();
-      });
+  },
+    created: function () {
+      this.doLogin();
     },
-    // read external json | !!!keep for testing and fallback!!!
     methods: {
-      readJSON: function () {
-      var self = this;
-      d3.json('/static/data/test.json', function (err, data) {
-        self.dataset = data;
-        console.log(self.dataset);
-      });
+        doLogin: function () {
+        this.isSubmitting = true;
+        api.auth.postLogin(this.options.user, this.options.pwd)
+           .then(response => {
+             this.isSubmitting = false;
+             this.retrieveData(this.options.size, 0);
+           })
+           .catch(error => {
+            console.log(error);
+             this.isSubmitting = false;
+             let errorCode = error.response.status;
+             if (errorCode < 500) {
+               this.showLoginError('Login failure - please try again!')
+             } else {
+               this.showLoginError('Server error - please try again later!')
+             }
+             console.log(error.response);
+           });
+      },
+      retrieveData: function (size, i) {
+       var self = this;
+       console.log("retrieveing");
+       // CORRECT: if(i==this.options.totalPages) !!!! NOTE !!!! Not activated since duplicate dummy data!!!!
+       if(i==5){
+        return 0;
+       }
+      var total_path = this.options.path.concat(this.options.num).concat(String(i)).concat(size);
+       api.graph.getData(total_path)
+           .then(response => {
+            this.options.totalPages = response.data.totalPages;
+           (response.data.content).forEach(function (e) {
+            var obj = {count : e.count, label : e.word};
+            //console.log(obj);
+            (self.dataset).push(obj);
+           });
+           this.retrieveData(size, ++i);
+           })
+           .catch(error => {
+            console.log(error);
+             let errorCode = error.response.status;
+             if (errorCode < 500) {
+               console.log('Failure - please try again!');
+             } else {
+               console.log('Error - please try again later!');
+             }
+             console.log(error.response);
+           });
+      }
     }
-  }
   };
 </script>

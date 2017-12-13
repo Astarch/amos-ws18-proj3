@@ -27,13 +27,13 @@
         cursor: pointer;
 
         &:hover {
-          background-color: #4667e2;
+          background-color: map_get($theme-colors, secondary);
         }
         &:active {
-          background-color: #4667e2;
+          background-color: map_get($theme-colors, secondary);
         }
         &.disabled {
-          background-color: #a2b3f0;
+          background-color: map_get($theme-colors, primaryLight);
         }
 
       }
@@ -44,7 +44,7 @@
       padding-top: 25px;
 
       a {
-        color: #1842db;
+        color: map_get($theme-colors, dark);
       }
     }
   }

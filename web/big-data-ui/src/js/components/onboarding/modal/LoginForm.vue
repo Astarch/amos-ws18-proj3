@@ -2,7 +2,7 @@
   <div id="form-login" class="onboarding-form form-login" :class="{active: active}">
     <input type="text"
            name="user"
-           placeholder="Email or Username"
+           placeholder="Username"
            v-model="username"
            v-on:input="hideLoginError"
            v-on:keyup.enter.stop="submit()"
@@ -65,14 +65,14 @@
            .then(response => {
              this.isSubmitting = false;
              this.$router.push({
-               path: 'graph'
+               path: 'engagement'
              }),
                console.log(response);
            })
            .catch(error => {
              this.isSubmitting = false;
-             let errorCode = error.response.status;
-             if (errorCode < 500) {
+             let isServerError = (!error || !error.response || !error.response.status || error.response.status >= 500);
+             if (!isServerError) {
                this.showLoginError('Login failure - please try again!')
              } else {
                this.showLoginError('Server error - please try again later!')
