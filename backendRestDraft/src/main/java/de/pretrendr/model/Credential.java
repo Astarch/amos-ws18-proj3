@@ -1,4 +1,4 @@
-package de.pretrendr.model.es;
+package de.pretrendr.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -7,15 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(indexName = "customindex", type = "articles")
+@Document(indexName = "credentials", type = "credential")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Article {
-	
-    @Id
-    private String id;
-    private String title;
-    private String author;
-    private String releaseDate;
+public class Credential {
+	@Id
+	private String email;
+	private String username;
+	private String password;
+	private String platform;
 }

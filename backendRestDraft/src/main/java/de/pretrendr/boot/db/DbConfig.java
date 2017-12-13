@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EntityScan(basePackages = { "de.pretrendr" })
 @EnableJpaRepositories(basePackages = { "de.pretrendr" })
 @EnableTransactionManagement
+@EnableElasticsearchRepositories(basePackages = { "de.pretrendr" })
 public class DbConfig {
 	/**
 	 * {@link DataSource} based on configuration file. See
