@@ -5,12 +5,15 @@ import qs from 'qs';
 /******************** Base API / Client Configuration ********************/
 
 let port = "8081/"
-let localhostUrl = "http://localhost:" + port
-let stagingUrl = "http://staging.pretrendr.org:" + port
+let localhostUrl = "http://localhost:" + port;
+let stagingUrl = "http://18.216.129.153:" + port;
+let liveUrl = "http://18.216.122.218:" + port;
+
+let baseUrl = (GIT && GIT.BRANCH && !GIT.BRANCH.includes("master") ) ? liveUrl : stagingUrl;
 
 
 const axiosInstance = axios.create({
-  baseURL: stagingUrl,
+  baseURL: baseUrl,
 });
 
 // Intercepts all responses, retrieves the x auth token and sets it to all following requests headers!
