@@ -71,8 +71,8 @@
            })
            .catch(error => {
              this.isSubmitting = false;
-             let errorCode = error.response.status;
-             if (errorCode < 500) {
+             let isServerError = (!error || !error.response || !error.response.status || error.response.status >= 500);
+             if (!isServerError) {
                this.showLoginError('Login failure - please try again!')
              } else {
                this.showLoginError('Server error - please try again later!')
