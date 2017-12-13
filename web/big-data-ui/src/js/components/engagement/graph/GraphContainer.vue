@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-  import http, {api} from './api';
+  import http, {api} from 'js/utils/api';
   import chart from "./Chart"
   import * as d3 from 'd3'
 
@@ -30,7 +30,7 @@
       };
     },
    computed: {
-  
+
   },
     created: function () {
       this.doLogin();
@@ -63,12 +63,12 @@
         return 0;
        }
       var total_path = this.options.path.concat(this.options.num).concat(String(i)).concat(size);
-       api.auth.getData(total_path)
+       api.graph.getData(total_path)
            .then(response => {
             this.options.totalPages = response.data.totalPages;
            (response.data.content).forEach(function (e) {
             var obj = {count : e.count, label : e.word};
-            console.log(obj);
+            //console.log(obj);
             (self.dataset).push(obj);
            });
            this.retrieveData(size, ++i);
