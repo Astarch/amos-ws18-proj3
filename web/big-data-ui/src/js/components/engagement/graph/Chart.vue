@@ -14,6 +14,7 @@
     name: 'chart',
     data() {
       return {
+        update_count: 0,
         width: null,
         height: null,
         rad: null,
@@ -25,19 +26,22 @@
     watch: {
       data: function (newData, oldData) {
         this.prepareData(newData);
+        // hack for testing
+        ++this.update_count;
       }
     },
     methods: {
       prepareData: function (newdata) {
         var key; var data = []; var self = this;
 
-        for (key in newdata) {
+// KEEP -- maybe needed when applying data type changes
+/*        for (key in newdata) {
           if (newdata.hasOwnProperty(key)){
             newdata[key] = Number(newdata[key]);
             data.push({'label':key, 'count':newdata[key]});
           }
-        }
-        this.buildGraph(data);
+        }*/
+        this.buildGraph(newdata);
       },
       // idea: http://zeroviscosity.com/d3-js-step-by-step/step-1-a-basic-pie-chart
       buildGraph: function (newdata) {
@@ -45,7 +49,7 @@
         this.width = document.getElementById('chart').getBoundingClientRect().width;
         this.height = document.getElementById('chart').getBoundingClientRect().height;
         this.rad = Math.min(this.width, this.height) / 2;
-        this.colorScale = d3.scaleOrdinal().range(['#A468D5', '#3F046F', '#582781', '#640CAB', '#200039', '#9D74BF']);
+        this.colorScale = d3.scaleOrdinal().range(['#^053948', '#8EA5AC', '#127281', '#640CAB', '#CD1D2C', '#88C742']);
         this.svg = d3.select('#chart').append('g').attr('transform', 'translate(' + (this.width / 2) + ',' + (this.height / 2) + ')');
         var radius = d3.arc().innerRadius(this.rad - (0.45 * this.rad)).outerRadius(this.rad);
         var pie = d3.pie().value(function (d) {
@@ -54,7 +58,10 @@
         var path = this.svg.selectAll('path').data(pie(newdata)).enter().append('path').attr('d', radius).attr('fill', function (d, i) {
           return self.colorScale(d.data.label);
         });
+        // hack for testing
+        if(this.update_count<1){
         this.drawLegend(newdata);
+        }
       },
       drawLegend: function (newdata) {
         var self = this;
