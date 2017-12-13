@@ -41,7 +41,7 @@
   import http, {api} from '../../../utils/api';
   import qs from 'qs';
 
-  const colors = new Array("", "#F09090", "#EBA096", "#E5B09C", "#E0C0A2", "#DBCFA7", "#D6DFAD", "#D0EFB3", "#CBFFB9")
+  const colors = ["", "#F09090", "#EBA096", "#E5B09C", "#E0C0A2", "#DBCFA7", "#D6DFAD", "#D0EFB3", "#CBFFB9"]
 
 
 

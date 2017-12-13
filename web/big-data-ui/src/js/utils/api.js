@@ -78,9 +78,17 @@ const user = {
   getAll
 };
 
+/***** graph *****/
+const getData = (path) => axiosInstance.get(path);
+
+const graph = {
+  getData
+};
+
 const api = {
   auth,
-  user
+  user,
+  graph
 }
 
 export {

@@ -5,7 +5,7 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 
-import SideBar from './components/base/sidebar'
+import SideBar from './components/engagement/common/sidebar'
 import GlobalComponents from './globalComponents'
 
 

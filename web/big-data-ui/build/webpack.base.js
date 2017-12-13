@@ -52,6 +52,7 @@ const webpackConfig = {
       js: path.resolve(__dirname, '../src/js'),
       components: path.resolve(__dirname, '../src/js/components'),
       src: path.resolve(__dirname, '../src'),
+      scss: path.resolve(__dirname, '../src/scss'),
     },
   },
   plugins: [
