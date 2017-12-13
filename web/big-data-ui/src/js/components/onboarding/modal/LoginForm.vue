@@ -2,7 +2,7 @@
   <div id="form-login" class="onboarding-form form-login" :class="{active: active}">
     <input type="text"
            name="user"
-           placeholder="Email or Username"
+           placeholder="Username"
            v-model="username"
            v-on:input="hideLoginError"
            v-on:keyup.enter.stop="submit()"
