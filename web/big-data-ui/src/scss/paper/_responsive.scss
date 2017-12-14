@@ -113,9 +113,9 @@
     @include transition (0.33s, cubic-bezier(0.685, 0.0473, 0.346, 1));
     position: relative;
   }
-  .navbar .navbar-collapse.collapse,
-  .navbar .navbar-collapse.collapse.in,
-  .navbar .navbar-collapse.collapsing {
+  .navbar .navbar-collapse.off-canvas-sidebar.collapse,
+  .navbar .navbar-collapse.off-canvas-sidebar.collapse.in,
+  .navbar .navbar-collapse.off-canvas-sidebar.collapsing {
     display: none !important;
   }
 

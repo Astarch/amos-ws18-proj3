@@ -70,8 +70,12 @@
       }
     }
 
-    div.collapse  a{
+    div.collapse  a,
+    div.collapsing a{
       padding: 5px 15px;
+    }
+    .navbar-collapse{
+      height: auto!important;
     }
   }
 
