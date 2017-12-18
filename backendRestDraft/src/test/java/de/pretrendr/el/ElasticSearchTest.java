@@ -21,7 +21,7 @@ import de.pretrendr.model.Article;
 
 public class ElasticSearchTest extends PretrendrTestBase {
 
-	//@Test
+//	@Test
 	public void test1() throws Exception {
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(
 				new URL("http://data.gdeltproject.org/gdeltv2/masterfilelist.txt").openStream()))) {
@@ -89,8 +89,6 @@ public class ElasticSearchTest extends PretrendrTestBase {
 									}
 								}
 								save(articles);
-
-								System.out.println("saved " + articles.size() + " articles");
 								articles.clear();
 
 								ze = zipInput.getNextEntry();
@@ -110,6 +108,7 @@ public class ElasticSearchTest extends PretrendrTestBase {
 
 	private void save(List<Article> articles) {
 		if(!articles.isEmpty()) {
+			System.out.println("saved " + articles.size() + " articles");
 			articleService.save(articles);
 			articles.clear();
 		}
