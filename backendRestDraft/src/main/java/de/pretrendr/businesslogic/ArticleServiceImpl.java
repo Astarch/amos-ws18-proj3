@@ -7,49 +7,43 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import de.pretrendr.dataccess.CredentialDAO;
-import de.pretrendr.model.Credential;
+import com.google.common.collect.Lists;
+
+import de.pretrendr.dataccess.ArticleDAO;
+import de.pretrendr.model.Article;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
-	private CredentialDAO articleRepository;
+	private ArticleDAO articleRepository;
 
 	@Autowired
-	public ArticleServiceImpl(CredentialDAO articleRepository) {
+	public ArticleServiceImpl(ArticleDAO articleRepository) {
 		this.articleRepository = articleRepository;
 	}
 
 	@Override
-	public Credential save(Credential article) {
+	public Article save(Article article) {
 		return articleRepository.save(article);
 	}
 
 	@Override
-	public void delete(Credential article) {
+	public void delete(Article article) {
 		articleRepository.delete(article);
 	}
 
 	@Override
-	public Credential findOne(String id) {
+	public Article findOne(String id) {
 		return articleRepository.findOne(id);
 	}
 
 	@Override
-	public Iterable<Credential> findAll() {
+	public Iterable<Article> findAll() {
 		return articleRepository.findAll();
 	}
 
 	@Override
-	public Page<Credential> findByAuthor(String author, PageRequest pageRequest) {
-		// return articleRepository.findByAuthor(author, pageRequest);
-		return null;
+	public List<Article> save(List<Article> articles) {
+		return Lists.newArrayList(articleRepository.save(articles));
 	}
-
-	@Override
-	public List<Credential> findByTitle(String title) {
-		// return articleRepository.findByTitle(title);
-		return null;
-	}
-
 }

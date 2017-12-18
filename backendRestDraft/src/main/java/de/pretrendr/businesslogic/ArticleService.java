@@ -3,22 +3,19 @@ package de.pretrendr.businesslogic;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import de.pretrendr.model.Credential;
+import de.pretrendr.model.Article;
 
 import java.util.List;
 
 public interface ArticleService {
 
-	Credential save(Credential book);
+	Article save(Article article);
 
-	void delete(Credential book);
+	List<Article> save(List<Article> articles);
 
-	Credential findOne(String id);
+	void delete(Article article);
 
-	Iterable<Credential> findAll();
+	Article findOne(String id);
 
-	Page<Credential> findByAuthor(String author, PageRequest pageRequest);
-
-	List<Credential> findByTitle(String title);
-
+	Iterable<Article> findAll();
 }

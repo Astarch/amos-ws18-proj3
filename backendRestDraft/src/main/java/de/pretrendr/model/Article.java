@@ -11,10 +11,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Credential {
+public class Article {
 	@Id
-	private String email;
-	private String username;
-	private String password;
-	private String platform;
+	private String url;
+	private String eventDate;
+	private String mentionDate;
+	private String domain;
+	private String title;
 }
