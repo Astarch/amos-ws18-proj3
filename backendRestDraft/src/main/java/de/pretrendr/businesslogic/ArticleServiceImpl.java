@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -97,6 +98,28 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	public Map<String, Long> countByTermAndDayFromTo(String term, int yearFrom, int monthFrom, int dayFrom, int yearTo,
+			int monthTo, int dayTo) {
+		boolean firstRun = true;
+		Map<String, Long> map = Maps.newHashMap();
+		for (int i = yearFrom; i <= yearTo; i++) {
+			String year = Integer.toString(i);
+			for (int m = firstRun ? monthFrom : 1; m <= (i == yearTo ? monthTo : 12); m++) {
+				String month = (m < 10 ? "0" : "") + Integer.toString(m);
+				for (int d = firstRun ? dayFrom : 1; d <= (i == yearTo && m == monthTo ? dayTo : 31); d++) {
+					firstRun = false;
+					String day = (d < 10 ? "0" : "") + Integer.toString(d);
+					long count = articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year, month, day);
+					if (count > 0) {
+						map.put(year + month + day, count);
+					}
+				}
+			}
+		}
+		return map;
+	}
+
+	@Override
 	public void crawlData() {
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(
 				new URL("http://data.gdeltproject.org/gdeltv2/masterfilelist.txt").openStream()))) {
@@ -114,9 +137,10 @@ public class ArticleServiceImpl implements ArticleService {
 			int fileCount = 0;
 			int skipped = 0;
 			int masterLineCount = 0;
-			while ((line = br.readLine()) != null && outerArticleCount < 1000000 && fileCount < 437) {
+			while ((line = br.readLine()) != null && outerArticleCount < 10000000 && fileCount < 1000) {
 				masterLineCount++;
-				if(masterLineCount%10!=0) { // read only each 10th file, for better data distribution over several days
+				if (masterLineCount % 10 != 0) { // read only each 10th file, for better data distribution over several
+													// days
 					continue;
 				}
 				Pattern pattern = Pattern.compile("([0-9]*?) ([0-9a-f]*) http://data.gdeltproject.org/gdeltv2/(.*)");
@@ -206,6 +230,25 @@ public class ArticleServiceImpl implements ArticleService {
 			log.error("Malformed URL", e1);
 		} catch (IOException e1) {
 			log.error("ioex", e1);
+		}
+	}
+
+	@Override
+	public Map<String, Long> countByTermAndDay(String term, String from, String to) {
+		if (from != null && !from.isEmpty() && to != null && !to.isEmpty()) {
+			try {
+			int yearFrom = Integer.parseInt(from.substring(0, 4));
+			int monthFrom = Integer.parseInt(from.substring(4, 6));
+			int dayFrom = Integer.parseInt(from.substring(6, 8));
+			int yearTo = Integer.parseInt(to.substring(0, 4));
+			int monthTo = Integer.parseInt(to.substring(4, 6));
+			int dayTo = Integer.parseInt(to.substring(6, 8));
+			return countByTermAndDayFromTo(term, yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo);
+			}catch (NumberFormatException e) {
+				return Maps.newHashMap();
+			}
+		} else {
+			return countByTermAndDay(term);
 		}
 	}
 }

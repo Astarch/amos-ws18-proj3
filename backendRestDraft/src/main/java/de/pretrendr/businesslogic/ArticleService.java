@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.pretrendr.model.Article;
+import de.pretrendr.model.GdeltCsvCache;
 
 public interface ArticleService {
 
@@ -24,4 +25,9 @@ public interface ArticleService {
 	Map<String, Long> countByTermAndDay(String term);
 
 	void crawlData();
+
+	Map<String, Long> countByTermAndDay(String term, String from, String to);
+
+	Map<String, Long> countByTermAndDayFromTo(String term, int yearFrom, int monthFrom, int dayFrom, int yearTo,
+			int monthTo, int dayTo);
 }
