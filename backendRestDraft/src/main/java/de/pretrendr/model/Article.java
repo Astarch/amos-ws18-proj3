@@ -16,6 +16,9 @@ public class Article {
 	private String url;
 	private String eventDate;
 	private String mentionDate;
+	private String year;
+	private String month;
+	private String day;
 	private String domain;
 	private String title;
 }

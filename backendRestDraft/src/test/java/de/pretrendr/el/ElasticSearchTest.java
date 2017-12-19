@@ -21,7 +21,7 @@ import de.pretrendr.model.Article;
 
 public class ElasticSearchTest extends PretrendrTestBase {
 
-//	@Test
+	// @Test
 	public void test1() throws Exception {
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(
 				new URL("http://data.gdeltproject.org/gdeltv2/masterfilelist.txt").openStream()))) {
@@ -30,13 +30,13 @@ public class ElasticSearchTest extends PretrendrTestBase {
 			String url;
 			String eventDate;
 			String mentionDate;
+			String year;
+			String month;
+			String day;
 			String domain;
 			String title;
-			String id;
-			String md5;
 			int outerArticleCount = 0;
-			int outerFileCount = 0;
-			while ((line = br.readLine()) != null) {
+			while ((line = br.readLine()) != null && outerArticleCount < 1000000) {
 				Pattern pattern = Pattern.compile("([0-9]*?) ([0-9a-f]*) http://data.gdeltproject.org/gdeltv2/(.*)");
 				Matcher matcher = pattern.matcher(line);
 				String zipUrl;
@@ -50,7 +50,6 @@ public class ElasticSearchTest extends PretrendrTestBase {
 									new URL("http://data.gdeltproject.org/gdeltv2/" + zipUrl).openStream());
 							ZipEntry ze = zipInput.getNextEntry();
 							while (ze != null) {
-								outerFileCount++;
 								String fileName = ze.getName();
 								File tmpFile = new File("gdelt" + File.separator + fileName.substring(0, 4)
 										+ File.separator + fileName.substring(4, 6) + File.separator
@@ -69,25 +68,30 @@ public class ElasticSearchTest extends PretrendrTestBase {
 								BufferedReader tmpReader = new BufferedReader(new FileReader(tmpFile));
 								int innerCount = 10000;
 								List<Article> articles = Lists.newArrayList();
-								while ((line = tmpReader.readLine()) != null) {
+								while ((line = tmpReader.readLine()) != null && outerArticleCount < 1000000) {
 									innerCount++;
 									outerArticleCount++;
 									Pattern innerPattern = Pattern
-											.compile("([0-9]*)\\t([0-9]*)\\t([0-9]*)\\t([0-9])\\t(.*?)\\t(http.*)");
+											.compile("([0-9]*)\\t([0-9]*)\\t([0-9]*)\\t([0-9])\\t(.*?)\\t(http\\S*)");
 									Matcher innerMatcher = innerPattern.matcher(line);
 									if (innerMatcher.find()) {
 										eventDate = innerMatcher.group(2);
 										mentionDate = innerMatcher.group(3);
+										year = mentionDate.substring(0, 4);
+										month = mentionDate.substring(4, 6);
+										day = mentionDate.substring(6, 8);
 										domain = innerMatcher.group(5);
 										url = innerMatcher.group(6);
-										title = url.replaceAll("^[0-9a-zA-Z]", "").replaceAll("  ", " ");
-										articles.add(new Article(url, eventDate, mentionDate, domain, title));
+										title = url.replaceAll("[^0-9a-zA-Z]", " ").replaceAll("[ ]+", " ");
+										articles.add(new Article(url, eventDate, mentionDate, year, month, day, domain,
+												title));
 									}
 									if (innerCount % 10000 == 0) {
+										System.out.println(outerArticleCount + "(+" + articles.size() + ")");
 										save(articles);
-										System.out.println(outerArticleCount + "(+" + articles.size() + ")" );
 									}
 								}
+								tmpReader.close();
 								save(articles);
 								articles.clear();
 
@@ -102,15 +106,30 @@ public class ElasticSearchTest extends PretrendrTestBase {
 				}
 			}
 		}
-		List<Article> asd = Lists.newArrayList(articleService.findAll());
-		System.out.println(asd);
 	}
 
 	private void save(List<Article> articles) {
-		if(!articles.isEmpty()) {
-			System.out.println("saved " + articles.size() + " articles");
+		if (!articles.isEmpty()) {
 			articleService.save(articles);
 			articles.clear();
 		}
+	}
+
+	@Test
+	public void test2() {
+		List<Article> asd = Lists.newArrayList(articleService.findAllByTerm("bitcoin"));
+		for (Article a : asd) {
+			System.out.println(a);
+		}
+	}
+
+	@Test
+	public void test3() {
+		System.out.println(articleService.countByTerm("bitcoin"));
+	}
+
+	@Test
+	public void test4() {
+		System.out.println(articleService.countByTermAndDay("bitcoin"));
 	}
 }

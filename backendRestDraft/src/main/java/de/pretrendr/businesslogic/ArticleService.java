@@ -1,11 +1,9 @@
 package de.pretrendr.businesslogic;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import java.util.List;
+import java.util.Map;
 
 import de.pretrendr.model.Article;
-
-import java.util.List;
 
 public interface ArticleService {
 
@@ -18,4 +16,10 @@ public interface ArticleService {
 	Article findOne(String id);
 
 	Iterable<Article> findAll();
+
+	List<Article> findAllByTerm(String string);
+
+	long countByTerm(String term);
+
+	Map<String, Long> countByTermAndDay(String term);
 }

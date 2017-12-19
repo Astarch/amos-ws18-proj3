@@ -1,13 +1,13 @@
 package de.pretrendr.businesslogic;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import de.pretrendr.dataccess.ArticleDAO;
 import de.pretrendr.model.Article;
@@ -45,5 +45,34 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public List<Article> save(List<Article> articles) {
 		return Lists.newArrayList(articleRepository.save(articles));
+	}
+
+	@Override
+	public List<Article> findAllByTerm(String string) {
+		return articleRepository.findAllByTitleContaining(string);
+	}
+
+	@Override
+	public long countByTerm(String term) {
+		return articleRepository.countByTitleContaining(term);
+	}
+
+	@Override
+	public Map<String, Long> countByTermAndDay(String term) {
+		Map<String, Long> map = Maps.newHashMap();
+		for (int i = 2015; i < 2016; i++) {
+			String year = Integer.toString(i);
+			for (int m = 2; m <= 3; m++) {
+				String month = (m < 10 ? "0" : "") + Integer.toString(m);
+				for (int d = 1; d <= 31; d++) {
+					String day = (d < 10 ? "0" : "") + Integer.toString(d);
+					long count = articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year, month, day);
+					if (count > 0) {
+						map.put(year + month + day, count);
+					}
+				}
+			}
+		}
+		return map;
 	}
 }
