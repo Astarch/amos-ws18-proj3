@@ -140,11 +140,11 @@
 
     <landing-footer></landing-footer>
 
-    <login-modal
+    <onboarding-modal
       :is-active="modalActive"
       :type="modalType"
       v-on:close="modalActive = false"
-      v-on:changeType="newType => modalType = newType"></login-modal>
+      v-on:changeType="newType => modalType = newType"></onboarding-modal>
 
 
   </div>
@@ -152,7 +152,7 @@
 
 <script>
   import GitInfo from './../../components/common/GitInfo';
-  import LoginModal from './modal/OnboardingModal';
+  import OnboardingModal from './modal/OnboardingModal';
   import LandingHeader from './LandingHeader';
   import LandingFooter from './LandingFooter';
 
@@ -161,7 +161,7 @@
   export default {
     name: 'Landing',
     components: {
-      GitInfo, LoginModal, LandingHeader, LandingFooter
+      GitInfo, OnboardingModal, LandingHeader, LandingFooter
     },
     data: () => ({
       modalActive: false,
