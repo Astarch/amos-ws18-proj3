@@ -22,4 +22,6 @@ public interface ArticleService {
 	long countByTerm(String term);
 
 	Map<String, Long> countByTermAndDay(String term);
+
+	void crawlData();
 }
