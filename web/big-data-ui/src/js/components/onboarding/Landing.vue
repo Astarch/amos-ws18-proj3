@@ -181,6 +181,9 @@
     },
     computed:{
       isGitInfoShown(){
+        if(GIT === undefined){
+          return false
+        }
         return GIT && GIT.BRANCH && !GIT.BRANCH.includes("master")
       }
     }
