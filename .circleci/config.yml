@@ -20,20 +20,14 @@ jobs:
           name: install
           command: cd web/big-data-ui; yarn install
       - run:
-          name: install karma
-          command: cd web/big-data-ui; yarn add karma
-      - run:
           name: run unit tests frontend
-          command: cd web/big-data-ui; ./node_modules/karma/bin/karma start test/unit/karma.conf.js --single-run || true 
-          environment:
-            JUNIT_REPORT_PATH: /junit
-            JUNIT_REPORT_NAME: test-results.xml
+          command: cd web/big-data-ui; yarn run unit
       - store_test_results:
-          path: web/big-data-ui/test/unit/junit
+          path: web/big-data-ui/test/report
       - store_artifacts:
-          path: web/big-data-ui/test/unit/junit
+          path: web/big-data-ui/test/report
       - store_artifacts:
-          path: web/big-data-ui/test/unit/coverage
+          path: web/big-data-ui/test/coverage
       - save_cache:
           paths:
             - ./web/big-data-ui/.cache/yarn
