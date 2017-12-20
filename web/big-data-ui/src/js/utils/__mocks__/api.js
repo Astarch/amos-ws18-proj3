@@ -4,7 +4,7 @@
 
 const auth = {
   postLogin: jest.fn(() => Promise.resolve({success: true})),
-  postRegistration: jest.fn(() => Promise.resolve({success: true})),
+  postRegistration: jest.fn(() => Promise.resolve({success: true, response:{status: 401}})),
   postCompleteRegistration: jest.fn(() => Promise.resolve({success: true})),
   doLogout: jest.fn(() => Promise.resolve({success: true}))
 };
@@ -27,7 +27,7 @@ const api = {
   graph: graph
 }
 
-module.exports = () => {
+export  {
   api
 };
 

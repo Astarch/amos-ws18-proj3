@@ -1,12 +1,14 @@
 <template>
   <div id="form-register" class="onboarding-form form-register" :class="{active: active}">
-    <input type="text"
+    <input id="username"
+           type="text"
            name="name"
            placeholder="Name"
            v-model="username"
            v-on:keyup.enter.stop="submit()"
            v-on:input="hideError">
-    <input type="email"
+    <input id="email"
+           type="email"
            name="email"
            placeholder="Email"
            v-model="email"
@@ -14,7 +16,8 @@
            v-on:input="checkEmail"
            ref="emailInput"
            v-bind:style="regEmailStyle">
-    <input type="password"
+    <input id="password"
+           type="password"
            name="password"
            placeholder="Password"
            v-model="password"
@@ -38,7 +41,7 @@
 
 <script>
   import {isPasswordValid, isNameValid, isMailValid, getPasswordStrength} from '../../../utils/validation'
-  import http, {api} from '../../../utils/api';
+  import {api} from '../../../utils/api';
   import qs from 'qs';
 
   const colors = ["", "#F09090", "#EBA096", "#E5B09C", "#E0C0A2", "#DBCFA7", "#D6DFAD", "#D0EFB3", "#CBFFB9"]
@@ -84,7 +87,6 @@
         api.auth.postRegistration(name, email, password)
            .then(response => {
              this.isSubmitting = false;
-             console.log(response);
            })
            .catch(error => {
              this.isSubmitting = false;
@@ -94,7 +96,6 @@
              } else {
                this.showError('Server error - please try again later!')
              }
-             console.log(error.response);
 
            });
       },

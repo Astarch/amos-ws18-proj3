@@ -10,9 +10,8 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development NODE_APP_MODE=app webpack-dev-server --open --hot",
     "build": "cross-env NODE_ENV=production NODE_APP_MODE=app webpack --progress --hide-modules",
-    "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run  || true ",
+    "unit": "cross-env BABEL_ENV=test jest ",
     "test": "npm run unit",
-    "testJest": "jest",
     "lint": "eslint --ext .js,.vue src test/unit/specs"
   },
   "dependencies": {

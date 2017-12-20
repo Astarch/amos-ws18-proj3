@@ -63,13 +63,10 @@
         this.isSubmitting = true;
         api.auth.postLogin(name, password)
            .then(response => {
-             console.log(response);
-
              this.isSubmitting = false;
              this.$router.push({
                path: 'engagement'
              })
-             console.log(response);
            })
            .catch(error => {
              this.isSubmitting = false;
@@ -79,7 +76,6 @@
              } else {
                this.showLoginError('Server error - please try again later!')
              }
-             console.log(error.response);
 
            });
       },
@@ -98,7 +94,6 @@
         return isValid;
       },
       showLoginError(message) {
-        console.log('showLoginError(): ', message)
         if (typeof message === 'string' || message instanceof String) {
           this.hasError = true;
           this.errorText = message;

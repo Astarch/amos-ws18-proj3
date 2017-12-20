@@ -1,21 +1,33 @@
 import { shallow, mount } from 'vue-test-utils'
 import Vue from 'vue'
-import LoginForm from 'src/js/components/onboarding/modal/LoginForm'
+import RegisterForm from 'src/js/components/onboarding/modal/RegisterForm'
 import {api} from 'src/js/utils/api'
 jest.mock('src/js/utils/api');
 
 
-describe('LoginForm.test.js', () => {
+describe('RegisterForm.test.js', () => {
   let cmp
 
   beforeEach(() => {
-    cmp = shallow(LoginForm, {
+    cmp = shallow(RegisterForm, {
       data: {
         username: '',
+        email: '',
         password: '',
         isSubmitting: false,
         errorText: '',
         hasError: false,
+
+        // Style Password Input Field
+        regPwStyle: {
+          backgroundColor: ''
+        },
+
+        // Style Email Input Field
+        regEmailStyle: {
+          backgroundColor: ''
+        }
+
       },
       propsData: {
         active: false
@@ -37,14 +49,14 @@ describe('LoginForm.test.js', () => {
     expect(cmp.element).toMatchSnapshot('active')
   })
 
-  test('to register clicked event is emitted', () => {
+  test('to login clicked event is emitted', () => {
     cmp.find('div.links > a').trigger('click')
-    expect(cmp.emitted().openRegistration).toBeTruthy()
+    expect(cmp.emitted().openLogin).toBeTruthy()
   })
 
 
  test('error is shown when submitting empty inputs', () => {
-    cmp.find('#loginSubmit').trigger('click')
+    cmp.find('#registerSubmit').trigger('click')
     let errorAlert = cmp.find('.alert')
     expect(errorAlert.exists()).toBeTruthy()
   })
@@ -52,15 +64,29 @@ describe('LoginForm.test.js', () => {
   test('error is shown when submitting empty password', () => {
     cmp.find('input#username').element.value = "test"
     cmp.find('input#username').trigger('input')
-    cmp.find('#loginSubmit').trigger('click')
+    cmp.find('input#email').element.value = "test@test.de"
+    cmp.find('input#email').trigger('input')
+    cmp.find('#registerSubmit').trigger('click')
     let errorAlert = cmp.find('.alert')
     expect(errorAlert.exists()).toBeTruthy()
   })
 
   test('error is shown when submitting empty username', () => {
-    cmp.find('input#password').element.value = "test"
+    cmp.find('input#password').element.value = "test1234"
     cmp.find('input#password').trigger('input')
-    cmp.find('#loginSubmit').trigger('click')
+    cmp.find('input#email').element.value = "test@test.de"
+    cmp.find('input#email').trigger('input')
+    cmp.find('#registerSubmit').trigger('click')
+    let errorAlert = cmp.find('.alert')
+    expect(errorAlert.exists()).toBeTruthy()
+  })
+
+  test('error is shown when submitting empty mail', () => {
+    cmp.find('input#password').element.value = "test1234"
+    cmp.find('input#password').trigger('input')
+    cmp.find('input#username').element.value = "test"
+    cmp.find('input#username').trigger('input')
+    cmp.find('#registerSubmit').trigger('click')
     let errorAlert = cmp.find('.alert')
     expect(errorAlert.exists()).toBeTruthy()
   })
@@ -70,11 +96,13 @@ describe('LoginForm.test.js', () => {
     cmp.find('input#password').trigger('input')
     cmp.find('input#username').element.value = "test"
     cmp.find('input#username').trigger('input')
-    cmp.find('#loginSubmit').trigger('click')
+    cmp.find('input#email').element.value = "test@test.de"
+    cmp.find('input#email').trigger('input')
+    cmp.find('#registerSubmit').trigger('click')
     let errorAlert = cmp.find('.alert')
     expect(errorAlert.exists()).toBeFalsy()
 
-    expect(api.auth.postLogin).toHaveBeenCalledWith("test", "test1234")
+    expect(api.auth.postRegistration).toHaveBeenCalledWith("test", "test@test.de", "test1234")
   })
 
 })
