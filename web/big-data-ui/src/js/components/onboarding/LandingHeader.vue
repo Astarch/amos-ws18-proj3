@@ -21,10 +21,10 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <a href="#register" v-on:click.prevent.stop="openRegister()">Register</a>
+            <a href="#register" id="register" v-on:click.prevent.stop="openRegister()">Register</a>
           </li>
           <li>
-            <a href="#login" v-on:click.prevent.stop="openLogin()">Login</a>
+            <a href="#login" id="login" v-on:click.prevent.stop="openLogin()">Login</a>
           </li>
         </ul>
       </div>

@@ -23,11 +23,11 @@
               <ul class="list-inline intro-social-buttons">
                 <li>
                   <a href="#register" ref="register"
-                     class="btn btn-default btn-lg"
+                     class="btn btn-default btn-lg register"
                      v-on:click.prevent="open(FormTypeEnum.register)">Register Now</a>
                 </li>
                 <li>
-                  <a href="#login" class="btn btn-default btn-lg"
+                  <a href="#login" class="btn btn-default btn-lg login"
                      v-on:click.prevent="open(FormTypeEnum.login)">Login</a>
                 </li>
               </ul>
@@ -166,7 +166,6 @@
     data: () => ({
       modalActive: false,
       modalType: FormTypeEnum.login,
-      requestAnswer: '',
       FormTypeEnum
     }),
     methods: {
@@ -181,6 +180,9 @@
     },
     computed:{
       isGitInfoShown(){
+        if(GIT === undefined){
+          return false
+        }
         return GIT && GIT.BRANCH && !GIT.BRANCH.includes("master")
       }
     }

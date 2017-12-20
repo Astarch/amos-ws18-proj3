@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OnboardingModal.test.js has the expected html structure 1`] = `
+<div
+  class="user-modal-container"
+  id="login-modal"
+>
+  <div
+    class="user-modal"
+  >
+    <ul
+      class="form-switcher"
+    >
+      <li>
+        <a
+          class=""
+          href=""
+          id="register-form"
+        >
+          Register
+        </a>
+      </li>
+       
+      <li>
+        <a
+          class="active"
+          href=""
+          id="login-form"
+        >
+          Login
+        </a>
+      </li>
+    </ul>
+     
+    <!---->
+     
+    <!---->
+  </div>
+</div>
+`;

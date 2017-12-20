@@ -8,8 +8,8 @@ let port = "8081/"
 let localhostUrl = "http://localhost:" + port;
 let stagingUrl = "http://18.216.129.153:" + port;
 let liveUrl = "http://18.216.122.218:" + port;
-
-let baseUrl = (GIT && GIT.BRANCH && !GIT.BRANCH.includes("master") ) ? liveUrl : stagingUrl;
+let baseUrl = stagingUrl
+baseUrl = (GIT.BRANCH && !GIT.BRANCH.includes("master") ) ? liveUrl : stagingUrl;
 
 
 const axiosInstance = axios.create({
