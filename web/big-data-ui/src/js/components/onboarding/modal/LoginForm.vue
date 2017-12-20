@@ -1,13 +1,13 @@
 <template>
   <div id="form-login" class="onboarding-form form-login" :class="{active: active}">
-    <input type="text"
+    <input id="username" type="text"
            name="user"
            placeholder="Username"
            v-model="username"
            v-on:input="hideLoginError"
            v-on:keyup.enter.stop="submit()"
            v-on:change="hideLoginError">
-    <input type="password"
+    <input id="password" type="password"
            name="password"
            placeholder="Password"
            v-model="password"
@@ -31,7 +31,7 @@
 
 <script>
   import {isPasswordValid, isNameValid} from '../../../utils/validation'
-  import http, {api} from '../../../utils/api';
+  import {api} from '../../../utils/api';
   import qs from 'qs';
 
   export default {
@@ -63,11 +63,13 @@
         this.isSubmitting = true;
         api.auth.postLogin(name, password)
            .then(response => {
+             console.log(response);
+
              this.isSubmitting = false;
              this.$router.push({
                path: 'engagement'
-             }),
-               console.log(response);
+             })
+             console.log(response);
            })
            .catch(error => {
              this.isSubmitting = false;
@@ -96,7 +98,7 @@
         return isValid;
       },
       showLoginError(message) {
-        console.log('toggleLoginError(): ', message)
+        console.log('showLoginError(): ', message)
         if (typeof message === 'string' || message instanceof String) {
           this.hasError = true;
           this.errorText = message;

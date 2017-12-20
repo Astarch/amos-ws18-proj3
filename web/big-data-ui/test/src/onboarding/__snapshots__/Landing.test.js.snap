@@ -52,7 +52,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
             >
               <li>
                 <a
-                  class="btn btn-default btn-lg"
+                  class="btn btn-default btn-lg register"
                   href="#register"
                 >
                   Register Now
@@ -61,7 +61,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
                
               <li>
                 <a
-                  class="btn btn-default btn-lg"
+                  class="btn btn-default btn-lg login"
                   href="#login"
                 >
                   Login
