@@ -6,9 +6,7 @@
         <slot name="subTitle"></slot>
       </p>
     </div>
-
     <div class="content">
-
       <slot name="content"></slot>
       <div class="footer">
         <hr/>
@@ -20,10 +18,9 @@
 </template>
 <script>
   export default {
-    name: 'graph-card',
+    name: 'card'
   }
-
 </script>
-<style>
+<style lang="scss" scoped>
 
 </style>

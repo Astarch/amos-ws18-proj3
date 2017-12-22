@@ -16,6 +16,8 @@
 @import "paper/variables";
 @import "paper/mixins";
 @import "paper/typography";
+// apply pretrendr styling
+@import "base";
 // Core CSS
 @import "paper/misc";
 @import "paper/sidebar-and-main-panel";

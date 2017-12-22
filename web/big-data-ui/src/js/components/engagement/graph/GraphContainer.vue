@@ -1,5 +1,5 @@
 <template>
-  <div class="row" style="margin-top: 70px">
+  <div class="row">
     <!-- include child component and pass data -->
     <chart class="col s12" :data="dataset"></chart>
   </div>
