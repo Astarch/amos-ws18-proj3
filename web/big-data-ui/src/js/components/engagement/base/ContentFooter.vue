@@ -9,10 +9,7 @@
         </ul>
       </nav>
       <div class="copyright pull-right">
-        &copy; Coded with
-        <i class="fa fa-heart heart"></i> by
-        <a href="https://github.com/cristijora" target="_blank">Cristi Jora</a>.
-        Designed by <a href="https://www.creative-tim.com/?ref=pdf-vuejs" target="_blank">Creative Tim</a>.
+        <p class="copyright text-muted small">Copyright &copy; pretrendr 2017. All Rights Reserved</p>
       </div>
     </div>
   </footer>
