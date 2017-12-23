@@ -4,6 +4,7 @@ import 'bootstrap';
 import Vue from 'vue';
 import App from './App';
 import router from './router';
+import store from './store';
 
 import SideBar from './components/engagement/common/sidebar'
 import GlobalComponents from './globalComponents'
@@ -17,11 +18,11 @@ Vue.use(GlobalComponents);
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  template: '<App/>',
-  components: {
-    App,
-  }
+    el: '#app',
+    router,
+    store,
+    template: '<App/>',
+    components: {
+        App,
+    }
 });
-

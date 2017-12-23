@@ -1,13 +1,13 @@
 <template>
   <div id="form-login" class="onboarding-form form-login" :class="{active: active}">
-    <input id="username" type="text"
+    <input id="form-username" type="text"
            name="user"
            placeholder="Username"
            v-model="username"
            v-on:input="hideLoginError"
            v-on:keyup.enter.stop="submit()"
            v-on:change="hideLoginError">
-    <input id="password" type="password"
+    <input id="form-password" type="password"
            name="password"
            placeholder="Password"
            v-model="password"
@@ -17,9 +17,9 @@
     <div v-if="hasError" class="alert alert-danger" role="alert">
       {{errorText}}
     </div>
-    <input id="loginSubmit"
+    <input id="form-login-submit"
            type="submit"
-           :class="{disabled: isSubmitting}"
+           :class="{disabled: loginStatus.pending}"
            v-on:click.stop="submit()"
            value="Login"
     >
@@ -30,87 +30,110 @@
 </template>
 
 <script>
-  import {isPasswordValid, isNameValid} from '../../../utils/validation'
-  import {api} from '../../../utils/api';
-  import qs from 'qs';
+import { mapState } from "vuex";
+import { isPasswordValid, isNameValid } from "../../../utils/validation";
+import { api } from "../../../utils/api";
+import { ServerErrors } from "../../../utils/constants";
+import qs from "qs";
 
-  export default {
-    name: 'login-form',
-    props: {
-      active: Boolean
-    },
-    data: () => ({
-      username: '',
-      password: '',
-      isSubmitting: false,
-      errorText: '',
-      hasError: false,
+export default {
+  name: "login-form",
+  props: {
+    active: Boolean
+  },
+  data: () => ({
+    username: "",
+    password: "",
+    errorText: "",
+    hasError: false
+  }),
+  computed: mapState({
+    // arrow functions can make the code very succinct!
+    user: state => state.user.user,
+    loginStatus: state => state.user.loginStatus,
+  }),
+  methods: {
+    submit() {
+      var data = { form: this.type };
 
-    }),
-    methods: {
-      submit() {
-        //this.isSubmitting = true;
-        var data = {form: this.type};
-
-        let validLoginData = this.validateLogin(this.username, this.password);
-        if (validLoginData) {
-          data.password = this.password;
-          data.user = this.username;
-          this.doLogin(this.username, this.password);
-        }
-      },
-      doLogin(name, password) {
-        this.isSubmitting = true;
-        api.auth.postLogin(name, password)
-           .then(response => {
-             this.isSubmitting = false;
-             this.$router.push({
-               path: 'engagement'
-             })
-           })
-           .catch(error => {
-             this.isSubmitting = false;
-             let isServerError = (!error || !error.response || !error.response.status || error.response.status >= 500);
-             if (!isServerError) {
-               this.showLoginError('Login failure - please try again!')
-             } else {
-               this.showLoginError('Server error - please try again later!')
-             }
-
-           });
-      },
-      validateLogin(name, password) {
-        let isValid = false;
-        if (!isNameValid(name)) {
-          this.showLoginError('Please enter a valid username!');
-
-        } else if (!isPasswordValid(password)) {
-          this.showLoginError('Please enter a valid password!');
-        } else {
-          isValid = true;
-          this.hideLoginError();
-        }
-
-        return isValid;
-      },
-      showLoginError(message) {
-        if (typeof message === 'string' || message instanceof String) {
-          this.hasError = true;
-          this.errorText = message;
-        } else {
-          this.hasError = false;
-        }
-      },
-      hideLoginError() {
-        this.hasError = false;
-      },
-      openRegistration() {
-        this.$emit('openRegistration')
+      let validLoginData = this.validateLogin(this.username, this.password);
+      if (validLoginData) {
+        data.password = this.password;
+        data.user = this.username;
+        this.doLogin(this.username, this.password);
       }
+    },
+    doLogin(name, password) {
+      this.$store.dispatch('loginUser', {username:name, password})
+      .then(data => {
+        console.log(this.user)
+        this.$router.push({
+            path: "engagement"
+          });
+      }).catch(error => {
+        console.log(this.loginStatus)
+        let isServerError =
+            !error ||
+            !error.response ||
+            !error.response.status ||
+            error.response.status >= 500;
+          if (this.loginStatus !== ServerErrors.ERROR_SERVER) {
+            this.showLoginError("Login failure - please try again!");
+          } else {
+            this.showLoginError("Server error - please try again later!");
+          }
+      })
+      /*api.auth
+        .postLogin(name, password)
+        .then(response => {
+          this.$router.push({
+            path: "engagement"
+          });
+        })
+        .catch(error => {
+          let isServerError =
+            !error ||
+            !error.response ||
+            !error.response.status ||
+            error.response.status >= 500;
+          if (!isServerError) {
+            this.showLoginError("Login failure - please try again!");
+          } else {
+            this.showLoginError("Server error - please try again later!");
+          }
+        });*/
+    },
+    validateLogin(name, password) {
+      let isValid = false;
+      if (!isNameValid(name)) {
+        this.showLoginError("Please enter a valid username!");
+      } else if (!isPasswordValid(password)) {
+        this.showLoginError("Please enter a valid password!");
+      } else {
+        isValid = true;
+        this.hideLoginError();
+      }
+
+      return isValid;
+    },
+    showLoginError(message) {
+      if (typeof message === "string" || message instanceof String) {
+        this.hasError = true;
+        this.errorText = message;
+      } else {
+        this.hasError = false;
+      }
+    },
+    hideLoginError() {
+      this.hasError = false;
+    },
+    openRegistration() {
+      this.$emit("openRegistration");
     }
   }
+};
 </script>
 
 <style lang='scss'>
-  @import '../../../../scss/forms';
+@import "../../../../scss/forms";
 </style>

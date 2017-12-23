@@ -62,7 +62,7 @@ exports[`LandingHeader.test.js has the expected html structure 1`] = `
         <li>
           <a
             href="#register"
-            id="register"
+            id="header-link-register"
           >
             Register
           </a>
@@ -71,7 +71,7 @@ exports[`LandingHeader.test.js has the expected html structure 1`] = `
         <li>
           <a
             href="#login"
-            id="login"
+            id="header-link-login"
           >
             Login
           </a>
