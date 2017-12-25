@@ -35,7 +35,7 @@
       password: "",
       errorText: "",
       hasError: false,
-      reqStatus: new RequestStatus(name = "Login")
+      reqStatus: new RequestStatus()
     }),
     computed: mapState({
       // arrow functions can make the code very succinct!

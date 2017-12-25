@@ -1,8 +1,7 @@
 import { ServerErrors } from './../utils/constants';
 
 export default class RequestStatus {
-    constructor(name = '', success = false, failure = false, pending = false, failureType = ServerErrors.ERROR_NONE) {
-        this.name = name;
+    constructor(success = false, failure = false, pending = false, failureType = ServerErrors.ERROR_NONE) {
         this.success = success;
         this.failure = failure;
         this.pending = pending;
@@ -10,6 +9,6 @@ export default class RequestStatus {
     }
 
     toString() {
-        return `RequestStatus(${this.name})[ success:${this.success}, failure:${this.failure}, pending:${this.pending}, failureType:${this.failureType} ]`
+        return `RequestStatus[ success:${this.success}, failure:${this.failure}, pending:${this.pending}, failureType:${this.failureType} ]`
     }
 }

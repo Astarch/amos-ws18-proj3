@@ -51,7 +51,7 @@ const actions = {
                             isLoggedIn: true
                         })
 
-                        let reqStatus = Object.assign({}, new RequestStatus(name = "Login"), {
+                        let reqStatus = Object.assign({}, new RequestStatus(), {
                             pending: false,
                             success: true,
                         })
@@ -60,7 +60,7 @@ const actions = {
                         commit(types.SET_USER, userdata)
                         resolve(reqStatus)
                     } else {
-                        let reqStatus = Object.assign({}, new RequestStatus(name = "Login"), {
+                        let reqStatus = Object.assign({}, new RequestStatus(), {
                             pending: false,
                             failure: true,
                             failureType: ServerErrors.ERROR_REQUEST
@@ -86,7 +86,7 @@ const actions = {
                         failure = ServerErrors.ERROR_REQUEST
                     }
 
-                    let reqStatus = Object.assign({}, new RequestStatus(name = "Login"), {
+                    let reqStatus = Object.assign({}, new RequestStatus(), {
                         pending: false,
                         failure: true,
                         failureType: failure
@@ -118,7 +118,7 @@ const actions = {
                             isLoggedIn: false
                         })
 
-                        let reqStatus = Object.assign({}, new RequestStatus(name = "Register"), {
+                        let reqStatus = Object.assign({}, new RequestStatus(), {
                             pending: false,
                             success: true,
                         })
@@ -126,7 +126,7 @@ const actions = {
                         commit(types.SET_USER, userdata)
                         resolve(reqStatus)
                     } else {
-                        let reqStatus = Object.assign({}, new RequestStatus(name = "Register"), {
+                        let reqStatus = Object.assign({}, new RequestStatus(), {
                             pending: false,
                             failure: true,
                             failureType: ServerErrors.ERROR_REQUEST
@@ -150,7 +150,7 @@ const actions = {
                     } else {
                         failure = ServerErrors.ERROR_REQUEST
                     }
-                    let reqStatus = Object.assign({}, new RequestStatus(name = "Register"), {
+                    let reqStatus = Object.assign({}, new RequestStatus(), {
                         pending: false,
                         failure: true,
                         failureType: failure

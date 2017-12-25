@@ -1,8 +1,8 @@
 <template>
   <div id="form-register" class="onboarding-form form-register" :class="{active: active}">
-    <input id="username" type="text" name="name" placeholder="Name" v-model="username" v-on:keyup.enter.stop="submit()" v-on:input="hideError">
-    <input id="email" type="email" name="email" placeholder="Email" v-model="email" v-on:keyup.enter.stop="submit()" v-on:input="checkEmail" ref="emailInput" v-bind:style="regEmailStyle">
-    <input id="password" type="password" name="password" placeholder="Password" v-model="password" v-on:keyup.enter.stop="submit()" v-on:input="checkPassword" ref="pwinput" v-bind:style="regPwStyle">
+    <input id="register-username" type="text" name="name" placeholder="Name" v-model="username" v-on:keyup.enter.stop="submit()" v-on:input="hideError">
+    <input id="register-email" type="email" name="email" placeholder="Email" v-model="email" v-on:keyup.enter.stop="submit()" v-on:input="checkEmail" ref="emailInput" v-bind:style="regEmailStyle">
+    <input id="register-password" type="password" name="password" placeholder="Password" v-model="password" v-on:keyup.enter.stop="submit()" v-on:input="checkPassword" ref="pwinput" v-bind:style="regPwStyle">
     <div v-if="hasError" class="alert alert-danger" role="alert">
       {{errorText}}
     </div>
@@ -53,7 +53,7 @@
       email: "",
       password: "",
       errorText: "",
-      requestStatus: new RequestStatus(name = "Register"),
+      requestStatus: new RequestStatus(),
       hasError: false,
   
       // Style Password Input Field
@@ -97,11 +97,10 @@
           })
           .then(requestStatus => {
             this.requestStatus = requestStatus;
-            console.log(this.user);
             this.openLogin();
           })
           .catch(error => {
-            console.log(error);
+
             this.requestStatus = error;
             if (this.requestStatus !== ServerErrors.ERROR_SERVER) {
               this.showError("User already registered!");
@@ -114,7 +113,7 @@
         this.username = "";
         this.email = "";
         this.password = "";
-        this.requestStatus = new RequestStatus(name = "Register");
+        this.requestStatus = new RequestStatus();
       },
       validateRegistration(name, mail, password) {
         let validRegistration = false;
