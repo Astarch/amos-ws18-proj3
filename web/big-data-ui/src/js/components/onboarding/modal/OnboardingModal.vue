@@ -11,9 +11,11 @@
         </li>
       </ul>
       <register-form
+        v-if="type == FormTypeEnum.register && isActive"
         :active="type == FormTypeEnum.register"
         v-on:openLogin="flip(FormTypeEnum.login)"></register-form>
       <login-form
+        v-if="type == FormTypeEnum.login && isActive"
         :active="type == FormTypeEnum.login"
         v-on:openRegistration="flip(FormTypeEnum.register)"></login-form>
     </div>
