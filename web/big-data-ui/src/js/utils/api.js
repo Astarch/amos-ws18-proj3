@@ -1,5 +1,6 @@
 import axios from 'axios';
 import qs from 'qs';
+import store from 'store2'
 
 
 /******************** Base API / Client Configuration ********************/
@@ -12,25 +13,46 @@ let baseUrl = stagingUrl
 baseUrl = (GIT.BRANCH && !GIT.BRANCH.includes("master")) ? liveUrl : stagingUrl;
 
 
+
+function writeAuthToken(token) {
+    store.session('authToken', token)
+    return token
+}
+
+function getAuthToken() {
+    return store.session('authToken')
+}
+
+
 const axiosInstance = axios.create({
     baseURL: baseUrl,
 });
 
+if (getAuthToken() && getAuthToken().length > 5) {
+    Object.assign(axiosInstance.defaults, { headers: { 'x-auth-token': getAuthToken() } });
+}
+
 // Intercepts all responses, retrieves the x auth token and sets it to all following requests headers!
-axiosInstance.interceptors.response.use(function(response) {
+axiosInstance.interceptors.response.use(response => {
     if (response && response.headers && response.headers['x-auth-token']) {
-        let authToken = response.headers['x-auth-token'];
+        let authToken = writeAuthToken(response.headers['x-auth-token']);
         if (authToken && authToken.length > 5) {
             Object.assign(axiosInstance.defaults, { headers: { 'x-auth-token': authToken } });
         }
     }
     return response;
-}, function(error) {
+}, error => {
     // Do something with response error
     return Promise.reject(error);
 });
 
 export default axiosInstance;
+
+export const isLoggedIn = () => {
+    let authToken = getAuthToken() ? getAuthToken() : authToken;
+    return authToken && authToken.length > 5
+}
+
 
 
 /******************** Pretrendr Backend API Endpoints ********************/

@@ -42,7 +42,8 @@
       user: state => state.user.user,
     }),
     mounted() {
-      console.log("mounted with user=" + this.user.toString())
+
+      // fill in username if user just registered
       if (this.user != undefined && this.user.username != undefined && this.user.username.length > 2) {
         this.username = this.user.username
       }

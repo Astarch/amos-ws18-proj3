@@ -57,7 +57,6 @@
       },
       retrieveData: function (size, i) {
        var self = this;
-       console.log("retrieveing");
        // CORRECT: if(i==this.options.totalPages) !!!! NOTE !!!! Not activated since duplicate dummy data!!!!
        if(i==5){
         return 0;
