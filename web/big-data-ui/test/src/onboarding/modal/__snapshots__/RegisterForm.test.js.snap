@@ -6,21 +6,21 @@ exports[`RegisterForm.test.js has the expected html structure when active: activ
   id="form-register"
 >
   <input
-    id="username"
+    id="register-username"
     name="name"
     placeholder="Name"
     type="text"
   />
    
   <input
-    id="email"
+    id="register-email"
     name="email"
     placeholder="Email"
     type="email"
   />
    
   <input
-    id="password"
+    id="register-password"
     name="password"
     placeholder="Password"
     type="password"
@@ -34,6 +34,8 @@ exports[`RegisterForm.test.js has the expected html structure when active: activ
     type="submit"
     value="Register"
   />
+   
+  <!---->
    
   <div
     class="links"
@@ -53,21 +55,21 @@ exports[`RegisterForm.test.js has the expected html structure when not active: i
   id="form-register"
 >
   <input
-    id="username"
+    id="register-username"
     name="name"
     placeholder="Name"
     type="text"
   />
    
   <input
-    id="email"
+    id="register-email"
     name="email"
     placeholder="Email"
     type="email"
   />
    
   <input
-    id="password"
+    id="register-password"
     name="password"
     placeholder="Password"
     type="password"
@@ -81,6 +83,8 @@ exports[`RegisterForm.test.js has the expected html structure when not active: i
     type="submit"
     value="Register"
   />
+   
+  <!---->
    
   <div
     class="links"
