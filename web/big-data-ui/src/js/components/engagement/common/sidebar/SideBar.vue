@@ -35,6 +35,12 @@
             </p>
           </a>
         </router-link>
+        <li>
+          <a href="" v-on:click.prevent.stop="logout">
+            <i class="ti-power-off"></i>
+            <p>Logout</p>
+            </a>
+          </li>
       </ul>
       <moving-arrow :move-y="arrowMovePx">
 
@@ -113,7 +119,7 @@ export default {
     ...mapState({
       // arrow functions can make the code very succinct!
       user: state => state.user.user
-    }),
+    })
   },
   data() {
     return {
@@ -134,6 +140,14 @@ export default {
         }
         return found;
       });
+    },
+    logout(){
+      this.$store.dispatch('logoutUser').then( event =>{
+        console.log("logged out")
+         this.$router.push({
+              path: "/"
+            });
+      }).catch()
     }
   },
   mounted() {

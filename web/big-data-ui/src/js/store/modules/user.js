@@ -1,4 +1,4 @@
-import { api } from '../../utils/api';
+import { api, logoutUser } from '../../utils/api';
 import { ServerErrors } from '../../utils/constants';
 import RequestStatus from '../../models/RequestStatus';
 import * as types from '../mutation-types'
@@ -57,7 +57,7 @@ const actions = {
                         })
 
 
-                        commit(types.SET_USER, userdata)
+                        commit(types.USER_SET, userdata)
                         resolve(reqStatus)
                     } else {
                         let reqStatus = Object.assign({}, new RequestStatus(), {
@@ -123,7 +123,7 @@ const actions = {
                             success: true,
                         })
 
-                        commit(types.SET_USER, userdata)
+                        commit(types.USER_SET, userdata)
                         resolve(reqStatus)
                     } else {
                         let reqStatus = Object.assign({}, new RequestStatus(), {
@@ -159,15 +159,25 @@ const actions = {
                 });
 
         })
+    },
+    logoutUser({ commit, state }) {
+        return new Promise((resolve, reject) => {
+            logoutUser()
+            commit(types.USER_CLEAR)
+            resolve()
+        })
     }
 }
 
 // mutations
 const mutations = {
-    [types.SET_USER](state, user) {
-        //set new users
+    [types.USER_SET](state, user) {
+        //set new user
         state.user = Object.assign({}, state.user, user)
-
+    },
+    [types.USER_CLEAR](state) {
+        //clear user
+        state.user = {}
     },
 }
 

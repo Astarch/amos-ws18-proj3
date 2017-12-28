@@ -34,12 +34,16 @@ if (getAuthToken() && getAuthToken().length > 5) {
 
 // Intercepts all responses, retrieves the x auth token and sets it to all following requests headers!
 axiosInstance.interceptors.response.use(response => {
-    if (response && response.headers && response.headers['x-auth-token']) {
+    let authToken = getAuthToken()
+    if (response.status == 401) {
+        authToken = writeAuthToken("")
+    } else if (response && response.headers && response.headers['x-auth-token']) {
         let authToken = writeAuthToken(response.headers['x-auth-token']);
         if (authToken && authToken.length > 5) {
             Object.assign(axiosInstance.defaults, { headers: { 'x-auth-token': authToken } });
         }
     }
+
     return response;
 }, error => {
     // Do something with response error
@@ -51,6 +55,10 @@ export default axiosInstance;
 export const isLoggedIn = () => {
     let authToken = getAuthToken() ? getAuthToken() : authToken;
     return authToken && authToken.length > 5
+}
+
+export const logoutUser = () => {
+    writeAuthToken("")
 }
 
 
