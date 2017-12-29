@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -137,7 +136,7 @@ public class ArticleServiceImpl implements ArticleService {
 			int fileCount = 0;
 			int skipped = 0;
 			int masterLineCount = 0;
-			while ((line = br.readLine()) != null && outerArticleCount < 10000000 && fileCount < 1000) {
+			while ((line = br.readLine()) != null && outerArticleCount < 1000000 && fileCount < 1000) {
 				masterLineCount++;
 				if (masterLineCount % 10 != 0) { // read only each 10th file, for better data distribution over several
 													// days
@@ -237,14 +236,14 @@ public class ArticleServiceImpl implements ArticleService {
 	public Map<String, Long> countByTermAndDay(String term, String from, String to) {
 		if (from != null && !from.isEmpty() && to != null && !to.isEmpty()) {
 			try {
-			int yearFrom = Integer.parseInt(from.substring(0, 4));
-			int monthFrom = Integer.parseInt(from.substring(4, 6));
-			int dayFrom = Integer.parseInt(from.substring(6, 8));
-			int yearTo = Integer.parseInt(to.substring(0, 4));
-			int monthTo = Integer.parseInt(to.substring(4, 6));
-			int dayTo = Integer.parseInt(to.substring(6, 8));
-			return countByTermAndDayFromTo(term, yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo);
-			}catch (NumberFormatException e) {
+				int yearFrom = Integer.parseInt(from.substring(0, 4));
+				int monthFrom = Integer.parseInt(from.substring(4, 6));
+				int dayFrom = Integer.parseInt(from.substring(6, 8));
+				int yearTo = Integer.parseInt(to.substring(0, 4));
+				int monthTo = Integer.parseInt(to.substring(4, 6));
+				int dayTo = Integer.parseInt(to.substring(6, 8));
+				return countByTermAndDayFromTo(term, yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo);
+			} catch (NumberFormatException e) {
 				return Maps.newHashMap();
 			}
 		} else {
