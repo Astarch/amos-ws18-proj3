@@ -16,10 +16,12 @@
 @import "paper/variables";
 @import "paper/mixins";
 @import "paper/typography";
+// apply pretrendr styling
+@import "base";
 // Core CSS
 @import "paper/misc";
 @import "paper/sidebar-and-main-panel";
-//@import "paper/buttons";
+//@import "paper/buttons"; // button styles are not nice xD
 @import "paper/inputs";
 @import "paper/alerts";
 @import "paper/tables";

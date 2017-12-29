@@ -1,5 +1,5 @@
 <template>
-  <div class="row" style="margin-top: 70px">
+  <div class="row">
     <!-- include child component and pass data -->
     <chart class="col s12" :data="dataset"></chart>
   </div>
@@ -57,7 +57,6 @@
       },
       retrieveData: function (size, i) {
        var self = this;
-       console.log("retrieveing");
        // CORRECT: if(i==this.options.totalPages) !!!! NOTE !!!! Not activated since duplicate dummy data!!!!
        if(i==5){
         return 0;

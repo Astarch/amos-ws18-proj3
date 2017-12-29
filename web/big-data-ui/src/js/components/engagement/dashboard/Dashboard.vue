@@ -3,48 +3,46 @@
 
     <!--Stats cards-->
     <div class="row">
-      <div class="col-lg-3 col-sm-6" v-for="stats in statsCards">
-        <stats-card>
-          <div class="icon-big text-center" :class="`icon-${stats.type}`" slot="header">
-            <i :class="stats.icon"></i>
-          </div>
-          <div class="numbers" slot="content">
-            <p>{{stats.title}}</p>
-            {{stats.value}}
-          </div>
-          <div class="stats" slot="footer">
-            <i :class="stats.footerIcon"></i> {{stats.footerText}}
-          </div>
-        </stats-card>
-      </div>
       <div class="col-lg-6 col-sm-6">
-        <graph-card>
+        <card>
           <div slot="title">
             Header
           </div>
           <div slot="subTitle">
             Subheader
           </div>
-          <div class="ct-chart" slot="content">
+          <div slot="content">
             <graph-container></graph-container>
           </div>
-          <div class="stats" slot="footer">
+          <div slot="footer">
             Footer
           </div>
-        </graph-card>
+        </card>
+      </div>
+      <div class="col-lg-6 col-sm-6">
+        <card>
+          <div slot="title">
+            Header
+          </div>
+          <div slot="content">
+            Some Content whatever
+            Some Content whatever
+          </div>
+          <div  slot="footer">
+            Footer
+          </div>
+        </card>
       </div>
     </div>
 
   </div>
 </template>
 <script>
-  import StatsCard from './StatsCard'
-  import GraphCard from './GraphCard'
+  import Card from './../common/Card'
   import GraphContainer from './../graph/GraphContainer'
   export default {
     components: {
-      StatsCard,
-      GraphCard,
+      Card,
       GraphContainer
     },
     /**

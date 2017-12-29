@@ -133,7 +133,10 @@
     @include sidebar-background-color($black-background-color, $white-color);
   }
   &[data-background-color="darkblue"] {
-    @include sidebar-background-color($darkblue-background-color, $white-color);
+     @include sidebar-background-color($darkblue-background-color, $white-color);
+   }
+  &[data-background-color="pretrendr"] {
+    @include sidebar-background-color($sidebar-background, $white-color);
   }
 
   &[data-active-color="primary"] {
@@ -151,11 +154,14 @@
   &[data-active-color="danger"] {
     @include sidebar-active-color($danger-color);
   }
+  &[data-active-color="pretrendr"] {
+    @include sidebar-active-color($sidebar-active);
+  }
 
 }
 
 .main-panel {
-  background-color: $bg-nude;
+  background-color: $dashboard-background;
   position: relative;
   z-index: 2;
   float: right;

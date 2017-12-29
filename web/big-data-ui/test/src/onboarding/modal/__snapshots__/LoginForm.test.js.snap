@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LoginForm.test.js has the expected html structure when active: active 1`] = `
+<div
+  class="onboarding-form form-login active"
+  id="form-login"
+>
+  <input
+    id="form-username"
+    name="user"
+    placeholder="Username"
+    type="text"
+  />
+   
+  <input
+    id="form-password"
+    name="password"
+    placeholder="Password"
+    type="password"
+  />
+   
+  <!---->
+   
+  <input
+    class=""
+    id="form-login-submit"
+    type="submit"
+    value="Login"
+  />
+   
+  <div
+    class="links"
+  >
+    <a
+      href=""
+    >
+      Don't have an account yet?
+    </a>
+  </div>
+</div>
+`;
+
+exports[`LoginForm.test.js has the expected html structure when not active: inactive 1`] = `
+<div
+  class="onboarding-form form-login"
+  id="form-login"
+>
+  <input
+    id="form-username"
+    name="user"
+    placeholder="Username"
+    type="text"
+  />
+   
+  <input
+    id="form-password"
+    name="password"
+    placeholder="Password"
+    type="password"
+  />
+   
+  <!---->
+   
+  <input
+    class=""
+    id="form-login-submit"
+    type="submit"
+    value="Login"
+  />
+   
+  <div
+    class="links"
+  >
+    <a
+      href=""
+    >
+      Don't have an account yet?
+    </a>
+  </div>
+</div>
+`;

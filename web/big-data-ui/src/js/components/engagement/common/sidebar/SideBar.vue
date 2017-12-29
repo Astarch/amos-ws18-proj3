@@ -13,7 +13,7 @@
           <div class="logo-img">
             <img src="~assets/logo/icon_white.svg" alt="">
           </div>
-          pretrendr Dashboard
+          {{user.firstname}} {{user.lastname}}
         </a>
       </div>
       <slot>
@@ -35,6 +35,12 @@
             </p>
           </a>
         </router-link>
+        <li>
+          <a href="" v-on:click.prevent.stop="logout">
+            <i class="ti-power-off"></i>
+            <p>Logout</p>
+            </a>
+          </li>
       </ul>
       <moving-arrow :move-y="arrowMovePx">
 
@@ -43,99 +49,119 @@
   </div>
 </template>
 <script>
-  import MovingArrow from './MovingArrow.vue'
-  export default {
-    props: {
-      type: {
-        type: String,
-        default: 'sidebar',
-        validator: (value) => {
-          let acceptedValues = ['sidebar', 'navbar']
-          return acceptedValues.indexOf(value) !== -1
-        }
-      },
-      backgroundColor: {
-        type: String,
-        default: 'black',
-        validator: (value) => {
-          let acceptedValues = ['white', 'black', 'darkblue']
-          return acceptedValues.indexOf(value) !== -1
-        }
-      },
-      activeColor: {
-        type: String,
-        default: 'success',
-        validator: (value) => {
-          let acceptedValues = ['primary', 'info', 'success', 'warning', 'danger']
-          return acceptedValues.indexOf(value) !== -1
-        }
-      },
-      sidebarLinks: {
-        type: Array,
-        default: () => []
+import MovingArrow from "./MovingArrow.vue";
+import { mapState } from "vuex";
+
+export default {
+  props: {
+    type: {
+      type: String,
+      default: "sidebar",
+      validator: value => {
+        let acceptedValues = ["sidebar", "navbar"];
+        return acceptedValues.indexOf(value) !== -1;
       }
     },
-    components: {
-      MovingArrow
+    backgroundColor: {
+      type: String,
+      default: "pretrendr",
+      validator: value => {
+        let acceptedValues = ["white", "black", "darkblue", "pretrendr"];
+        return acceptedValues.indexOf(value) !== -1;
+      }
     },
-    computed: {
-      sidebarClasses () {
-        if (this.type === 'sidebar') {
-          return 'sidebar'
-        } else {
-          return 'collapse navbar-collapse off-canvas-sidebar'
-        }
-      },
-      navClasses () {
-        if (this.type === 'sidebar') {
-          return 'nav'
-        } else {
-          return 'nav navbar-nav'
-        }
-      },
-      /**
+    activeColor: {
+      type: String,
+      default: "pretrendr",
+      validator: value => {
+        let acceptedValues = [
+          "primary",
+          "info",
+          "success",
+          "warning",
+          "danger",
+          "pretrendr"
+        ];
+        return acceptedValues.indexOf(value) !== -1;
+      }
+    },
+    sidebarLinks: {
+      type: Array,
+      default: () => []
+    }
+  },
+  components: {
+    MovingArrow
+  },
+  computed: {
+    sidebarClasses() {
+      if (this.type === "sidebar") {
+        return "sidebar";
+      } else {
+        return "collapse navbar-collapse off-canvas-sidebar";
+      }
+    },
+    navClasses() {
+      if (this.type === "sidebar") {
+        return "nav";
+      } else {
+        return "nav navbar-nav";
+      }
+    },
+    /**
        * Styles to animate the arrow near the current active sidebar link
        * @returns {{transform: string}}
        */
-      arrowMovePx () {
-        return this.linkHeight * this.activeLinkIndex
-      }
+    arrowMovePx() {
+      return this.linkHeight * this.activeLinkIndex;
     },
-    data () {
-      return {
-        linkHeight: 60,
-        activeLinkIndex: 0,
 
-        windowWidth: 0,
-        isWindows: false,
-        hasAutoHeight: false
-      }
+    ...mapState({
+      // arrow functions can make the code very succinct!
+      user: state => state.user.user
+    })
+  },
+  data() {
+    return {
+      linkHeight: 60,
+      activeLinkIndex: 0,
+
+      windowWidth: 0,
+      isWindows: false,
+      hasAutoHeight: false
+    };
+  },
+  methods: {
+    findActiveLink() {
+      this.sidebarLinks.find((element, index) => {
+        let found = element.path === this.$route.path;
+        if (found) {
+          this.activeLinkIndex = index;
+        }
+        return found;
+      });
     },
-    methods: {
-      findActiveLink () {
-        this.sidebarLinks.find((element, index) => {
-          let found = element.path === this.$route.path
-          if (found) {
-            this.activeLinkIndex = index
-          }
-          return found
-        })
-      }
-    },
-    mounted () {
-      this.findActiveLink()
-    },
-    watch: {
-      $route: function (newRoute, oldRoute) {
-        this.findActiveLink()
-      }
+    logout(){
+      this.$store.dispatch('logoutUser').then( event =>{
+        console.log("logged out")
+         this.$router.push({
+              path: "/"
+            });
+      }).catch()
+    }
+  },
+  mounted() {
+    this.findActiveLink();
+  },
+  watch: {
+    $route: function(newRoute, oldRoute) {
+      this.findActiveLink();
     }
   }
-
+};
 </script>
 <style lang="scss" scoped>
-  .logo-img{
-    background: transparent!important;
-  }
-
+.logo-img {
+  background: transparent !important;
+}
 </style>
