@@ -138,8 +138,7 @@ public class ArticleServiceImpl implements ArticleService {
 			int masterLineCount = 0;
 			while ((line = br.readLine()) != null && outerArticleCount < 1000000 && fileCount < 1000) {
 				masterLineCount++;
-				if (masterLineCount % 10 != 0) { // read only each 10th file, for better data distribution over several
-													// days
+				if (masterLineCount % 10 != 0) { // read only each 10th file, for better data distribution over days
 					continue;
 				}
 				Pattern pattern = Pattern.compile("([0-9]*?) ([0-9a-f]*) http://data.gdeltproject.org/gdeltv2/(.*)");
