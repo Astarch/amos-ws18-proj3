@@ -3,8 +3,8 @@ package de.pretrendr.controller;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
+import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +21,7 @@ import com.google.common.collect.Maps;
 
 import de.pretrendr.businesslogic.ArticleService;
 import de.pretrendr.dataccess.GdeltCsvCacheDAO;
+import de.pretrendr.model.Article;
 import de.pretrendr.model.GdeltCsvCache;
 
 @RequestMapping("/api/dummy")
@@ -37,6 +38,8 @@ public class GdeltDataController {
 	@RequestMapping(value = "/wordcount/{text}", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Long>> getWordCountByText(@PathVariable String text) {
 		Map<String, Long> content = Maps.newHashMap();
+
+		content.put("*", articleService.countAll());
 
 		for (String s : text.split(" ")) {
 			long count = articleService.countByTerm(s);
@@ -65,4 +68,11 @@ public class GdeltDataController {
 		return new ResponseEntity<Map<String, Long>>(list, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/findall", method = RequestMethod.GET)
+	public ResponseEntity<List<Article>> getAll(@RequestParam(value = "from", defaultValue = "") final String from,
+			@RequestParam(value = "to", defaultValue = "") final String to) throws IOException {
+		List<Article> list = Lists.newArrayList(articleService.findAll());
+
+		return new ResponseEntity<List<Article>>(list, HttpStatus.OK);
+	}
 }

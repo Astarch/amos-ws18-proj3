@@ -17,6 +17,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
@@ -59,7 +60,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public Iterable<Article> findAll() {
-		return articleRepository.findAll();
+		return articleRepository.findAll(new PageRequest(0, 100));
 	}
 
 	@Override
@@ -69,30 +70,32 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public List<Article> findAllByTerm(String string) {
-		return articleRepository.findAllByTitleContaining(string);
+		return null; // articleRepository.findAllByTitleContaining(string);
 	}
 
 	@Override
 	public long countByTerm(String term) {
-		return articleRepository.countByTitleContaining(term);
+		return articleRepository.countBySourceurlContaining(term);
 	}
 
 	@Override
 	public Map<String, Long> countByTermAndDay(String term) {
 		Map<String, Long> map = Maps.newHashMap();
-		for (int i = 2015; i < 2016; i++) {
-			String year = Integer.toString(i);
-			for (int m = 2; m <= 3; m++) {
-				String month = (m < 10 ? "0" : "") + Integer.toString(m);
-				for (int d = 1; d <= 31; d++) {
-					String day = (d < 10 ? "0" : "") + Integer.toString(d);
-					long count = articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year, month, day);
-					if (count > 0) {
-						map.put(year + month + day, count);
-					}
-				}
-			}
-		}
+		// for (int i = 2015; i < 2016; i++) {
+		// String year = Integer.toString(i);
+		// for (int m = 2; m <= 3; m++) {
+		// String month = (m < 10 ? "0" : "") + Integer.toString(m);
+		// for (int d = 1; d <= 31; d++) {
+		// String day = (d < 10 ? "0" : "") + Integer.toString(d);
+		// long count =
+		// articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year,
+		// month, day);
+		// if (count > 0) {
+		// map.put(year + month + day, count);
+		// }
+		// }
+		// }
+		// }
 		return map;
 	}
 
@@ -101,20 +104,24 @@ public class ArticleServiceImpl implements ArticleService {
 			int monthTo, int dayTo) {
 		boolean firstRun = true;
 		Map<String, Long> map = Maps.newHashMap();
-		for (int i = yearFrom; i <= yearTo; i++) {
-			String year = Integer.toString(i);
-			for (int m = firstRun ? monthFrom : 1; m <= (i == yearTo ? monthTo : 12); m++) {
-				String month = (m < 10 ? "0" : "") + Integer.toString(m);
-				for (int d = firstRun ? dayFrom : 1; d <= (i == yearTo && m == monthTo ? dayTo : 31); d++) {
-					firstRun = false;
-					String day = (d < 10 ? "0" : "") + Integer.toString(d);
-					long count = articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year, month, day);
-					if (count > 0) {
-						map.put(year + month + day, count);
-					}
-				}
-			}
-		}
+		// for (int i = yearFrom; i <= yearTo; i++) {
+		// String year = Integer.toString(i);
+		// for (int m = firstRun ? monthFrom : 1; m <= (i == yearTo ? monthTo : 12);
+		// m++) {
+		// String month = (m < 10 ? "0" : "") + Integer.toString(m);
+		// for (int d = firstRun ? dayFrom : 1; d <= (i == yearTo && m == monthTo ?
+		// dayTo : 31); d++) {
+		// firstRun = false;
+		// String day = (d < 10 ? "0" : "") + Integer.toString(d);
+		// long count =
+		// articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year,
+		// month, day);
+		// if (count > 0) {
+		// map.put(year + month + day, count);
+		// }
+		// }
+		// }
+		// }
 		return map;
 	}
 
@@ -193,8 +200,9 @@ public class ArticleServiceImpl implements ArticleService {
 											domain = innerMatcher.group(5);
 											url = innerMatcher.group(6);
 											title = url.replaceAll("[^0-9a-zA-Z]", " ").replaceAll("[ ]+", " ");
-											articles.add(new Article(url, eventDate, mentionDate, year, month, day,
-													domain, title));
+											// TODO fix or delete
+											// articles.add(new Article(url, eventDate, mentionDate, year, month, day,
+											// domain, title));
 										}
 										if (innerCount % 10000 == 0) {
 											log.debug("saving articles: " + outerArticleCount + "(+" + articles.size()
@@ -248,5 +256,10 @@ public class ArticleServiceImpl implements ArticleService {
 		} else {
 			return countByTermAndDay(term);
 		}
+	}
+
+	@Override
+	public long countAll() {
+		return articleRepository.count();
 	}
 }

@@ -15,6 +15,8 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import de.pretrendr.model.Article;
+
 /**
  * Database configuration.
  * 
@@ -49,6 +51,8 @@ public class DbConfig {
 	// Embedded Elasticsearch Server
 	@Bean
 	public ElasticsearchOperations elasticsearchTemplate() {
-		return new ElasticsearchTemplate(nodeBuilder().local(true).node().client());
+		ElasticsearchTemplate et = new ElasticsearchTemplate(nodeBuilder().local(true).node().client());
+		et.putMapping(Article.class);
+		return et;
 	}
 }
