@@ -144,9 +144,9 @@ export default {
     logout(){
       this.$store.dispatch('logoutUser').then( event =>{
         console.log("logged out")
-         this.$router.push({
+         /*this.$router.push({
               path: "/"
-            });
+            });*/
       }).catch()
     }
   },
