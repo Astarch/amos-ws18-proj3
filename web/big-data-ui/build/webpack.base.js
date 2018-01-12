@@ -48,6 +48,11 @@ const webpackConfig = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       vue$: 'vue/dist/vue.esm.js',
+      assets: path.resolve(__dirname, '../src/assets'),
+      js: path.resolve(__dirname, '../src/js'),
+      components: path.resolve(__dirname, '../src/js/components'),
+      src: path.resolve(__dirname, '../src'),
+      scss: path.resolve(__dirname, '../src/scss'),
     },
   },
   plugins: [
@@ -76,8 +81,8 @@ const webpackConfig = {
         options: {
           extractCSS: config.isProd,
           loaders: {
-            sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax=1&data=@import "./src/assets/base"',
-            scss: 'vue-style-loader!css-loader!sass-loader?data=@import "./src/assets/base";'
+            sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax=1&data=@import "./src/scss/base"',
+            scss: 'vue-style-loader!css-loader!sass-loader?data=@import "./src/scss/base";'
           },
         },
       },
@@ -85,7 +90,7 @@ const webpackConfig = {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
-          limit: 100,
+          limit: 8000,
           name: path.posix.join(config.assetsSubDirectory, './img/[name].[hash:7].[ext]'),
         },
       },

@@ -13,11 +13,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Maps;
 
+/**
+ * Dummy Controller to provide simple Request-Response scenarios without the
+ * need to login first.
+ * 
+ * @author Tristan Schneider
+ *
+ */
 @RequestMapping("/api/dummy")
 @RestController
 @CrossOrigin
 public class DummyController {
-
+	// TODO remove before final release
+	// TODO remove unauthorized mapping from SecurityConfig
+	/**
+	 * REMOVE ME!
+	 */
 	@RequestMapping(value = "/graphData", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, String>> getDummyGraphData(
 			@RequestParam(name = "size", defaultValue = "10") int size,

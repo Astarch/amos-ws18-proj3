@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.amazonaws.services.s3.model.AmazonS3Exception;
+
 import de.pretrendr.ex.EmailNotValidException;
+import de.pretrendr.ex.InvalidBucketNameException;
 import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
@@ -58,5 +61,25 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		logger.error(MessageFormat.format("Request ({0}) could not be handled. EmailNotValidException: {1}", request,
 				ex.getMessage()));
 		return handleExceptionInternal(ex, bodyOfResponse, headers, HttpStatus.NOT_ACCEPTABLE, request);
+	}
+
+	@ExceptionHandler(value = { AmazonS3Exception.class })
+	protected ResponseEntity<Object> handleAmazonException(RuntimeException ex, WebRequest request) {
+		String bodyOfResponse = "There was a problem with the Amazon resource.";
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.TEXT_PLAIN);
+		logger.error(MessageFormat.format("Request ({0}) could not be handled. EmailNotValidException: {1}", request,
+				ex.getMessage()));
+		return handleExceptionInternal(ex, bodyOfResponse, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
+	}
+
+	@ExceptionHandler(value = { InvalidBucketNameException.class })
+	protected ResponseEntity<Object> handleInvalidBucketNameException(RuntimeException ex, WebRequest request) {
+		String bodyOfResponse = "The given name is not valid as AmasonS3Bucket.";
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.TEXT_PLAIN);
+		logger.error(MessageFormat.format("Request ({0}) could not be handled. EmailNotValidException: {1}", request,
+				ex.getMessage()));
+		return handleExceptionInternal(ex, bodyOfResponse, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
 	}
 }

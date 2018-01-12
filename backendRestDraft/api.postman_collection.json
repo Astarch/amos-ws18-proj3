@@ -1,8 +1,8 @@
 {
 	"variables": [],
 	"info": {
-		"name": "pretrendr.de/api",
-		"_postman_id": "c17b80c5-69d8-5cbd-8fb6-46271ecde4b0",
+		"name": "pretrendr.de/api copy",
+		"_postman_id": "07483366-aa02-1308-f289-c7b8f0353ab1",
 		"description": "This serves as a definition for the user management api for the backend.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -155,7 +155,7 @@
 			"description": "",
 			"item": [
 				{
-					"name": "/register",
+					"name": "/graphData",
 					"request": {
 						"url": "http://{{baseurl}}:{{baseport}}/api/dummy/graphData",
 						"method": "GET",
@@ -166,8 +166,155 @@
 								"description": ""
 							}
 						],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"description": "Method: POST\r\nParameters\r\n    - none\r\nRequest Payload\r\n    - user (full json except ID)\r\n    - x-auth-token\r\nResponse Payload:\r\n    - user (full json with ID)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "/s3",
+			"description": "",
+			"item": [
+				{
+					"name": "/bucket/{buckitId}/wordCount",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/s3/bucket/8cec40c2-f750-48fb-ace2-7c12fa61f88e/wordCount",
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/bucket/getAll",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/s3/bucket/getAll",
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/bucket/create/{bucketName}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var rb = JSON.parse(responseBody)",
+									"var id = rb.id",
+									"",
+									"tests[\"ID OK\"] = id !== null;",
+									"tests[\"HTTPSTATUS OK\"] = responseCode.code == 200;",
+									"",
+									"postman.setGlobalVariable(\"lastBucketId\", id);",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/s3/bucket/create/test-bucket-name",
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/bucket/delete/{bucketId}",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/s3/bucket/{{lastBucketId}}/delete",
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/bucket/{bucketId}/object/getAll",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/s3/bucket/8cec40c2-f750-48fb-ace2-7c12fa61f88e/object/getAll",
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/bucket/{bucketId}/update",
+					"request": {
+						"url": "http://{{baseurl}}:{{baseport}}/api/s3/bucket/8cec40c2-f750-48fb-ace2-7c12fa61f88e/update",
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
 					},
 					"response": []
 				}
