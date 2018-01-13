@@ -12,6 +12,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Article {
+	public Article(String url, String eventDate, String mentionDate, String year2, String month, String day,
+			String domain, String title) {
+		this.sourceurl = url;
+		this.sqldate = eventDate;
+		this.dateadded = mentionDate;
+		this.year = year2;
+		this.monthyear = month + year2;
+	}
+
 	@Id
 	private String globaleventid;
 	private String sqldate;

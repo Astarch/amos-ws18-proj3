@@ -70,32 +70,33 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public List<Article> findAllByTerm(String string) {
-		return null; // articleRepository.findAllByTitleContaining(string);
+		return articleRepository.findAllBySourceurlContaining(string); // articleRepository.findAllByTitleContaining(string);
 	}
 
 	@Override
 	public long countByTerm(String term) {
-		return 0;// articleRepository.countBySourceurlContaining(term);
+		return articleRepository.countBySourceurlContaining(term);
 	}
 
 	@Override
 	public Map<String, Long> countByTermAndDay(String term) {
 		Map<String, Long> map = Maps.newHashMap();
-		// for (int i = 2015; i < 2016; i++) {
-		// String year = Integer.toString(i);
-		// for (int m = 2; m <= 3; m++) {
-		// String month = (m < 10 ? "0" : "") + Integer.toString(m);
-		// for (int d = 1; d <= 31; d++) {
-		// String day = (d < 10 ? "0" : "") + Integer.toString(d);
-		// long count =
-		// articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year,
-		// month, day);
-		// if (count > 0) {
-		// map.put(year + month + day, count);
-		// }
-		// }
-		// }
-		// }
+		for (int i = 2015; i < 2016; i++) {
+			String year = Integer.toString(i);
+			for (int m = 1; m <= 12; m++) {
+				String month = (m < 10 ? "0" : "") + Integer.toString(m);
+				// for (int d = 1; d <= 31; d++) {
+				// String day = (d < 10 ? "0" : "") + Integer.toString(d);
+				// long count =
+				// articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year,
+				// month, day);
+				long count = articleRepository.countBySourceurlContainingAndMonthyear(term, month + year);
+				if (count > 0) {
+					// map.put(year + month + day, count);
+					map.put(year + month, count);
+				}
+			}
+		}
 		return map;
 	}
 
@@ -203,8 +204,8 @@ public class ArticleServiceImpl implements ArticleService {
 											url = innerMatcher.group(6);
 											title = url.replaceAll("[^0-9a-zA-Z]", " ").replaceAll("[ ]+", " ");
 											// TODO fix or delete
-											// articles.add(new Article(url, eventDate, mentionDate, year, month, day,
-											// domain, title));
+											articles.add(new Article(url, eventDate, mentionDate, year, month, day,
+													domain, title));
 										}
 										if (innerCount % 10000 == 0) {
 											log.debug("saving articles: " + outerArticleCount + "(+" + articles.size()

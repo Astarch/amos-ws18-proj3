@@ -12,6 +12,8 @@ public interface ArticleDAO extends ElasticsearchRepository<Article, String> {
 
 	long countBySourceurlContaining(String term);
 
+	long countBySourceurlContainingAndMonthyear(String term, String string);
+
 	// long countByTitleContainingAndYear(String term, String string);
 
 	// Long countByTitleContainingAndYearAndMonthAndDay(String term, String year,
