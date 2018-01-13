@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -137,6 +136,7 @@ public class ArticleServiceImpl implements ArticleService {
 			int fileCount = 0;
 			int skipped = 0;
 			int masterLineCount = 0;
+			// read masterfile line by line
 			while ((line = br.readLine()) != null && outerArticleCount < 10000000 && fileCount < 1000) {
 				masterLineCount++;
 				if (masterLineCount % 10 != 0) { // read only each 10th file, for better data distribution over several
@@ -147,7 +147,8 @@ public class ArticleServiceImpl implements ArticleService {
 				Matcher matcher = pattern.matcher(line);
 				if (matcher.find()) {
 					String zipUrl = matcher.group(3);
-					if (zipUrl.contains("mention")) {
+					if (zipUrl.contains("mention")) { // line matches pattern and contains "mention" (other
+														// lines/zipfiles will be ignored)
 						fileCount++;
 						if (!gdeltCsvCacheDAO.findAll(QGdeltCsvCache.gdeltCsvCache.zipUrl.eq(zipUrl)).iterator()
 								.hasNext()) {
@@ -160,7 +161,7 @@ public class ArticleServiceImpl implements ArticleService {
 										new URL("http://data.gdeltproject.org/gdeltv2/" + zipUrl).openStream());
 								ZipEntry ze = zipInput.getNextEntry();
 								int zipCount = 0;
-								while (ze != null) {
+								while (ze != null) { // read all files in zipfile
 									String fileName = ze.getName();
 									File tmpFile = new File("gdelt" + File.separator + fileName.substring(0, 4)
 											+ File.separator + fileName.substring(4, 6) + File.separator
@@ -179,7 +180,7 @@ public class ArticleServiceImpl implements ArticleService {
 									BufferedReader tmpReader = new BufferedReader(new FileReader(tmpFile));
 									int innerCount = 0;
 									List<Article> articles = Lists.newArrayList();
-									while ((line = tmpReader.readLine()) != null) {
+									while ((line = tmpReader.readLine()) != null) { // read file in zip line by line
 										innerCount++;
 										zipCount++;
 										outerArticleCount++;
@@ -237,14 +238,14 @@ public class ArticleServiceImpl implements ArticleService {
 	public Map<String, Long> countByTermAndDay(String term, String from, String to) {
 		if (from != null && !from.isEmpty() && to != null && !to.isEmpty()) {
 			try {
-			int yearFrom = Integer.parseInt(from.substring(0, 4));
-			int monthFrom = Integer.parseInt(from.substring(4, 6));
-			int dayFrom = Integer.parseInt(from.substring(6, 8));
-			int yearTo = Integer.parseInt(to.substring(0, 4));
-			int monthTo = Integer.parseInt(to.substring(4, 6));
-			int dayTo = Integer.parseInt(to.substring(6, 8));
-			return countByTermAndDayFromTo(term, yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo);
-			}catch (NumberFormatException e) {
+				int yearFrom = Integer.parseInt(from.substring(0, 4));
+				int monthFrom = Integer.parseInt(from.substring(4, 6));
+				int dayFrom = Integer.parseInt(from.substring(6, 8));
+				int yearTo = Integer.parseInt(to.substring(0, 4));
+				int monthTo = Integer.parseInt(to.substring(4, 6));
+				int dayTo = Integer.parseInt(to.substring(6, 8));
+				return countByTermAndDayFromTo(term, yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo);
+			} catch (NumberFormatException e) {
 				return Maps.newHashMap();
 			}
 		} else {
