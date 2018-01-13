@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RegisterForm.test.js has the expected html structure when active: active 1`] = `
+<div
+  class="onboarding-form form-register active"
+  id="form-register"
+>
+  <input
+    id="register-username"
+    name="name"
+    placeholder="Name"
+    type="text"
+  />
+   
+  <input
+    id="register-email"
+    name="email"
+    placeholder="Email"
+    type="email"
+  />
+   
+  <input
+    id="register-password"
+    name="password"
+    placeholder="Password"
+    type="password"
+  />
+   
+  <!---->
+   
+  <input
+    class=""
+    id="registerSubmit"
+    type="submit"
+    value="Register"
+  />
+   
+  <!---->
+   
+  <div
+    class="links"
+  >
+    <a
+      href=""
+    >
+      Already have an account?
+    </a>
+  </div>
+</div>
+`;
+
+exports[`RegisterForm.test.js has the expected html structure when not active: inactive 1`] = `
+<div
+  class="onboarding-form form-register"
+  id="form-register"
+>
+  <input
+    id="register-username"
+    name="name"
+    placeholder="Name"
+    type="text"
+  />
+   
+  <input
+    id="register-email"
+    name="email"
+    placeholder="Email"
+    type="email"
+  />
+   
+  <input
+    id="register-password"
+    name="password"
+    placeholder="Password"
+    type="password"
+  />
+   
+  <!---->
+   
+  <input
+    class=""
+    id="registerSubmit"
+    type="submit"
+    value="Register"
+  />
+   
+  <!---->
+   
+  <div
+    class="links"
+  >
+    <a
+      href=""
+    >
+      Already have an account?
+    </a>
+  </div>
+</div>
+`;

@@ -23,11 +23,11 @@
               <ul class="list-inline intro-social-buttons">
                 <li>
                   <a href="#register" ref="register"
-                     class="btn btn-default btn-lg"
+                     class="btn btn-default btn-lg register"
                      v-on:click.prevent="open(FormTypeEnum.register)">Register Now</a>
                 </li>
                 <li>
-                  <a href="#login" class="btn btn-default btn-lg"
+                  <a href="#login" class="btn btn-default btn-lg login"
                      v-on:click.prevent="open(FormTypeEnum.login)">Login</a>
                 </li>
               </ul>
@@ -140,11 +140,11 @@
 
     <landing-footer></landing-footer>
 
-    <login-modal
+    <onboarding-modal
       :is-active="modalActive"
       :type="modalType"
       v-on:close="modalActive = false"
-      v-on:changeType="newType => modalType = newType"></login-modal>
+      v-on:changeType="newType => modalType = newType"></onboarding-modal>
 
 
   </div>
@@ -152,7 +152,7 @@
 
 <script>
   import GitInfo from './../../components/common/GitInfo';
-  import LoginModal from './modal/OnboardingModal';
+  import OnboardingModal from './modal/OnboardingModal';
   import LandingHeader from './LandingHeader';
   import LandingFooter from './LandingFooter';
 
@@ -161,12 +161,11 @@
   export default {
     name: 'Landing',
     components: {
-      GitInfo, LoginModal, LandingHeader, LandingFooter
+      GitInfo, OnboardingModal, LandingHeader, LandingFooter
     },
     data: () => ({
       modalActive: false,
       modalType: FormTypeEnum.login,
-      requestAnswer: '',
       FormTypeEnum
     }),
     methods: {
@@ -181,6 +180,9 @@
     },
     computed:{
       isGitInfoShown(){
+        if(GIT === undefined){
+          return false
+        }
         return GIT && GIT.BRANCH && !GIT.BRANCH.includes("master")
       }
     }

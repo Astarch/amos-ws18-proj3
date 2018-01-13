@@ -4,6 +4,8 @@ import 'bootstrap';
 import Vue from 'vue';
 import App from './App';
 import router from './router';
+import store from './store';
+import { sync } from 'vuex-router-sync'
 
 import SideBar from './components/engagement/common/sidebar'
 import GlobalComponents from './globalComponents'
@@ -14,14 +16,17 @@ Vue.config.productionTip = false;
 Vue.use(SideBar);
 Vue.use(GlobalComponents);
 
+// stores current route in store 
+const unsync = sync(store, router)
+
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  template: '<App/>',
-  components: {
-    App,
-  }
+    el: '#app',
+    router,
+    store,
+    template: '<App/>',
+    components: {
+        App,
+    }
 });
-

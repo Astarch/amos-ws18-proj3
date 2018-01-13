@@ -6,10 +6,10 @@
     <div class="content">
       <div class="author">
         <img class="avatar border-white" src="/static/img/faces/face-2.jpg" alt="...">
-        <h4 class="title">Chet Faker
+        <h4 class="title">{{user.firstname}} {{user.lastname}}
           <br>
           <a href="#">
-            <small>@chetfaker</small>
+            <small>@{{user.email}}</small>
           </a>
         </h4>
       </div>
@@ -33,39 +33,45 @@
   </div>
 </template>
 <script>
-  export default {
-    data () {
-      return {
-        details: [
-          {
-            title: '12',
-            subTitle: 'Files'
-          },
-          {
-            title: '2GB',
-            subTitle: 'Used'
-          },
-          {
-            title: '24,6$',
-            subTitle: 'Spent'
-          }
-        ]
-      }
-    },
-    methods: {
-      getClasses (index) {
-        var remainder = index % 3
-        if (remainder === 0) {
-          return 'col-md-3 col-md-offset-1'
-        } else if (remainder === 2) {
-          return 'col-md-4'
-        } else {
-          return 'col-md-3'
+import { mapState } from "vuex";
+export default {
+  data() {
+    return {
+      details: [
+        {
+          title: "12",
+          subTitle: "Files"
+        },
+        {
+          title: "2GB",
+          subTitle: "Used"
+        },
+        {
+          title: "24,6$",
+          subTitle: "Spent"
         }
+      ]
+    };
+  },
+  computed: {
+    ...mapState({
+      // arrow functions can make the code very succinct!
+      user: state => state.user.user
+    })
+  },
+  methods: {
+    getClasses(index) {
+      var remainder = index % 3;
+      if (remainder === 0) {
+        return "col-md-3 col-md-offset-1";
+      } else if (remainder === 2) {
+        return "col-md-4";
+      } else {
+        return "col-md-3";
       }
     }
   }
-
+};
 </script>
 <style>
 

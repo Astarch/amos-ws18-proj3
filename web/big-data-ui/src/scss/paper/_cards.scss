@@ -1,8 +1,8 @@
 .card {
   border-radius: $border-radius-extreme;
   box-shadow: 0 2px 2px rgba(204, 197, 185, 0.5);
-  background-color: #FFFFFF;
-  color: $card-black-color;
+  background-color: $card-background;
+  color: $card-color;
   margin-bottom: 20px;
   position: relative;
   z-index: 1;
@@ -26,6 +26,7 @@
   }
   .header {
     padding: 20px 20px 0;
+    font-size: $font-size-large;
   }
   .description {
     font-size: $font-paragraph;
@@ -38,9 +39,9 @@
   }
   .category,
   label {
-    font-size: $font-size-base;
+    font-size: $font-size-medium;
     font-weight: $font-weight-normal;
-    color: $dark-gray;
+    color: $card-header-color;
     margin-bottom: 0px;
     i {
       font-size: $font-paragraph;
@@ -54,7 +55,7 @@
 
   .title {
     margin: $none;
-    color: $card-black-color;
+    color: $card-header-color;
     font-weight: $font-weight-light;
   }
   .avatar {

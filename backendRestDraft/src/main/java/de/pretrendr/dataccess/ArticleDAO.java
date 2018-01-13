@@ -8,12 +8,13 @@ import de.pretrendr.model.Article;
 
 public interface ArticleDAO extends ElasticsearchRepository<Article, String> {
 
-	List<Article> findAllByTitleContaining(String string);
+	List<Article> findAllBySourceurlContaining(String string);
 
-	long countByTitleContaining(String term);
+	long countBySourceurlContaining(String term);
 
-	long countByTitleContainingAndYear(String term, String string);
+	// long countByTitleContainingAndYear(String term, String string);
 
-	Long countByTitleContainingAndYearAndMonthAndDay(String term, String year, String month, String day);
+	// Long countByTitleContainingAndYearAndMonthAndDay(String term, String year,
+	// String month, String day);
 
 }
