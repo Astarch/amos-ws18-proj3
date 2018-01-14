@@ -3,9 +3,12 @@ package de.pretrendr.businesslogic;
 import java.util.List;
 import java.util.Map;
 
+import de.pretrendr.dataccess.ArticleDAO;
 import de.pretrendr.model.Article;
 
 public interface ArticleService {
+
+	ArticleDAO getArticleRepository();
 
 	Article save(Article article);
 
@@ -27,8 +30,8 @@ public interface ArticleService {
 
 	Map<String, Long> countByTermAndDay(String term, String from, String to);
 
+	long countAll();
+
 	Map<String, Long> countByTermAndDayFromTo(String term, int yearFrom, int monthFrom, int dayFrom, int yearTo,
 			int monthTo, int dayTo);
-
-	long countAll();
 }

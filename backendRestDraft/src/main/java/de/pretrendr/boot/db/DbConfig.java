@@ -55,4 +55,5 @@ public class DbConfig {
 		et.putMapping(Article.class);
 		return et;
 	}
+
 }

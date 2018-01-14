@@ -2,6 +2,9 @@ package de.pretrendr.dataccess;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 import de.pretrendr.model.Article;
@@ -12,11 +15,8 @@ public interface ArticleDAO extends ElasticsearchRepository<Article, String> {
 
 	long countBySourceurlContaining(String term);
 
-	long countBySourceurlContainingAndMonthyear(String term, String string);
+	long countBySourceurlContainingAndSqldateStartsWith(String term, String string);
 
-	// long countByTitleContainingAndYear(String term, String string);
-
-	// Long countByTitleContainingAndYearAndMonthAndDay(String term, String year,
-	// String month, String day);
-
+	@Query("{\"bool\": {\"must\": [{\"match\": {\"sqldate\": \"?0\"}}]}}")
+	Page<Article> findBySQLDateCustom(String term, Pageable pageable);
 }

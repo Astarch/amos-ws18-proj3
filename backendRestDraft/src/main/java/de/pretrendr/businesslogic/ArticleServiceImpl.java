@@ -28,12 +28,14 @@ import de.pretrendr.dataccess.GdeltCsvCacheDAO;
 import de.pretrendr.model.Article;
 import de.pretrendr.model.GdeltCsvCache;
 import de.pretrendr.model.QGdeltCsvCache;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
 public class ArticleServiceImpl implements ArticleService {
 
+	@Getter
 	private ArticleDAO articleRepository;
 	private GdeltCsvCacheDAO gdeltCsvCacheDAO;
 
@@ -85,15 +87,11 @@ public class ArticleServiceImpl implements ArticleService {
 			String year = Integer.toString(i);
 			for (int m = 1; m <= 12; m++) {
 				String month = (m < 10 ? "0" : "") + Integer.toString(m);
-				// for (int d = 1; d <= 31; d++) {
-				// String day = (d < 10 ? "0" : "") + Integer.toString(d);
-				// long count =
-				// articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year,
-				// month, day);
-				long count = articleRepository.countBySourceurlContainingAndMonthyear(term, month + year);
-				if (count > 0) {
-					// map.put(year + month + day, count);
-					map.put(year + month, count);
+				for (int d = 1; d <= 31; d++) {
+					String day = (d < 10 ? "0" : "") + Integer.toString(d);
+					long count = articleRepository.countBySourceurlContainingAndSqldateStartsWith(term,
+							year + month + day);
+					map.put(year + month + day, count);
 				}
 			}
 		}
@@ -105,24 +103,19 @@ public class ArticleServiceImpl implements ArticleService {
 			int monthTo, int dayTo) {
 		boolean firstRun = true;
 		Map<String, Long> map = Maps.newHashMap();
-		// for (int i = yearFrom; i <= yearTo; i++) {
-		// String year = Integer.toString(i);
-		// for (int m = firstRun ? monthFrom : 1; m <= (i == yearTo ? monthTo : 12);
-		// m++) {
-		// String month = (m < 10 ? "0" : "") + Integer.toString(m);
-		// for (int d = firstRun ? dayFrom : 1; d <= (i == yearTo && m == monthTo ?
-		// dayTo : 31); d++) {
-		// firstRun = false;
-		// String day = (d < 10 ? "0" : "") + Integer.toString(d);
-		// long count =
-		// articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year,
-		// month, day);
-		// if (count > 0) {
-		// map.put(year + month + day, count);
-		// }
-		// }
-		// }
-		// }
+		for (int i = yearFrom; i <= yearTo; i++) {
+			String year = Integer.toString(i);
+			for (int m = firstRun ? monthFrom : 1; m <= (i == yearTo ? monthTo : 12); m++) {
+				String month = (m < 10 ? "0" : "") + Integer.toString(m);
+				for (int d = firstRun ? dayFrom : 1; d <= (i == yearTo && m == monthTo ? dayTo : 31); d++) {
+					firstRun = false;
+					String day = (d < 10 ? "0" : "") + Integer.toString(d);
+					long count = articleRepository.countBySourceurlContainingAndSqldateStartsWith(term,
+							year + month + day);
+					map.put(year + month + day, count);
+				}
+			}
+		}
 		return map;
 	}
 
@@ -144,8 +137,11 @@ public class ArticleServiceImpl implements ArticleService {
 			int fileCount = 0;
 			int skipped = 0;
 			int masterLineCount = 0;
+			int articleLimit = 100000000;
+			int fileLimit = 5000;
 			// read masterfile line by line
-			while ((line = br.readLine()) != null && outerArticleCount < 10000000 && fileCount < 1000) {
+			long startTime = System.nanoTime();
+			while ((line = br.readLine()) != null && outerArticleCount < articleLimit && fileCount < fileLimit) {
 				masterLineCount++;
 				if (masterLineCount % 10 != 0) { // read only each 10th file, for better data distribution over days
 					continue;
@@ -209,14 +205,32 @@ public class ArticleServiceImpl implements ArticleService {
 										}
 										if (innerCount % 10000 == 0) {
 											log.debug("saving articles: " + outerArticleCount + "(+" + articles.size()
-													+ ")");
+													+ ") from " + fileCount + " files @ "
+													+ Math.floor(outerArticleCount
+															/ ((System.nanoTime() - startTime) / 1e9) * 100) / 100
+													+ " ("
+													+ Math.floor(
+															((double) outerArticleCount) / articleLimit * 100 * 1000)
+															/ 1000
+													+ "% articles, "
+													+ Math.floor(((double) fileCount) / fileLimit * 100 * 1000) / 1000
+													+ "% files)");
 											save(articles);
+											articles.clear();
 										}
 									}
 									tmpReader.close();
 									if (articles.size() > 0) {
-										log.debug(
-												"saving articles: " + outerArticleCount + "(+" + articles.size() + ")");
+										log.debug("saving articles: " + outerArticleCount + "(+" + articles.size()
+												+ ") from " + fileCount + " files @ "
+												+ Math.floor(outerArticleCount / ((System.nanoTime() - startTime) / 1e9)
+														* 100) / 100
+												+ " ("
+												+ Math.floor(((double) outerArticleCount) / articleLimit * 100 * 1000)
+														/ 1000
+												+ "% articles, "
+												+ Math.floor(((double) fileCount) / fileLimit * 100 * 1000) / 1000
+												+ "% files)");
 										save(articles);
 									}
 									articles.clear();
