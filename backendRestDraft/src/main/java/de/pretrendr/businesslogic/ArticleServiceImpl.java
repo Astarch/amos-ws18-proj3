@@ -1,12 +1,14 @@
 package de.pretrendr.businesslogic;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -91,7 +93,11 @@ public class ArticleServiceImpl implements ArticleService {
 					String day = (d < 10 ? "0" : "") + Integer.toString(d);
 					long count = articleRepository.countBySourceurlContainingAndSqldateStartsWith(term,
 							year + month + day);
-					map.put(year + month + day, count);
+					if (map.containsKey(year + month)) {
+						map.put(year + month, count + map.get(year + month));
+					} else {
+						map.put(year + month, count);
+					}
 				}
 			}
 		}
@@ -112,7 +118,11 @@ public class ArticleServiceImpl implements ArticleService {
 					String day = (d < 10 ? "0" : "") + Integer.toString(d);
 					long count = articleRepository.countBySourceurlContainingAndSqldateStartsWith(term,
 							year + month + day);
-					map.put(year + month + day, count);
+					if (map.containsKey(year + month)) {
+						map.put(year + month, count + map.get(year + month));
+					} else {
+						map.put(year + month, count);
+					}
 				}
 			}
 		}
@@ -123,6 +133,27 @@ public class ArticleServiceImpl implements ArticleService {
 	public void crawlData() {
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(
 				new URL("http://data.gdeltproject.org/gdeltv2/masterfilelist.txt").openStream()))) {
+			File tmpFile = new File("gdelt" + File.separator + "master.txt");
+			new File(tmpFile.getParent()).mkdirs();
+
+			FileOutputStream fos = new FileOutputStream(tmpFile);
+			BufferedWriter bos = new BufferedWriter(new OutputStreamWriter(fos));
+
+			String line;
+			while ((line = br.readLine()) != null) {
+				bos.write(line);
+				bos.write(System.lineSeparator());
+			}
+
+			fos.close();
+		} catch (MalformedURLException e1) {
+			log.error("Malformed URL", e1);
+		} catch (IOException e1) {
+			log.error("ioex", e1);
+		}
+
+		File masterFile = new File("gdelt" + File.separator + "master.txt");
+		try (BufferedReader br = new BufferedReader(new FileReader(masterFile))) {
 			byte[] buffer = new byte[1024];
 			String line;
 			String url;
@@ -138,10 +169,10 @@ public class ArticleServiceImpl implements ArticleService {
 			int skipped = 0;
 			int masterLineCount = 0;
 			int articleLimit = 100000000;
-			int fileLimit = 5000;
+			int fileLimit = 50000;
 			// read masterfile line by line
 			long startTime = System.nanoTime();
-			while ((line = br.readLine()) != null && outerArticleCount < articleLimit && fileCount < fileLimit) {
+			while ((line = br.readLine()) != null) { // && outerArticleCount < articleLimit && fileCount < fileLimit) {
 				masterLineCount++;
 				if (masterLineCount % 10 != 0) { // read only each 10th file, for better data distribution over days
 					continue;
