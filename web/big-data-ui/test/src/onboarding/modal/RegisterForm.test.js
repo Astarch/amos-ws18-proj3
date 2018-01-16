@@ -119,6 +119,49 @@ describe('RegisterForm.test.js', () => {
         expect(errorAlert.exists()).toBeTruthy()
     })
 
+    test('error is shown when submitting invalid Email', () => {
+        const cmp = shallow(RegisterForm, { store })
+        cmp.find('input#register-password').element.value = validPassword
+        cmp.find('input#register-password').trigger('input')
+        cmp.find('input#register-username').element.value = validUsername
+        cmp.find('input#register-username').trigger('input')
+        cmp.find('input#register-email').element.value = invalidEmail
+        cmp.find('input#register-email').trigger('input')
+        cmp.find('#registerSubmit').trigger('click')
+
+        let errorAlert = cmp.find('.alert')
+        expect(errorAlert.exists()).toBeTruthy()
+    })
+
+    test('error is shown when submitting username with length 2 ', () => {
+        const cmp = shallow(RegisterForm, { store })
+        cmp.find('input#register-password').element.value = validPassword
+        cmp.find('input#register-password').trigger('input')
+        cmp.find('input#register-username').element.value = "aa"
+        cmp.find('input#register-username').trigger('input')
+        cmp.find('input#register-email').element.value = validEmail
+        cmp.find('input#register-email').trigger('input')
+        cmp.find('#registerSubmit').trigger('click')
+
+        let errorAlert = cmp.find('.alert')
+        expect(errorAlert.exists()).toBeTruthy()
+    })
+
+    test('error is shown when submitting password with length 4 ', () => {
+        const cmp = shallow(RegisterForm, { store })
+        cmp.find('input#register-password').element.value = "test"
+        cmp.find('input#register-password').trigger('input')
+        cmp.find('input#register-username').element.value = validUsername
+        cmp.find('input#register-username').trigger('input')
+        cmp.find('input#register-email').element.value = validEmail
+        cmp.find('input#register-email').trigger('input')
+        cmp.find('#registerSubmit').trigger('click')
+
+        let errorAlert = cmp.find('.alert')
+        expect(errorAlert.exists()).toBeTruthy()
+    })
+
+
     test('correct data is submitted', () => {
         const cmp = shallow(RegisterForm, { store })
         let email = validEmail
