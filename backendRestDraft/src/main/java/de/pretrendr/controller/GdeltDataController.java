@@ -79,7 +79,7 @@ public class GdeltDataController {
 	@RequestMapping(value = "/findall", method = RequestMethod.GET)
 	public ResponseEntity<List<Article>> getAll(@RequestParam(value = "from", defaultValue = "") final String from,
 			@RequestParam(value = "to", defaultValue = "") final String to) throws IOException {
-		List<Article> list = Lists.newArrayList(articleService.findAll());
+		List<Article> list = Lists.newArrayList(articleService.findAllBySourceurlContaining("bitcoin"));
 
 		return new ResponseEntity<List<Article>>(list, HttpStatus.OK);
 	}
@@ -100,4 +100,15 @@ public class GdeltDataController {
 		List<Article> articles = elasticsearchOperations.queryForList(searchQuery, Article.class);
 		return new ResponseEntity<List<Article>>(articles, HttpStatus.OK);
 	}
+
+	@RequestMapping(value = "/deleteAll", method = RequestMethod.GET)
+	public ResponseEntity<Boolean> deleteAll(@RequestParam(value = "delete", defaultValue = "") final String pass)
+			throws IOException {
+		if (pass.equals("YESWECAN!")) {
+			articleService.deleteAll();
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		}
+		return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+	}
+
 }

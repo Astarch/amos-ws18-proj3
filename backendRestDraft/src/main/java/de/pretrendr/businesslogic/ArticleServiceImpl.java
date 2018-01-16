@@ -74,12 +74,12 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public List<Article> findAllByTerm(String string) {
-		return articleRepository.findAllBySourceurlContaining(string); // articleRepository.findAllByTitleContaining(string);
+		return articleRepository.findAllByTitleContaining(string); // articleRepository.findAllByTitleContaining(string);
 	}
 
 	@Override
 	public long countByTerm(String term) {
-		return articleRepository.countBySourceurlContaining(term);
+		return articleRepository.countByTitleContaining(term);
 	}
 
 	@Override
@@ -91,8 +91,7 @@ public class ArticleServiceImpl implements ArticleService {
 				String month = (m < 10 ? "0" : "") + Integer.toString(m);
 				for (int d = 1; d <= 31; d++) {
 					String day = (d < 10 ? "0" : "") + Integer.toString(d);
-					long count = articleRepository.countBySourceurlContainingAndSqldateStartsWith(term,
-							year + month + day);
+					long count = articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year, month, day);
 					if (map.containsKey(year + month)) {
 						map.put(year + month, count + map.get(year + month));
 					} else {
@@ -116,8 +115,7 @@ public class ArticleServiceImpl implements ArticleService {
 				for (int d = firstRun ? dayFrom : 1; d <= (i == yearTo && m == monthTo ? dayTo : 31); d++) {
 					firstRun = false;
 					String day = (d < 10 ? "0" : "") + Integer.toString(d);
-					long count = articleRepository.countBySourceurlContainingAndSqldateStartsWith(term,
-							year + month + day);
+					long count = articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year, month, day);
 					if (map.containsKey(year + month)) {
 						map.put(year + month, count + map.get(year + month));
 					} else {
@@ -156,6 +154,7 @@ public class ArticleServiceImpl implements ArticleService {
 		try (BufferedReader br = new BufferedReader(new FileReader(masterFile))) {
 			byte[] buffer = new byte[1024];
 			String line;
+			String id;
 			String url;
 			String eventDate;
 			String mentionDate;
@@ -168,19 +167,41 @@ public class ArticleServiceImpl implements ArticleService {
 			int fileCount = 0;
 			int skipped = 0;
 			int masterLineCount = 0;
-			int articleLimit = 100000000;
-			int fileLimit = 50000;
+			int articleLimit = 2000;
+			int fileLimit = 10000;
 			// read masterfile line by line
 			long startTime = System.nanoTime();
-			while ((line = br.readLine()) != null) { // && outerArticleCount < articleLimit && fileCount < fileLimit) {
+			Pattern pattern = Pattern.compile("([0-9]*?) ([0-9a-f]*) http://data.gdeltproject.org/gdeltv2/(.*)");
+			Pattern innerPattern = Pattern.compile("([0-9]*)\\t([0-9]*)\\t([0-9]*)\\t([0-9])\\t(.*?)\\t(http\\S*)");
+			int skipOldEntries = 0;
+			while ((line = br.readLine()) != null) {
+				Matcher innerMatcher = pattern.matcher(line);
+				skipOldEntries++;
+				if (innerMatcher.find()) {
+					if (!innerMatcher.group(3).startsWith("2017")) {
+						if (skipOldEntries % 1000 == 0) {
+							log.info("skipped " + skipOldEntries + " which were from prior 2017.");
+						}
+						continue;
+					} else {
+						log.info("skipped " + skipOldEntries + " which were from prior 2017. now reading file");
+						log.info(line);
+						break;
+					}
+				}
+			}
+
+			while ((line = br.readLine()) != null && outerArticleCount < articleLimit && fileCount < fileLimit) {
 				masterLineCount++;
 				if (masterLineCount % 10 != 0) { // read only each 10th file, for better data distribution over days
 					continue;
 				}
-				Pattern pattern = Pattern.compile("([0-9]*?) ([0-9a-f]*) http://data.gdeltproject.org/gdeltv2/(.*)");
 				Matcher matcher = pattern.matcher(line);
 				if (matcher.find()) {
 					String zipUrl = matcher.group(3);
+					if (!zipUrl.startsWith("2017")) {
+						break;
+					}
 					if (zipUrl.contains("mention")) { // line matches pattern and contains "mention" (other
 														// lines/zipfiles will be ignored)
 						fileCount++;
@@ -218,10 +239,9 @@ public class ArticleServiceImpl implements ArticleService {
 										innerCount++;
 										zipCount++;
 										outerArticleCount++;
-										Pattern innerPattern = Pattern.compile(
-												"([0-9]*)\\t([0-9]*)\\t([0-9]*)\\t([0-9])\\t(.*?)\\t(http\\S*)");
 										Matcher innerMatcher = innerPattern.matcher(line);
 										if (innerMatcher.find()) {
+											id = innerMatcher.group(1);
 											eventDate = innerMatcher.group(2);
 											mentionDate = innerMatcher.group(3);
 											year = mentionDate.substring(0, 4);
@@ -230,9 +250,8 @@ public class ArticleServiceImpl implements ArticleService {
 											domain = innerMatcher.group(5);
 											url = innerMatcher.group(6);
 											title = url.replaceAll("[^0-9a-zA-Z]", " ").replaceAll("[ ]+", " ");
-											// TODO fix or delete
-											articles.add(new Article(url, eventDate, mentionDate, year, month, day,
-													domain, title));
+											articles.add(
+													new Article(id, url, domain, title, mentionDate, year, month, day));
 										}
 										if (innerCount % 10000 == 0) {
 											log.debug("saving articles: " + outerArticleCount + "(+" + articles.size()
@@ -309,5 +328,16 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public long countAll() {
 		return articleRepository.count();
+	}
+
+	@Override
+	public List<Article> findAllBySourceurlContaining(String string) {
+		return articleRepository.findAllByTitleContaining(string);
+
+	}
+
+	@Override
+	public void deleteAll() {
+		articleRepository.deleteAll();
 	}
 }
