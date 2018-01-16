@@ -137,8 +137,8 @@ public class ArticleServiceImpl implements ArticleService {
 			int fileCount = 0;
 			int skipped = 0;
 			int masterLineCount = 0;
-			int articleLimit = 100000000;
-			int fileLimit = 5000;
+			int articleLimit = 1000000;
+			int fileLimit = 500;
 			// read masterfile line by line
 			long startTime = System.nanoTime();
 			while ((line = br.readLine()) != null && outerArticleCount < articleLimit && fileCount < fileLimit) {
@@ -278,5 +278,16 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public long countAll() {
 		return articleRepository.count();
+	}
+
+	@Override
+	public List<Article> findAllBySourceurlContaining(String string) {
+		return articleRepository.findAllBySourceurlContaining(string);
+
+	}
+
+	@Override
+	public void deleteAll() {
+		articleRepository.deleteAll();
 	}
 }

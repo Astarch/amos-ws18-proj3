@@ -19,4 +19,7 @@ public interface ArticleDAO extends ElasticsearchRepository<Article, String> {
 
 	@Query("{\"bool\": {\"must\": [{\"match\": {\"sqldate\": \"?0\"}}]}}")
 	Page<Article> findBySQLDateCustom(String term, Pageable pageable);
+
+	@Override
+	void deleteAll();
 }

@@ -2,12 +2,14 @@ package de.pretrendr.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(indexName = "logstash-2018.01.11", type = "csv")
+@Document(indexName = "logstash-2018.01.16", type = "csv")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -80,4 +82,7 @@ public class Article {
 	private String actiongeo_featureid;
 	private String dateadded;
 	private String sourceurl;
+	@Field(type = FieldType.Double)
+	private Double _score;
+	private String message;
 }

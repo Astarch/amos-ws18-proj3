@@ -34,4 +34,8 @@ public interface ArticleService {
 
 	Map<String, Long> countByTermAndDayFromTo(String term, int yearFrom, int monthFrom, int dayFrom, int yearTo,
 			int monthTo, int dayTo);
+
+	List<Article> findAllBySourceurlContaining(String string);
+
+	void deleteAll();
 }
