@@ -26,16 +26,22 @@ public interface ArticleService {
 
 	Map<String, Long> countByTermAndDay(String term);
 
-	void crawlData();
-
 	Map<String, Long> countByTermAndDay(String term, String from, String to);
-
-	long countAll();
 
 	Map<String, Long> countByTermAndDayFromTo(String term, int yearFrom, int monthFrom, int dayFrom, int yearTo,
 			int monthTo, int dayTo);
 
-	List<Article> findAllBySourceurlContaining(String string);
+	Map<String, Long> countByTermAndMonth(String term);
+
+	Map<String, Long> countByTermAndMonth(String term, String from, String to);
+
+	Map<String, Long> countByTermAndMonthFromTo(String term, int yearFrom, int monthFrom, int dayFrom, int yearTo,
+			int monthTo, int dayTo);
+
+	void crawlData();
+
+	long countAll();
 
 	void deleteAll();
+
 }

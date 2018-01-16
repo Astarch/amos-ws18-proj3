@@ -68,7 +68,7 @@ public class GdeltDataController {
 	}
 
 	@RequestMapping(value = "/wordcountByDay/{term}", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Long>> getWordCountByBucketId(@PathVariable String term,
+	public ResponseEntity<Map<String, Long>> getWordCountByDay(@PathVariable String term,
 			@RequestParam(value = "from", defaultValue = "") final String from,
 			@RequestParam(value = "to", defaultValue = "") final String to) throws IOException {
 		Map<String, Long> list = articleService.countByTermAndDay(term, from, to);
@@ -76,10 +76,18 @@ public class GdeltDataController {
 		return new ResponseEntity<Map<String, Long>>(list, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/findall", method = RequestMethod.GET)
-	public ResponseEntity<List<Article>> getAll(@RequestParam(value = "from", defaultValue = "") final String from,
+	@RequestMapping(value = "/wordcountByMonth/{term}", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Long>> getWordCountByMonth(@PathVariable String term,
+			@RequestParam(value = "from", defaultValue = "") final String from,
 			@RequestParam(value = "to", defaultValue = "") final String to) throws IOException {
-		List<Article> list = Lists.newArrayList(articleService.findAllBySourceurlContaining("bitcoin"));
+		Map<String, Long> list = articleService.countByTermAndMonth(term, from, to);
+
+		return new ResponseEntity<Map<String, Long>>(list, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/findall", method = RequestMethod.GET)
+	public ResponseEntity<List<Article>> getAll() throws IOException {
+		List<Article> list = Lists.newArrayList(articleService.findAll());
 
 		return new ResponseEntity<List<Article>>(list, HttpStatus.OK);
 	}
@@ -95,8 +103,8 @@ public class GdeltDataController {
 	 */
 	@RequestMapping(value = "/findByTerm/{term}", method = RequestMethod.GET)
 	public ResponseEntity<List<Article>> findByTerm(@PathVariable String term) throws IOException {
-		SearchQuery searchQuery = new NativeSearchQueryBuilder()
-				.withFilter(regexpQuery("sourceurl", ".*" + term + ".*")).build();
+		SearchQuery searchQuery = new NativeSearchQueryBuilder().withFilter(regexpQuery("title", ".*" + term + ".*"))
+				.build();
 		List<Article> articles = elasticsearchOperations.queryForList(searchQuery, Article.class);
 		return new ResponseEntity<List<Article>>(articles, HttpStatus.OK);
 	}
@@ -105,7 +113,8 @@ public class GdeltDataController {
 	public ResponseEntity<Boolean> deleteAll(@RequestParam(value = "delete", defaultValue = "") final String pass)
 			throws IOException {
 		if (pass.equals("YESWECAN!")) {
-			articleService.deleteAll();
+			// commented out for sake of insanity
+			// articleService.deleteAll();
 			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 		}
 		return new ResponseEntity<Boolean>(false, HttpStatus.OK);
