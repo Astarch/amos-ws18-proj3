@@ -11,6 +11,7 @@ import javax.persistence.EntityNotFoundException;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import de.pretrendr.dataccess.RoleDAO;
@@ -37,6 +38,9 @@ public class UserServiceImpl implements UserService {
 	private final RoleDAO roleDAO;
 
 	@Autowired
+	PasswordEncoder passwordEncoder;
+
+	@Autowired
 	public UserServiceImpl(final UserDAO userDAO, final RoleDAO roleDAO) {
 		this.userDAO = userDAO;
 		this.roleDAO = roleDAO;
@@ -56,8 +60,9 @@ public class UserServiceImpl implements UserService {
 		} else {
 
 			if (Pattern.matches(EMAIL_REGEX, userReg.getEmail())) {
-				user = new User(userReg.getUsername(), userReg.getPassword(), userReg.getFirstname(),
-						userReg.getLastname(), userReg.getEmail(), userReg.getAddress(), userReg.getPhone());
+				user = new User(userReg.getUsername(), passwordEncoder.encode(userReg.getPassword()),
+						userReg.getFirstname(), userReg.getLastname(), userReg.getEmail(), userReg.getAddress(),
+						userReg.getPhone());
 				Role userRole = roleDAO.findOne(QRole.role1.role.eq("USER"));
 				user.getRoles().add(userRole);
 				return userDAO.save(user);
