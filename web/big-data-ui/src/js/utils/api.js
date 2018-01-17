@@ -1,6 +1,7 @@
 import axios from 'axios';
 import qs from 'qs';
-import store from 'store2'
+import storage from 'store2'
+import store from 'src/js/store';
 
 
 /******************** Base API / Client Configuration ********************/
@@ -15,12 +16,12 @@ baseUrl = (GIT.BRANCH && !GIT.BRANCH.includes("master")) ? liveUrl : stagingUrl;
 
 
 function writeAuthToken(token) {
-    store.session('authToken', token)
+    storage.set('authToken', token)
     return token
 }
 
 function getAuthToken() {
-    return store.session('authToken')
+    return storage.get('authToken')
 }
 
 
@@ -36,7 +37,7 @@ if (getAuthToken() && getAuthToken().length > 5) {
 axiosInstance.interceptors.response.use(response => {
     let authToken = getAuthToken()
     if (response.status == 401) {
-        authToken = writeAuthToken("")
+        store.dispatch('logoutUser').then(event => {}).catch()
     } else if (response && response.headers && response.headers['x-auth-token']) {
         let authToken = writeAuthToken(response.headers['x-auth-token']);
         if (authToken && authToken.length > 5) {

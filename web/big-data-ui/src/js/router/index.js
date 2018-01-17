@@ -28,6 +28,11 @@ const router = new Router({
             component: LandingPage,
         },
         {
+            path: '/error',
+            component: LandingPage,
+            meta: { isPublic: true }
+        },
+        {
             path: '/engagement',
             component: EngagementLayout,
             name: 'dashboard-home',
@@ -71,9 +76,9 @@ const router = new Router({
 router.beforeResolve((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
         console.log(`${to.path} requires auth`)
-        console.log(store.state.user)
-            // this route requires auth, check if logged in
-            // if not, redirect to login page.
+
+        // this route requires auth, check if logged in
+        // if not, redirect to login page.
         if (!isLoggedIn()) {
             next({
                 path: '/'
@@ -81,8 +86,12 @@ router.beforeResolve((to, from, next) => {
         } else {
             next()
         }
+    } else if (!to.matched.some(record => record.meta.isPublic) && isLoggedIn()) {
+        next({
+            path: '/engagement'
+        })
     } else {
-        next() // make sure to always call next()!
+        next()
     }
     // next(false)
     // next('/')

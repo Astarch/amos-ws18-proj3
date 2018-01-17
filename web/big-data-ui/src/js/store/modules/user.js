@@ -3,6 +3,8 @@ import { ServerErrors } from '../../utils/constants';
 import RequestStatus from '../../models/RequestStatus';
 import * as types from '../mutation-types'
 
+import router from 'src/js/router'
+
 
 // initial state
 // shape: {
@@ -164,6 +166,9 @@ const actions = {
         return new Promise((resolve, reject) => {
             logoutUser()
             commit(types.USER_CLEAR)
+            router.push({
+                path: "/"
+            });
             resolve()
         })
     }
