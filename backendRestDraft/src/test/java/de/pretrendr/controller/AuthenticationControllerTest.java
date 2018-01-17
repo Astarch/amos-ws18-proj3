@@ -1,5 +1,8 @@
 package de.pretrendr.controller;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -19,8 +22,10 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.http.MockHttpOutputMessage;
 
 import de.pretrendr.PretrendrTestBase;
+import de.pretrendr.model.QUser;
 import de.pretrendr.model.Role;
 import de.pretrendr.model.User;
+import de.pretrendr.model.pojo.RegUser;
 
 public class AuthenticationControllerTest extends PretrendrTestBase {
 
@@ -47,34 +52,52 @@ public class AuthenticationControllerTest extends PretrendrTestBase {
 
 	@Test
 	public void register_existingUserName_309() throws Exception {
-		User existingUsername = new User(UUID.randomUUID(), "username", "password", "firstname", "lastname",
-				"other@mail.me", "address", "phone", null);
+		RegUser existingUsername = new RegUser("username", "password", "firstname", "lastname", "other@mail.me",
+				"address", "phone");
 		mockMvc.perform(post("/auth/register").content(this.json(existingUsername)).contentType(jsonContentType))
 				.andExpect(status().isConflict());
 	}
 
 	@Test
 	public void register_existingUserEmail_409() throws Exception {
-		User existingEmail = new User(UUID.randomUUID(), "otherUsername", "password", "firstname", "lastname",
-				"existing@mail.me", "address", "phone", null);
+		RegUser existingEmail = new RegUser("otherUsername", "password", "firstname", "lastname", "existing@mail.me",
+				"address", "phone");
 		mockMvc.perform(post("/auth/register").content(this.json(existingEmail)).contentType(jsonContentType))
 				.andExpect(status().isConflict());
 	}
 
 	@Test
 	public void register_InvalidEmail_406() throws Exception {
-		User invalidEmail = new User(UUID.randomUUID(), "otherUsername", "password", "firstname", "lastname",
-				"invalidEmail", "address", "phone", null);
+		RegUser invalidEmail = new RegUser("otherUsername", "password", "firstname", "lastname", "invalidEmail",
+				"address", "phone");
 		mockMvc.perform(post("/auth/register").content(this.json(invalidEmail)).contentType(jsonContentType))
 				.andExpect(status().isNotAcceptable());
 	}
 
 	@Test
 	public void register_ValidEmail_200() throws Exception {
-		User validEmail = new User(UUID.randomUUID(), "otherUsername", "password", "firstname", "lastname",
-				"validEmail@test.me", "address", "phone", null);
+		RegUser validEmail = new RegUser("otherUsername", "password", "firstname", "lastname", "validEmail@test.me",
+				"address", "phone");
 		mockMvc.perform(post("/auth/register").content(this.json(validEmail)).contentType(jsonContentType))
 				.andExpect(status().isOk());
+
+		User newUser = userDAO.findOne(QUser.user.email.eq(validEmail.getEmail()));
+		assertNotNull(newUser);
+		assertNotNull(newUser.getId());
+		assertNotNull(newUser.getRoles());
+
+		assertEquals(newUser.getAddress(), validEmail.getAddress());
+		assertEquals(newUser.getEmail(), validEmail.getEmail());
+		assertEquals(newUser.getFirstname(), validEmail.getFirstname());
+		assertEquals(newUser.getLastname(), validEmail.getLastname());
+		assertEquals(newUser.getPhone(), validEmail.getPhone());
+		assertEquals(newUser.getUsername(), validEmail.getUsername());
+		assertTrue(newUser.isAccountNonExpired());
+		assertTrue(newUser.isAccountNonLocked());
+		assertTrue(newUser.isCredentialsNonExpired());
+		assertTrue(newUser.isEnabled());
+
+		assertTrue(passwordEncoder.matches(validEmail.getPassword(), newUser.getPassword()));
 	}
 
 	@Test
