@@ -15,7 +15,7 @@ INTO
     (
         '63b61ed5-5ae4-4cc8-9aa3-f14a15c31755',
         'user1',
-        'pass1',
+        '$2a$11$kRVKDZdUVu/8ukF/vD97HOKSTqyOE2GW1CxzEjIRFOjOE.ee9dFvC', -- "pass1"
         'firstname1',
         'lastname1',
         'email1',
@@ -26,7 +26,7 @@ INTO
     (
         '337bf2b7-a12e-4d48-ba84-1feaddbd4b20',
         'user2',
-        'pass2',
+        '$2a$11$V4K/YKxxp.N6hHJF/Ef0qul/aDZkOK6GTmo4VgEXGmcgpBXPtifTi', -- "pass2"
         'firstname2',
         'lastname2',
         'email2',
@@ -37,7 +37,7 @@ INTO
     (
         '8ad5b3f5-5c78-415f-bd7a-34b38d523027',
         'user3',
-        'pass3',
+        '$2a$11$ItX.nhf7GXskxpGGH9u2Re0M5gjdBGFvWtg/mZZDbmMScjfBgn1ua', -- "pass3"
         'firstname3',
         'lastname3',
         'email3',
