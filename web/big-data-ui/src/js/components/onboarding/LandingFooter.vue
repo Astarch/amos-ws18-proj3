@@ -10,11 +10,11 @@
             </li>
             <li class="footer-menu-divider">&sdot;</li>
             <li>
-              <a href="#about">About</a>
+              <a href="#about-pretrendr">About Pretrendr</a>
             </li>
             <li class="footer-menu-divider">&sdot;</li>
             <li>
-              <a href="#services">Services</a>
+              <a href="#about-us">About Us</a>
             </li>
             <li class="footer-menu-divider">&sdot;</li>
             <li>

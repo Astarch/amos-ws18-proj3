@@ -30,9 +30,9 @@ exports[`LandingFooter.test.js has the expected html structure 1`] = `
            
           <li>
             <a
-              href="#about"
+              href="#about-pretrendr"
             >
-              About
+              About Pretrendr
             </a>
           </li>
            
@@ -44,9 +44,9 @@ exports[`LandingFooter.test.js has the expected html structure 1`] = `
            
           <li>
             <a
-              href="#services"
+              href="#about-us"
             >
-              Services
+              About Us
             </a>
           </li>
            
