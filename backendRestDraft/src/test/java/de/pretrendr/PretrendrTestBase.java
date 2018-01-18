@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import de.pretrendr.boot.Application;
+import de.pretrendr.businesslogic.ArticleService;
 import de.pretrendr.dataccess.CachedS3BucketDAO;
 import de.pretrendr.dataccess.CachedS3ObjectDAO;
 import de.pretrendr.dataccess.CachedS3WordCountPairDAO;
@@ -61,6 +62,9 @@ public abstract class PretrendrTestBase {
 
 	@Autowired
 	protected WebApplicationContext webApplicationContext;
+
+	@Autowired
+	protected ArticleService articleService;
 
 	@Autowired
 	void setConverters(HttpMessageConverter<?>[] converters) {

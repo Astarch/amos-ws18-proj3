@@ -53,3 +53,11 @@ CREATE TABLE
         PRIMARY KEY(bucketid,word),
         CONSTRAINT s3wcp_to_s3b FOREIGN KEY(bucketid) REFERENCES CACHEDS3BUCKET(id)
     );
+	
+CREATE TABLE
+    GDELTSCVCACHE
+    (
+        zipurl VARCHAR(255) NOT NULL,
+        COUNT INTEGER,
+        PRIMARY KEY(zipurl)
+    );
