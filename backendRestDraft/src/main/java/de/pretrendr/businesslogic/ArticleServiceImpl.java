@@ -1,5 +1,8 @@
 package de.pretrendr.businesslogic;
 
+import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
+import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,8 +21,16 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.search.aggregations.Aggregations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.ResultsExtractor;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
@@ -47,6 +58,9 @@ public class ArticleServiceImpl implements ArticleService {
 		this.gdeltCsvCacheDAO = gdeltCsvCacheDAO;
 	}
 
+	@Autowired
+	ElasticsearchOperations elasticsearchOperations;
+
 	@Override
 	public Article save(Article article) {
 		return articleRepository.save(article);
@@ -55,6 +69,11 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public void delete(Article article) {
 		articleRepository.delete(article);
+	}
+
+	@Override
+	public void delete(List<Article> articles) {
+		articleRepository.delete(articles);
 	}
 
 	@Override
@@ -158,16 +177,16 @@ public class ArticleServiceImpl implements ArticleService {
 			String url;
 			String eventDate;
 			String mentionDate;
-			String year = null;
-			String month = null;
-			String day = null;
+			int year = 0;
+			int month = 0;
+			int day = 0;
 			String domain;
 			String title;
 			int outerArticleCount = 0;
 			int fileCount = 0;
 			int skipped = 0;
 			int masterLineCount = 0;
-			int articleLimit = 50000000;
+			int articleLimit = 1000000;
 			int fileLimit = 10000;
 			// read masterfile line by line
 			long startTime = System.nanoTime();
@@ -239,9 +258,9 @@ public class ArticleServiceImpl implements ArticleService {
 											id = innerMatcher.group(1);
 											eventDate = innerMatcher.group(2);
 											mentionDate = innerMatcher.group(3);
-											year = mentionDate.substring(0, 4);
-											month = mentionDate.substring(4, 6);
-											day = mentionDate.substring(6, 8);
+											year = Integer.parseInt(mentionDate.substring(0, 4));
+											month = Integer.parseInt(mentionDate.substring(4, 6));
+											day = Integer.parseInt(mentionDate.substring(6, 8));
 											domain = innerMatcher.group(5);
 											url = innerMatcher.group(6);
 											title = url.replaceAll("[^0-9a-zA-Z]", " ").replaceAll("[ ]+", " ");
@@ -291,21 +310,73 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public Map<String, Long> countByTermAndDay(String term, String from, String to) {
-		if (from != null && !from.isEmpty() && to != null && !to.isEmpty()) {
-			try {
-				int yearFrom = Integer.parseInt(from.substring(0, 4));
-				int monthFrom = Integer.parseInt(from.substring(4, 6));
-				int dayFrom = Integer.parseInt(from.substring(6, 8));
-				int yearTo = Integer.parseInt(to.substring(0, 4));
-				int monthTo = Integer.parseInt(to.substring(4, 6));
-				int dayTo = Integer.parseInt(to.substring(6, 8));
-				return countByTermAndDayFromTo(term, yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo);
-			} catch (NumberFormatException e) {
-				return Maps.newHashMap();
+		// NativeSearchQueryBuilder searchBuilder = new
+		// NativeSearchQueryBuilder().withQuery(QueryBuilder)(query).addIndex("jug").addType("talk");
+		// SearchResponse result =
+		// elasticsearchOperations.getClient().execute(searchBuilder.build());
+
+		// TermQueryBuilder aggregation = AggregationBuilders.filter("term",
+		// ).field("tags")
+		// .order(Terms.Order.aggregation("_count", false));
+		// SearchResponse response =
+		// client.prepareSearch("blog").setTypes("article").addAggregation(aggregation).execute()
+		// .actionGet();
+		//
+		// Map<String, Aggregation> results = response.getAggregations().asMap();
+		// StringTerms topTags = (StringTerms) results.get("top_tags");
+		//
+		// List<String> keys = topTags.getBuckets().stream().map(b ->
+		// b.getKeyAsString()).collect(toList());
+
+		// @// @formatter:off
+		String query = "{" + 
+				"	\"size\": 1," + 
+				"	\"aggs\": {" + 
+				"		\"main\": {" + 
+				"			\"filter\" : { \"regexp\": { \"title\": \".*bitcoin.*\" } }," + 
+				"			\"aggs\": {" + 
+				"				\"year\": {" + 
+				"					\"terms\": {" + 
+				"						\"field\": \"year.raw\"" + 
+				"					}," + 
+				"					\"aggs\": {" + 
+				"						\"month\": {" + 
+				"							\"terms\": {" + 
+				"								\"order\" : { \"_term\" : \"asc\" }," + 
+				"								\"field\": \"month.raw\"" + 
+				"							}," + 
+				"							\"aggs\": {" + 
+				"								\"day\": {" + 
+				"									\"terms\": {" + 
+				"										\"order\" : { \"_term\" : \"asc\" }," + 
+				"										\"field\": \"day.raw\"," + 
+				"										\"size\": 31" + 
+				"									}" + 
+				"								}" + 
+				"							}          " + 
+				"						}" + 
+				"					}" + 
+				"				}" + 
+				"			}" + 
+				"		}" + 
+				"	}" + 
+				"}";
+		// @formatter:on
+
+		Client client = elasticsearchOperations.getClient();
+		// QueryBuilders.wrapperQuery(query.getBytes()).;
+		SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
+				.withSearchType(SearchType.DEFAULT).withIndices("article-2018.01.18").withTypes("csv")
+				.addAggregation(terms("bitcoin").field("subject")).build();
+		// when
+		Aggregations aggregations = elasticsearchOperations.query(searchQuery, new ResultsExtractor<Aggregations>() {
+			@Override
+			public Aggregations extract(SearchResponse response) {
+				return response.getAggregations();
 			}
-		} else {
-			return countByTermAndDay(term);
-		}
+		});
+
+		System.out.println(aggregations.asMap());
 	}
 
 	@Override

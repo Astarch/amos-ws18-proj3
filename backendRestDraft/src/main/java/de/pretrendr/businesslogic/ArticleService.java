@@ -44,4 +44,6 @@ public interface ArticleService {
 
 	void deleteAll();
 
+	void delete(List<Article> articles);
+
 }

@@ -112,6 +112,16 @@ public class GdeltDataController {
 	@RequestMapping(value = "/deleteAll", method = RequestMethod.GET)
 	public ResponseEntity<Boolean> deleteAll(@RequestParam(value = "delete", defaultValue = "") final String pass)
 			throws IOException {
+		// Page<Article> page =
+		// articleService.getArticleRepository().findByTypeCustom(new PageRequest(0,
+		// 10));
+		// System.out.println(page);
+		// System.out.println(page.getContent());
+		System.out.println(articleService.getArticleRepository().findAllByYear("2015", new PageRequest(0, 100)));
+		articleService.getArticleRepository().deleteAllByYearAndMonth("2017", "01");
+		// System.out.println();
+		System.out.println("done");
+
 		if (pass.equals("DELETEALL")) {
 			articleService.deleteAll();
 			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
