@@ -7,7 +7,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
   <!---->
    
   <a
-    name="about"
+    id="home"
   />
    
   <div
@@ -75,7 +75,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
   </div>
    
   <a
-    name="services"
+    id="about-pretrendr"
   />
    
   <div
@@ -116,7 +116,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
             class="lead"
           >
             Pretrendr simplifies the identification of existing and emerging trends that reshape industries. 
-            News are linked and refined to evaluate trends in order to deliver accurate results.We provide an easy-to-use 
+            News are linked and refined to evaluate trends in order to deliver accurate results. We provide an easy-to-use 
             webpage where trends can be monitored
             and identified.
           </p>
@@ -134,6 +134,10 @@ exports[`Landing.test.js has the expected html structure 1`] = `
       </div>
     </div>
   </div>
+   
+  <a
+    id="about-us"
+  />
    
   <div
     class="content-section-b"
@@ -168,7 +172,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
             We are a team of seven students from the TU Berlin who came together in a course about agile methods and 
             open source software development. Each team member is studying towards the master of science degree in a 
             software related field. Lara, Tristan, Joud and Scott are studying Computer Science, Florian and Patrick 
-            Information Systems and Antonia Computer Engineering.
+            Information Systems Management and Antonia Computer Engineering.
           
           </p>
         </div>

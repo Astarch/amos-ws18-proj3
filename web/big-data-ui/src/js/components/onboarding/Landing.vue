@@ -5,7 +5,7 @@
       <git-info :isActive="isGitInfoShown"></git-info>
     </landing-header>
     <!-- Header -->
-    <a name="about"></a>
+    <a id="home"></a>
     <div class="intro-header" v-bind:style="{'padding-top': isGitInfoShown ? '80px': '50px'}">
       <div class="container">
   
@@ -36,9 +36,8 @@
     <!-- /.intro-header -->
   
     <!-- Page Content -->
-    <a name="services"></a>
-    <div class="content-section-a">
-  
+    <a id="about-pretrendr"></a>
+    <div class="content-section-a">  
       <div class="container">
         <div class="row display-flex">
           <div class="col-lg-5 col-sm-6">
@@ -49,7 +48,7 @@
               It is a web-based solution to extract trend data out of the worlds broadcast, print and web news and predict 
               if it will become a trend.</p>
             <p class="lead">Pretrendr simplifies the identification of existing and emerging trends that reshape industries. 
-              News are linked and refined to evaluate trends in order to deliver accurate results.We provide an easy-to-use 
+              News are linked and refined to evaluate trends in order to deliver accurate results. We provide an easy-to-use 
               webpage where trends can be monitored
               and identified.</p>
           </div>
@@ -63,11 +62,9 @@
   
     </div>
     <!-- /.content-section-a -->
-  
-    <div class="content-section-b">
-  
-      <div class="container">
-  
+    <a id="about-us"/>
+    <div class="content-section-b">  
+      <div class="container">  
         <div class="row display-flex">
           <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
             <hr class="section-heading-spacer">
@@ -77,7 +74,7 @@
               We are a team of seven students from the TU Berlin who came together in a course about agile methods and 
               open source software development. Each team member is studying towards the master of science degree in a 
               software related field. Lara, Tristan, Joud and Scott are studying Computer Science, Florian and Patrick 
-              Information Systems and Antonia Computer Engineering.
+              Information Systems Management and Antonia Computer Engineering.
             </p>
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
