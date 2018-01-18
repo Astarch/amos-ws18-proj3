@@ -112,9 +112,8 @@ public class GdeltDataController {
 	@RequestMapping(value = "/deleteAll", method = RequestMethod.GET)
 	public ResponseEntity<Boolean> deleteAll(@RequestParam(value = "delete", defaultValue = "") final String pass)
 			throws IOException {
-		if (pass.equals("YESWECAN!")) {
-			// commented out for sake of insanity
-			// articleService.deleteAll();
+		if (pass.equals("DELETEALL")) {
+			articleService.deleteAll();
 			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 		}
 		return new ResponseEntity<Boolean>(false, HttpStatus.OK);

@@ -158,9 +158,9 @@ public class ArticleServiceImpl implements ArticleService {
 			String url;
 			String eventDate;
 			String mentionDate;
-			String year;
-			String month;
-			String day;
+			String year = null;
+			String month = null;
+			String day = null;
 			String domain;
 			String title;
 			int outerArticleCount = 0;
@@ -188,7 +188,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 			while ((line = br.readLine()) != null && outerArticleCount < articleLimit && fileCount < fileLimit) {
 				masterLineCount++;
-				if (masterLineCount % 10 != 0) { // read only each 10th file, for better data distribution over days
+				if (masterLineCount % 5 != 0) { // read only each n-th file, for better data distribution over days
 					continue;
 				}
 				Matcher matcher = pattern.matcher(line);
@@ -253,13 +253,7 @@ public class ArticleServiceImpl implements ArticleService {
 													+ ") from " + fileCount + " files @ "
 													+ Math.floor(outerArticleCount
 															/ ((System.nanoTime() - startTime) / 1e9) * 100) / 100
-													+ " ("
-													+ Math.floor(
-															((double) outerArticleCount) / articleLimit * 100 * 1000)
-															/ 1000
-													+ "% articles, "
-													+ Math.floor(((double) fileCount) / fileLimit * 100 * 1000) / 1000
-													+ "% files)");
+													+ " last: " + year + month + day);
 											save(articles);
 											articles.clear();
 										}
@@ -267,15 +261,9 @@ public class ArticleServiceImpl implements ArticleService {
 									tmpReader.close();
 									if (articles.size() > 0) {
 										log.debug("saving articles: " + outerArticleCount + "(+" + articles.size()
-												+ ") from " + fileCount + " files @ "
-												+ Math.floor(outerArticleCount / ((System.nanoTime() - startTime) / 1e9)
-														* 100) / 100
-												+ " ("
-												+ Math.floor(((double) outerArticleCount) / articleLimit * 100 * 1000)
-														/ 1000
-												+ "% articles, "
-												+ Math.floor(((double) fileCount) / fileLimit * 100 * 1000) / 1000
-												+ "% files)");
+												+ ") from " + fileCount + " files @ " + Math.floor(outerArticleCount
+														/ ((System.nanoTime() - startTime) / 1e9) * 100) / 100
+												+ " last: " + year + month + day);
 										save(articles);
 									}
 									articles.clear();
@@ -327,7 +315,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public void deleteAll() {
-		articleRepository.deleteAll();
+		// articleRepository.deleteByYearAndMonthAndDay("2017", "01", "02");
 	}
 
 	@Override

@@ -19,4 +19,6 @@ public interface ArticleDAO extends ElasticsearchRepository<Article, String> {
 
 	@Override
 	void deleteAll();
+
+	void deleteByYearAndMonthAndDay(String year, String month, String day);
 }
