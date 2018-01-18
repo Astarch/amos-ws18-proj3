@@ -19,5 +19,4 @@ ssh -i AMOS_EC2_KEY.pem -o BatchMode=yes -o StrictHostKeyChecking=no ubuntu@18.2
 echo "Step6"
 ssh -i AMOS_EC2_KEY.pem -o BatchMode=yes -o StrictHostKeyChecking=no ubuntu@18.216.129.153 "cd /home/ubuntu/pretrendr/backend/repo/backendRestDraft; sudo mv /home/ubuntu/pretrendr/backend/repo/backendRestDraft/target/pretrendr-0.1.0.jar /home/ubuntu/pretrendr/backend; sudo mv /home/ubuntu/pretrendr/backend/repo/backendRestDraft/src /home/ubuntu/pretrendr/backend/; sudo systemctl start pretrendr.service"
 sudo rm AMOS_EC2_KEY.pem
-sudo rm AMOS_EC2_KEY.pem
 echo "Test: Pretrendr (Backend) deployed"
