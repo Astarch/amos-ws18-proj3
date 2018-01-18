@@ -15,6 +15,8 @@ ssh -i AMOS_EC2_KEY.pem -o BatchMode=yes -o StrictHostKeyChecking=no ubuntu@18.2
 echo "Step4"
 ssh -i AMOS_EC2_KEY.pem -o BatchMode=yes -o StrictHostKeyChecking=no ubuntu@18.216.122.218 "cd /home/ubuntu/pretrendr/backend/repo/backendRestDraft; sudo mvn clean install"
 echo "Step5"
+ssh -i AMOS_EC2_KEY.pem -o BatchMode=yes -o StrictHostKeyChecking=no ubuntu@18.216.122.218 "sleep 15; sudo mv /home/ubuntu/pretrendr/backend/repo/backendRestDraft/keystore.p12 /home/ubuntu/pretrendr/backend/"
+echo "Step6"
 ssh -i AMOS_EC2_KEY.pem -o BatchMode=yes -o StrictHostKeyChecking=no ubuntu@18.216.122.218 "cd /home/ubuntu/pretrendr/backend/repo/backendRestDraft; sudo mv /home/ubuntu/pretrendr/backend/repo/backendRestDraft/target/pretrendr-0.1.0.jar /home/ubuntu/pretrendr/backend; sudo mv /home/ubuntu/pretrendr/backend/repo/backendRestDraft/src /home/ubuntu/pretrendr/backend/; sudo systemctl start pretrendr.service"
 sudo rm AMOS_EC2_KEY.pem
 echo "Production: Pretrendr (Backend) deployed"
