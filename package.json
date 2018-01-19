@@ -1,0 +1,12 @@
+{
+    "name": "pretrendr",
+    "description": "Firebase wrapper project",
+    "version": "0.0.1",
+    "author": "Patrick Willmann <patrick.m.willmann@gmail.com>",
+    "private": true,
+    "dependencies": {
+        "firebase-tools": "^3.16.0"
+    },
+    "license": "MIT",
+    "repository": "git@github.com:Astarch/amos-ws18-proj3.git"
+}
