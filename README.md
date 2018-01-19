@@ -12,7 +12,7 @@ Pretrendr consists of five components:
 * Common Crawl (data source)
 
 The following picture shows the interaction between the five components:
-![Pretrendr architecture](architecture/pretrendr_advanced_new.jpeg?raw=true "Pretrendr architecture")
+![Pretrendr architecture](architecture/pretrendr_advanced.jpeg?raw=true "Pretrendr architecture")
 
 
 ## Staging (test / production system)
