@@ -89,6 +89,19 @@ jobs:
               aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --region us-east-2 --acl public-read --delete
               echo "deployed to staging";
             fi
+      - run:
+          name: Deploy Frontend to Firebase
+          working_directory: ~/repo
+          command: |
+            sudo yarn            
+            if [[ $CIRCLE_BRANCH == "master" ]]; then
+              sudo ./node_modules/.bin/firebase deploy -P default --token=$FIREBASE_TOKEN --non-interactive
+              echo "deployed to staging";
+            else
+              sudo ./node_modules/.bin/firebase deploy -P staging --token=$FIREBASE_TOKEN --non-interactive
+              echo "deployed to staging";
+            fi
+            
 
   backend_deploy:
     docker:
