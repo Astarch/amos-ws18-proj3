@@ -11,7 +11,7 @@ import EngagementLayout from '../components/engagement/EngagementLayout';
 import Dashboard from '../components/engagement/dashboard/Dashboard';
 import UserProfile from '../components/engagement/user-profile/UserProfile';
 import TableList from '../components/engagement/table-list/TableList';
-import ErrorNotFound from '../components/engagement/fallback/ErrorNotFound';
+import ErrorNotFound from '../components/common/ErrorNotFound';
 
 
 Vue.use(VueResource);
