@@ -104,51 +104,6 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public Map<String, Long> countByTermAndDay(String term) {
-		Map<String, Long> map = Maps.newHashMap();
-		for (int i = 2017; i < 2018; i++) {
-			String year = Integer.toString(i);
-			for (int m = 1; m <= 12; m++) {
-				String month = (m < 10 ? "0" : "") + Integer.toString(m);
-				for (int d = 1; d <= 31; d++) {
-					String day = (d < 10 ? "0" : "") + Integer.toString(d);
-					long count = articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year, month, day);
-					if (map.containsKey(year + month)) {
-						map.put(year + month + day, count + map.get(year + month));
-					} else {
-						map.put(year + month + day, count);
-					}
-				}
-			}
-		}
-		return map;
-	}
-
-	@Override
-	public Map<String, Long> countByTermAndMonthFromTo(String term, int yearFrom, int monthFrom, int dayFrom,
-			int yearTo, int monthTo, int dayTo) {
-		boolean firstRun = true;
-		Map<String, Long> map = Maps.newHashMap();
-		for (int i = yearFrom; i <= yearTo; i++) {
-			String year = Integer.toString(i);
-			for (int m = firstRun ? monthFrom : 1; m <= (i == yearTo ? monthTo : 12); m++) {
-				String month = (m < 10 ? "0" : "") + Integer.toString(m);
-				for (int d = firstRun ? dayFrom : 1; d <= (i == yearTo && m == monthTo ? dayTo : 31); d++) {
-					firstRun = false;
-					String day = (d < 10 ? "0" : "") + Integer.toString(d);
-					long count = articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year, month, day);
-					if (map.containsKey(year + month)) {
-						map.put(year + month, count + map.get(year + month));
-					} else {
-						map.put(year + month, count);
-					}
-				}
-			}
-		}
-		return map;
-	}
-
-	@Override
 	public void crawlData() {
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(
 				new URL("http://data.gdeltproject.org/gdeltv2/masterfilelist.txt").openStream()))) {
@@ -311,61 +266,17 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	public long countAll() {
+		return articleRepository.count();
+	}
+
+	@Override
+	public void deleteAll() {
+	}
+
+	@Override
 	public Map<String, Long> countByTermAndDay(String term, String from, String to) {
 		Map<String, Long> resultMap = Maps.newHashMap();
-		// NativeSearchQueryBuilder searchBuilder = new
-		// NativeSearchQueryBuilder().withQuery(QueryBuilder)(query).addIndex("jug").addType("talk");
-		// SearchResponse result =
-		// elasticsearchOperations.getClient().execute(searchBuilder.build());
-
-		// TermQueryBuilder aggregation = AggregationBuilders.filter("term",
-		// ).field("tags")
-		// .order(Terms.Order.aggregation("_count", false));
-		// SearchResponse response =
-		// client.prepareSearch("blog").setTypes("article").addAggregation(aggregation).execute()
-		// .actionGet();
-		//
-		// Map<String, Aggregation> results = response.getAggregations().asMap();
-		// StringTerms topTags = (StringTerms) results.get("top_tags");
-		//
-		// List<String> keys = topTags.getBuckets().stream().map(b ->
-		// b.getKeyAsString()).collect(toList());
-
-		// @// @formatter:off
-		String query = "{" + 
-				"	\"size\": 1," + 
-				"	\"aggs\": {" + 
-				"		\"main\": {" + 
-				"			\"filter\" : { \"regexp\": { \"title\": \".*bitcoin.*\" } }," + 
-				"			\"aggs\": {" + 
-				"				\"year\": {" + 
-				"					\"terms\": {" + 
-				"						\"field\": \"year.raw\"" + 
-				"					}," + 
-				"					\"aggs\": {" + 
-				"						\"month\": {" + 
-				"							\"terms\": {" + 
-				"								\"order\" : { \"_term\" : \"asc\" }," + 
-				"								\"field\": \"month.raw\"" + 
-				"							}," + 
-				"							\"aggs\": {" + 
-				"								\"day\": {" + 
-				"									\"terms\": {" + 
-				"										\"order\" : { \"_term\" : \"asc\" }," + 
-				"										\"field\": \"day.raw\"," + 
-				"										\"size\": 31" + 
-				"									}" + 
-				"								}" + 
-				"							}          " + 
-				"						}" + 
-				"					}" + 
-				"				}" + 
-				"			}" + 
-				"		}" + 
-				"	}" + 
-				"}";
-		// @formatter:on
-
 		SearchQuery aSearchQuery = new NativeSearchQueryBuilder()
 				.withQuery(boolQuery().must(termQuery("title", term))
 						.must(rangeQuery("dateadded").from(from + "000000").to(to + "235959")))
@@ -408,75 +319,38 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public long countAll() {
-		return articleRepository.count();
-	}
-
-	@Override
-	public void deleteAll() {
-	}
-
-	@Override
 	public Map<String, Long> countByTermAndMonth(String term, String from, String to) {
-		if (from != null && !from.isEmpty() && to != null && !to.isEmpty()) {
-			try {
-				int yearFrom = Integer.parseInt(from.substring(0, 4));
-				int monthFrom = Integer.parseInt(from.substring(4, 6));
-				int dayFrom = Integer.parseInt(from.substring(6, 8));
-				int yearTo = Integer.parseInt(to.substring(0, 4));
-				int monthTo = Integer.parseInt(to.substring(4, 6));
-				int dayTo = Integer.parseInt(to.substring(6, 8));
-				return countByTermAndMonthFromTo(term, yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo);
-			} catch (NumberFormatException e) {
-				return Maps.newHashMap();
-			}
-		} else {
-			return countByTermAndMonth(term);
-		}
-	}
-
-	@Override
-	public Map<String, Long> countByTermAndMonth(String term) {
-		Map<String, Long> map = Maps.newHashMap();
-		for (int i = 2017; i < 2018; i++) {
-			String year = Integer.toString(i);
-			for (int m = 1; m <= 12; m++) {
-				String month = (m < 10 ? "0" : "") + Integer.toString(m);
-				for (int d = 1; d <= 31; d++) {
-					String day = (d < 10 ? "0" : "") + Integer.toString(d);
-					long count = articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year, month, day);
-					if (map.containsKey(year + month)) {
-						map.put(year + month, count + map.get(year + month));
-					} else {
-						map.put(year + month, count);
+		Map<String, Long> resultMap = Maps.newHashMap();
+		SearchQuery aSearchQuery = new NativeSearchQueryBuilder()
+				.withQuery(boolQuery().must(termQuery("title", term))
+						.must(rangeQuery("dateadded").from(from + "000000").to(to + "235959")))
+				.withIndices("article-2018.01.18").withTypes("csv").addAggregation(terms("byYear").field("year")
+						.size(10).subAggregation(AggregationBuilders.terms("byMonth").field("month").size(12)))
+				.build();
+		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
+				new ResultsExtractor<Aggregations>() {
+					@Override
+					public Aggregations extract(SearchResponse aResponse) {
+						return aResponse.getAggregations();
 					}
-				}
-			}
-		}
-		return map;
-	}
+				});
+		Terms aField1Terms = aField1Aggregations.get("byYear");
+		aField1Terms.getBuckets().stream().forEach(yearBucket -> {
+			Object yearValue = yearBucket.getKey();
+			Terms aField2Terms = yearBucket.getAggregations().get("byMonth");
 
-	@Override
-	public Map<String, Long> countByTermAndDayFromTo(String term, int yearFrom, int monthFrom, int dayFrom, int yearTo,
-			int monthTo, int dayTo) {
-		boolean firstRun = true;
-		Map<String, Long> map = Maps.newHashMap();
-		for (int i = yearFrom; i <= yearTo; i++) {
-			String year = Integer.toString(i);
-			for (int m = firstRun ? monthFrom : 1; m <= (i == yearTo ? monthTo : 12); m++) {
-				String month = (m < 10 ? "0" : "") + Integer.toString(m);
-				for (int d = firstRun ? dayFrom : 1; d <= (i == yearTo && m == monthTo ? dayTo : 31); d++) {
-					firstRun = false;
-					String day = (d < 10 ? "0" : "") + Integer.toString(d);
-					long count = articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year, month, day);
-					if (map.containsKey(year + month)) {
-						map.put(year + month + day, count + map.get(year + month));
-					} else {
-						map.put(year + month + day, count);
-					}
-				}
-			}
-		}
-		return map;
+			aField2Terms.getBuckets().stream().forEach(monthBucket -> {
+				Object monthValue = monthBucket.getKey();
+
+				Long count = monthBucket.getDocCount();
+
+				String year = yearValue.toString();
+				String month = monthValue.toString().length() < 2 ? "0" + monthValue.toString() : monthValue.toString();
+				resultMap.put(year + month, count);
+			});
+		});
+
+		return resultMap;
+
 	}
 }

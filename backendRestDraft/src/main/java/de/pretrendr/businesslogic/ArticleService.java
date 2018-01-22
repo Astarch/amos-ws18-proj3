@@ -24,19 +24,9 @@ public interface ArticleService {
 
 	long countByTerm(String term);
 
-	Map<String, Long> countByTermAndDay(String term);
-
 	Map<String, Long> countByTermAndDay(String term, String from, String to);
 
-	Map<String, Long> countByTermAndDayFromTo(String term, int yearFrom, int monthFrom, int dayFrom, int yearTo,
-			int monthTo, int dayTo);
-
-	Map<String, Long> countByTermAndMonth(String term);
-
 	Map<String, Long> countByTermAndMonth(String term, String from, String to);
-
-	Map<String, Long> countByTermAndMonthFromTo(String term, int yearFrom, int monthFrom, int dayFrom, int yearTo,
-			int monthTo, int dayTo);
 
 	void crawlData();
 
