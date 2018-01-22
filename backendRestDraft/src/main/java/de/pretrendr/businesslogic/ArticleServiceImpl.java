@@ -1,7 +1,6 @@
 package de.pretrendr.businesslogic;
 
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
-import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
@@ -25,9 +24,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchType;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -192,7 +188,7 @@ public class ArticleServiceImpl implements ArticleService {
 			int fileCount = 0;
 			int skipped = 0;
 			int masterLineCount = 0;
-			int articleLimit = 1000000;
+			int articleLimit = 10000000;
 			int fileLimit = 10000;
 			// read masterfile line by line
 			long startTime = System.nanoTime();
@@ -370,23 +366,6 @@ public class ArticleServiceImpl implements ArticleService {
 				"}";
 		// @formatter:on
 
-		Client client = elasticsearchOperations.getClient();
-		// QueryBuilders.wrapperQuery(query.getBytes()).;
-		SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
-				.withSearchType(SearchType.DEFAULT).withIndices("article-2018.01.18").withTypes("csv")
-				.addAggregation(terms("bitcoin").field("title").subAggregation(terms("01").field("01"))).build();
-		// when
-		Aggregations aggregations = elasticsearchOperations.query(searchQuery, new ResultsExtractor<Aggregations>() {
-			@Override
-			public Aggregations extract(SearchResponse response) {
-				return response.getAggregations();
-			}
-		});
-
-		Map<String, Aggregation> map = aggregations.asMap();
-		System.out.println(map);
-
-		// List<FieldObject> fieldObjectList = Lists.newArrayList();
 		SearchQuery aSearchQuery = new NativeSearchQueryBuilder()
 				.withQuery(boolQuery().must(termQuery("title", term))
 						.must(rangeQuery("dateadded").from(from + "000000").to(to + "235959")))
@@ -404,17 +383,17 @@ public class ArticleServiceImpl implements ArticleService {
 					}
 				});
 		Terms aField1Terms = aField1Aggregations.get("byYear");
-		aField1Terms.getBuckets().stream().forEach(aField1Bucket -> {
-			Object yearValue = aField1Bucket.getKey();
-			Terms aField2Terms = aField1Bucket.getAggregations().get("byMonth");
+		aField1Terms.getBuckets().stream().forEach(yearBucket -> {
+			Object yearValue = yearBucket.getKey();
+			Terms aField2Terms = yearBucket.getAggregations().get("byMonth");
 
-			aField2Terms.getBuckets().stream().forEach(aField2Bucket -> {
-				Object monthValue = aField2Bucket.getKey();
-				Terms aField3Terms = aField2Bucket.getAggregations().get("byDay");
+			aField2Terms.getBuckets().stream().forEach(monthBucket -> {
+				Object monthValue = monthBucket.getKey();
+				Terms aField3Terms = monthBucket.getAggregations().get("byDay");
 
-				aField3Terms.getBuckets().stream().forEach(aField3Bucket -> {
-					Object dayValue = aField3Bucket.getKey();
-					Long count = aField3Bucket.getDocCount();
+				aField3Terms.getBuckets().stream().forEach(dayBucket -> {
+					Object dayValue = dayBucket.getKey();
+					Long count = dayBucket.getDocCount();
 
 					String year = yearValue.toString().length() < 2 ? "0" + yearValue.toString() : yearValue.toString();
 					String month = monthValue.toString().length() < 2 ? "0" + monthValue.toString()
@@ -435,7 +414,6 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public void deleteAll() {
-		// articleRepository.deleteByYearAndMonthAndDay("2017", "01", "02");
 	}
 
 	@Override
