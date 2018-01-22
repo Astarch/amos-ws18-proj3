@@ -1,6 +1,9 @@
 package de.pretrendr.businesslogic;
 
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
+import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
 
 import java.io.BufferedReader;
@@ -24,7 +27,10 @@ import java.util.zip.ZipInputStream;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.search.aggregations.Aggregation;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -310,6 +316,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public Map<String, Long> countByTermAndDay(String term, String from, String to) {
+		Map<String, Long> resultMap = Maps.newHashMap();
 		// NativeSearchQueryBuilder searchBuilder = new
 		// NativeSearchQueryBuilder().withQuery(QueryBuilder)(query).addIndex("jug").addType("talk");
 		// SearchResponse result =
@@ -367,7 +374,7 @@ public class ArticleServiceImpl implements ArticleService {
 		// QueryBuilders.wrapperQuery(query.getBytes()).;
 		SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(matchAllQuery())
 				.withSearchType(SearchType.DEFAULT).withIndices("article-2018.01.18").withTypes("csv")
-				.addAggregation(terms("bitcoin").field("subject")).build();
+				.addAggregation(terms("bitcoin").field("title").subAggregation(terms("01").field("01"))).build();
 		// when
 		Aggregations aggregations = elasticsearchOperations.query(searchQuery, new ResultsExtractor<Aggregations>() {
 			@Override
@@ -376,7 +383,49 @@ public class ArticleServiceImpl implements ArticleService {
 			}
 		});
 
-		System.out.println(aggregations.asMap());
+		Map<String, Aggregation> map = aggregations.asMap();
+		System.out.println(map);
+
+		// List<FieldObject> fieldObjectList = Lists.newArrayList();
+		SearchQuery aSearchQuery = new NativeSearchQueryBuilder()
+				.withQuery(boolQuery().must(termQuery("title", term))
+						.must(rangeQuery("dateadded").from(from + "000000").to(to + "235959")))
+				.withIndices("article-2018.01.18").withTypes("csv")
+				.addAggregation(
+						terms("byYear").field("year").size(10)
+								.subAggregation(AggregationBuilders.terms("byMonth").field("month").size(12)
+										.subAggregation(AggregationBuilders.terms("byDay").field("day")).size(31)))
+				.build();
+		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
+				new ResultsExtractor<Aggregations>() {
+					@Override
+					public Aggregations extract(SearchResponse aResponse) {
+						return aResponse.getAggregations();
+					}
+				});
+		Terms aField1Terms = aField1Aggregations.get("byYear");
+		aField1Terms.getBuckets().stream().forEach(aField1Bucket -> {
+			Object yearValue = aField1Bucket.getKey();
+			Terms aField2Terms = aField1Bucket.getAggregations().get("byMonth");
+
+			aField2Terms.getBuckets().stream().forEach(aField2Bucket -> {
+				Object monthValue = aField2Bucket.getKey();
+				Terms aField3Terms = aField2Bucket.getAggregations().get("byDay");
+
+				aField3Terms.getBuckets().stream().forEach(aField3Bucket -> {
+					Object dayValue = aField3Bucket.getKey();
+					Long count = aField3Bucket.getDocCount();
+
+					String year = yearValue.toString().length() < 2 ? "0" + yearValue.toString() : yearValue.toString();
+					String month = monthValue.toString().length() < 2 ? "0" + monthValue.toString()
+							: monthValue.toString();
+					String day = dayValue.toString().length() < 2 ? "0" + dayValue.toString() : dayValue.toString();
+					resultMap.put(year + month + day, count);
+				});
+			});
+		});
+
+		return resultMap;
 	}
 
 	@Override
