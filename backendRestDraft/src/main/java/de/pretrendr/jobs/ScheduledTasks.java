@@ -8,11 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import de.pretrendr.businesslogic.ArticleService;
-import de.pretrendr.businesslogic.S3Service;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -26,14 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 public class ScheduledTasks implements ApplicationRunner {
 
 	@Autowired
-	public S3Service s3Service;
-	
-	@Autowired
 	public ArticleService articleService;
 
-	@Value("${pretrendr.s3.update.onstart}")
-	private boolean s3UpdateOnStart;
-	
 	@Value("${pretrendr.gdelt.update.onstart}")
 	private boolean gdeltUpdateOnStart;
 
@@ -42,43 +34,15 @@ public class ScheduledTasks implements ApplicationRunner {
 	 */
 	@Override
 	public void run(ApplicationArguments arg0) throws Exception {
-		if (s3UpdateOnStart) {
-			log.info("S3 cache update on startup invoked, because config said so.");
-			startS3WordCountJob();
-		} else {
-			log.info("S3 cache update on startup skipped, because config said so.");
-		}
-		
 		if (gdeltUpdateOnStart) {
 			log.info("Gdelt cache update on startup invoked, because config said so.");
 			startGdeltCrawl();
 		} else {
 			log.info("Gdelt cache update on startup skipped, because config said so.");
 		}
-		
+
 	}
 
-	/**
-	 * The jobs will be executed every night at midnight
-	 */
-	@Scheduled(cron = "0 0 0 * * ?")
-	public void updateCacheAtMidNight() {
-		log.info("Cache update invoked by scheduler.");
-		startS3WordCountJob();
-	}
-
-	/**
-	 * Word count: job to update the database from S3 buckets
-	 */
-	private void startS3WordCountJob() {
-		DateTime start = DateTime.now();
-
-		s3Service.updateAllBuckets();
-
-		log.info(MessageFormat.format("Finished cache update after {0} seconds.",
-				new Duration(start, DateTime.now()).getStandardSeconds()));
-	}
-	
 	private void startGdeltCrawl() {
 		DateTime start = DateTime.now();
 

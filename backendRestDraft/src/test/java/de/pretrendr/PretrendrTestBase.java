@@ -23,9 +23,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import de.pretrendr.boot.Application;
 import de.pretrendr.businesslogic.ArticleService;
-import de.pretrendr.dataccess.CachedS3BucketDAO;
-import de.pretrendr.dataccess.CachedS3ObjectDAO;
-import de.pretrendr.dataccess.CachedS3WordCountPairDAO;
 import de.pretrendr.dataccess.RoleDAO;
 import de.pretrendr.dataccess.UserDAO;
 
@@ -50,15 +47,6 @@ public abstract class PretrendrTestBase {
 
 	@Autowired
 	protected UserDAO userDAO;
-
-	@Autowired
-	protected CachedS3BucketDAO cachedS3BucketDAO;
-
-	@Autowired
-	protected CachedS3ObjectDAO cachedS3ObjectDAO;
-
-	@Autowired
-	protected CachedS3WordCountPairDAO cachedS3WordCountPairDAO;
 
 	@Autowired
 	protected WebApplicationContext webApplicationContext;
