@@ -11,6 +11,8 @@ import EngagementLayout from '../components/engagement/EngagementLayout';
 import Dashboard from '../components/engagement/dashboard/Dashboard';
 import UserProfile from '../components/engagement/user-profile/UserProfile';
 import TableList from '../components/engagement/table-list/TableList';
+import ErrorNotFound from '../components/common/ErrorNotFound';
+
 
 Vue.use(VueResource);
 Vue.use(Router);
@@ -65,11 +67,14 @@ const router = new Router({
                     name: 'table-list',
                     component: TableList
                 },
+                {
+                    path: '*',
+                    component : ErrorNotFound
+                },
 
             ]
         },
-        { path: '', redirect: '/' },
-        { path: '*', redirect: '/' }
+        { path: '*', component: ErrorNotFound }
     ],
 });
 

@@ -8,10 +8,11 @@ import store from 'src/js/store';
 
 let port = "8081/"
 let localhostUrl = "http://localhost:" + port;
-let stagingUrl = "http://18.216.129.153:" + port;
-let liveUrl = "http://18.216.122.218:" + port;
+let stagingUrl = "https://amos-backend-staging.flmuchow.com/"
+let liveUrl = "https://amos-backend-prod.flmuchow.com/";
+
 let baseUrl = stagingUrl
-baseUrl = (GIT.BRANCH && !GIT.BRANCH.includes("master")) ? liveUrl : stagingUrl;
+baseUrl = (GIT.BRANCH && GIT.BRANCH.includes("master")) ? liveUrl : stagingUrl;
 
 
 
