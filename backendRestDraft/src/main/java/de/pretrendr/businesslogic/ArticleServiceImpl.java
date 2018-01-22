@@ -2,7 +2,7 @@ package de.pretrendr.businesslogic;
 
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
-import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+import static org.elasticsearch.index.query.QueryBuilders.regexpQuery;
 import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
 
 import java.io.BufferedReader;
@@ -24,9 +24,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -277,15 +277,22 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public Map<String, Long> countByTermAndDay(String term, String from, String to) {
 		Map<String, Long> resultMap = Maps.newHashMap();
+		// @formatter:off
 		SearchQuery aSearchQuery = new NativeSearchQueryBuilder()
-				.withQuery(boolQuery().must(termQuery("title", term))
-						.must(rangeQuery("dateadded").from(from + "000000").to(to + "235959")))
-				.withIndices("article-2018.01.18").withTypes("csv")
+				.withQuery(
+					boolQuery().must(regexpQuery("title", ".*" + term + ".*"))
+							   .must(rangeQuery("dateadded").from(from + "000000").to(to + "235959"))
+				   )
+				.withIndices("article-2018.01.18")
+				.withTypes("csv")
 				.addAggregation(
-						terms("byYear").field("year").size(10)
-								.subAggregation(AggregationBuilders.terms("byMonth").field("month").size(12)
-										.subAggregation(AggregationBuilders.terms("byDay").field("day")).size(31)))
+					terms("byYear").field("year").size(10).order(Order.term(true))
+						.subAggregation(terms("byMonth").field("month").size(12).order(Order.term(true))
+							.subAggregation(terms("byDay").field("day").size(31).order(Order.term(true)))
+						)
+					)
 				.build();
+		// @formatter:on
 		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
 				new ResultsExtractor<Aggregations>() {
 					@Override
@@ -321,12 +328,20 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public Map<String, Long> countByTermAndMonth(String term, String from, String to) {
 		Map<String, Long> resultMap = Maps.newHashMap();
+		// @formatter:off
 		SearchQuery aSearchQuery = new NativeSearchQueryBuilder()
-				.withQuery(boolQuery().must(termQuery("title", term))
-						.must(rangeQuery("dateadded").from(from + "000000").to(to + "235959")))
-				.withIndices("article-2018.01.18").withTypes("csv").addAggregation(terms("byYear").field("year")
-						.size(10).subAggregation(AggregationBuilders.terms("byMonth").field("month").size(12)))
+				.withQuery(
+					boolQuery().must(regexpQuery("title", ".*" + term + ".*"))
+							   .must(rangeQuery("dateadded").from(from + "000000").to(to + "235959"))
+				   )
+				.withIndices("article-2018.01.18")
+				.withTypes("csv")
+				.addAggregation(
+					terms("byYear").field("year").size(10).order(Order.term(true))
+						.subAggregation(terms("byMonth").field("month").size(10).order(Order.term(true)))
+					)
 				.build();
+		// @formatter:on
 		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
 				new ResultsExtractor<Aggregations>() {
 					@Override
@@ -341,10 +356,9 @@ public class ArticleServiceImpl implements ArticleService {
 
 			aField2Terms.getBuckets().stream().forEach(monthBucket -> {
 				Object monthValue = monthBucket.getKey();
-
 				Long count = monthBucket.getDocCount();
 
-				String year = yearValue.toString();
+				String year = yearValue.toString().length() < 2 ? "0" + yearValue.toString() : yearValue.toString();
 				String month = monthValue.toString().length() < 2 ? "0" + monthValue.toString() : monthValue.toString();
 				resultMap.put(year + month, count);
 			});
