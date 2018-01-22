@@ -15,6 +15,7 @@
   @import '~bootstrap/dist/css/bootstrap.css';
   @import '../scss/base';
   @import '../scss/paper-dashboard';
+  @import '../scss/error';
 
   body {
    // background: map-get($theme-colors, 'dark');
