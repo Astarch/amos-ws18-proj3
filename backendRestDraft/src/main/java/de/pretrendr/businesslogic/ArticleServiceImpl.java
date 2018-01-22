@@ -132,7 +132,6 @@ public class ArticleServiceImpl implements ArticleService {
 			String line;
 			String id;
 			String url;
-			String eventDate;
 			String mentionDate;
 			int year = 0;
 			int month = 0;
@@ -145,11 +144,11 @@ public class ArticleServiceImpl implements ArticleService {
 			int masterLineCount = 0;
 			int articleLimit = 10000000;
 			int fileLimit = 10000;
-			// read masterfile line by line
 			long startTime = System.nanoTime();
 			Pattern pattern = Pattern.compile("([0-9]*?) ([0-9a-f]*) http://data.gdeltproject.org/gdeltv2/(.*)");
 			Pattern innerPattern = Pattern.compile("([0-9]*)\\t([0-9]*)\\t([0-9]*)\\t([0-9])\\t(.*?)\\t(http\\S*)");
 			int skipOldEntries = 0;
+			// read masterfile line by line
 			while ((line = br.readLine()) != null) {
 				Matcher innerMatcher = pattern.matcher(line);
 				skipOldEntries++;
@@ -213,7 +212,6 @@ public class ArticleServiceImpl implements ArticleService {
 										Matcher innerMatcher = innerPattern.matcher(line);
 										if (innerMatcher.find()) {
 											id = innerMatcher.group(1);
-											eventDate = innerMatcher.group(2);
 											mentionDate = innerMatcher.group(3);
 											year = Integer.parseInt(mentionDate.substring(0, 4));
 											month = Integer.parseInt(mentionDate.substring(4, 6));
@@ -365,6 +363,5 @@ public class ArticleServiceImpl implements ArticleService {
 		});
 
 		return resultMap;
-
 	}
 }
