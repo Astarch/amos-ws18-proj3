@@ -69,8 +69,8 @@ public class GdeltDataController {
 
 	@RequestMapping(value = "/wordcountByDay/{term}", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Long>> getWordCountByDay(@PathVariable String term,
-			@RequestParam(value = "from", defaultValue = "") final String from,
-			@RequestParam(value = "to", defaultValue = "") final String to) throws IOException {
+			@RequestParam(value = "from", defaultValue = "20170101") final String from,
+			@RequestParam(value = "to", defaultValue = "20171231") final String to) throws IOException {
 		Map<String, Long> list = articleService.countByTermAndDay(term, from, to);
 
 		return new ResponseEntity<Map<String, Long>>(list, HttpStatus.OK);
@@ -78,8 +78,8 @@ public class GdeltDataController {
 
 	@RequestMapping(value = "/wordcountByMonth/{term}", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Long>> getWordCountByMonth(@PathVariable String term,
-			@RequestParam(value = "from", defaultValue = "") final String from,
-			@RequestParam(value = "to", defaultValue = "") final String to) throws IOException {
+			@RequestParam(value = "from", defaultValue = "20170101") final String from,
+			@RequestParam(value = "to", defaultValue = "20171231") final String to) throws IOException {
 		Map<String, Long> list = articleService.countByTermAndMonth(term, from, to);
 
 		return new ResponseEntity<Map<String, Long>>(list, HttpStatus.OK);
@@ -112,6 +112,16 @@ public class GdeltDataController {
 	@RequestMapping(value = "/deleteAll", method = RequestMethod.GET)
 	public ResponseEntity<Boolean> deleteAll(@RequestParam(value = "delete", defaultValue = "") final String pass)
 			throws IOException {
+		// Page<Article> page =
+		// articleService.getArticleRepository().findByTypeCustom(new PageRequest(0,
+		// 10));
+		// System.out.println(page);
+		// System.out.println(page.getContent());
+		System.out.println(articleService.getArticleRepository().findAllByYear("2015", new PageRequest(0, 100)));
+		articleService.getArticleRepository().deleteAllByYearAndMonth("2017", "01");
+		// System.out.println();
+		System.out.println("done");
+
 		if (pass.equals("DELETEALL")) {
 			articleService.deleteAll();
 			return new ResponseEntity<Boolean>(true, HttpStatus.OK);

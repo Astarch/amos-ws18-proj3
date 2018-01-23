@@ -1,5 +1,10 @@
 package de.pretrendr.businesslogic;
 
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
+import static org.elasticsearch.index.query.QueryBuilders.regexpQuery;
+import static org.elasticsearch.search.aggregations.AggregationBuilders.terms;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,8 +23,16 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.ResultsExtractor;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
@@ -47,6 +60,9 @@ public class ArticleServiceImpl implements ArticleService {
 		this.gdeltCsvCacheDAO = gdeltCsvCacheDAO;
 	}
 
+	@Autowired
+	ElasticsearchOperations elasticsearchOperations;
+
 	@Override
 	public Article save(Article article) {
 		return articleRepository.save(article);
@@ -55,6 +71,11 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public void delete(Article article) {
 		articleRepository.delete(article);
+	}
+
+	@Override
+	public void delete(List<Article> articles) {
+		articleRepository.delete(articles);
 	}
 
 	@Override
@@ -80,51 +101,6 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public long countByTerm(String term) {
 		return articleRepository.countByTitleContaining(term);
-	}
-
-	@Override
-	public Map<String, Long> countByTermAndDay(String term) {
-		Map<String, Long> map = Maps.newHashMap();
-		for (int i = 2017; i < 2018; i++) {
-			String year = Integer.toString(i);
-			for (int m = 1; m <= 12; m++) {
-				String month = (m < 10 ? "0" : "") + Integer.toString(m);
-				for (int d = 1; d <= 31; d++) {
-					String day = (d < 10 ? "0" : "") + Integer.toString(d);
-					long count = articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year, month, day);
-					if (map.containsKey(year + month)) {
-						map.put(year + month + day, count + map.get(year + month));
-					} else {
-						map.put(year + month + day, count);
-					}
-				}
-			}
-		}
-		return map;
-	}
-
-	@Override
-	public Map<String, Long> countByTermAndMonthFromTo(String term, int yearFrom, int monthFrom, int dayFrom,
-			int yearTo, int monthTo, int dayTo) {
-		boolean firstRun = true;
-		Map<String, Long> map = Maps.newHashMap();
-		for (int i = yearFrom; i <= yearTo; i++) {
-			String year = Integer.toString(i);
-			for (int m = firstRun ? monthFrom : 1; m <= (i == yearTo ? monthTo : 12); m++) {
-				String month = (m < 10 ? "0" : "") + Integer.toString(m);
-				for (int d = firstRun ? dayFrom : 1; d <= (i == yearTo && m == monthTo ? dayTo : 31); d++) {
-					firstRun = false;
-					String day = (d < 10 ? "0" : "") + Integer.toString(d);
-					long count = articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year, month, day);
-					if (map.containsKey(year + month)) {
-						map.put(year + month, count + map.get(year + month));
-					} else {
-						map.put(year + month, count);
-					}
-				}
-			}
-		}
-		return map;
 	}
 
 	@Override
@@ -156,24 +132,23 @@ public class ArticleServiceImpl implements ArticleService {
 			String line;
 			String id;
 			String url;
-			String eventDate;
 			String mentionDate;
-			String year = null;
-			String month = null;
-			String day = null;
+			int year = 0;
+			int month = 0;
+			int day = 0;
 			String domain;
 			String title;
 			int outerArticleCount = 0;
 			int fileCount = 0;
 			int skipped = 0;
 			int masterLineCount = 0;
-			int articleLimit = 50000000;
+			int articleLimit = 10000000;
 			int fileLimit = 10000;
-			// read masterfile line by line
 			long startTime = System.nanoTime();
 			Pattern pattern = Pattern.compile("([0-9]*?) ([0-9a-f]*) http://data.gdeltproject.org/gdeltv2/(.*)");
 			Pattern innerPattern = Pattern.compile("([0-9]*)\\t([0-9]*)\\t([0-9]*)\\t([0-9])\\t(.*?)\\t(http\\S*)");
 			int skipOldEntries = 0;
+			// read masterfile line by line
 			while ((line = br.readLine()) != null) {
 				Matcher innerMatcher = pattern.matcher(line);
 				skipOldEntries++;
@@ -237,11 +212,10 @@ public class ArticleServiceImpl implements ArticleService {
 										Matcher innerMatcher = innerPattern.matcher(line);
 										if (innerMatcher.find()) {
 											id = innerMatcher.group(1);
-											eventDate = innerMatcher.group(2);
 											mentionDate = innerMatcher.group(3);
-											year = mentionDate.substring(0, 4);
-											month = mentionDate.substring(4, 6);
-											day = mentionDate.substring(6, 8);
+											year = Integer.parseInt(mentionDate.substring(0, 4));
+											month = Integer.parseInt(mentionDate.substring(4, 6));
+											day = Integer.parseInt(mentionDate.substring(6, 8));
 											domain = innerMatcher.group(5);
 											url = innerMatcher.group(6);
 											title = url.replaceAll("[^0-9a-zA-Z]", " ").replaceAll("[ ]+", " ");
@@ -290,95 +264,104 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public Map<String, Long> countByTermAndDay(String term, String from, String to) {
-		if (from != null && !from.isEmpty() && to != null && !to.isEmpty()) {
-			try {
-				int yearFrom = Integer.parseInt(from.substring(0, 4));
-				int monthFrom = Integer.parseInt(from.substring(4, 6));
-				int dayFrom = Integer.parseInt(from.substring(6, 8));
-				int yearTo = Integer.parseInt(to.substring(0, 4));
-				int monthTo = Integer.parseInt(to.substring(4, 6));
-				int dayTo = Integer.parseInt(to.substring(6, 8));
-				return countByTermAndDayFromTo(term, yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo);
-			} catch (NumberFormatException e) {
-				return Maps.newHashMap();
-			}
-		} else {
-			return countByTermAndDay(term);
-		}
-	}
-
-	@Override
 	public long countAll() {
 		return articleRepository.count();
 	}
 
 	@Override
 	public void deleteAll() {
-		// articleRepository.deleteByYearAndMonthAndDay("2017", "01", "02");
+	}
+
+	@Override
+	public Map<String, Long> countByTermAndDay(String term, String from, String to) {
+		Map<String, Long> resultMap = Maps.newHashMap();
+		// @formatter:off
+		SearchQuery aSearchQuery = new NativeSearchQueryBuilder()
+				.withQuery(
+					boolQuery().must(regexpQuery("title", ".*" + term + ".*"))
+							   .must(rangeQuery("dateadded").from(from + "000000").to(to + "235959"))
+				   )
+				.withIndices("article-2018.01.18")
+				.withTypes("csv")
+				.addAggregation(
+					terms("byYear").field("year").size(10).order(Order.term(true))
+						.subAggregation(terms("byMonth").field("month").size(12).order(Order.term(true))
+							.subAggregation(terms("byDay").field("day").size(31).order(Order.term(true)))
+						)
+					)
+				.build();
+		// @formatter:on
+		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
+				new ResultsExtractor<Aggregations>() {
+					@Override
+					public Aggregations extract(SearchResponse aResponse) {
+						return aResponse.getAggregations();
+					}
+				});
+		Terms aField1Terms = aField1Aggregations.get("byYear");
+		aField1Terms.getBuckets().stream().forEach(yearBucket -> {
+			Object yearValue = yearBucket.getKey();
+			Terms aField2Terms = yearBucket.getAggregations().get("byMonth");
+
+			aField2Terms.getBuckets().stream().forEach(monthBucket -> {
+				Object monthValue = monthBucket.getKey();
+				Terms aField3Terms = monthBucket.getAggregations().get("byDay");
+
+				aField3Terms.getBuckets().stream().forEach(dayBucket -> {
+					Object dayValue = dayBucket.getKey();
+					Long count = dayBucket.getDocCount();
+
+					String year = yearValue.toString().length() < 2 ? "0" + yearValue.toString() : yearValue.toString();
+					String month = monthValue.toString().length() < 2 ? "0" + monthValue.toString()
+							: monthValue.toString();
+					String day = dayValue.toString().length() < 2 ? "0" + dayValue.toString() : dayValue.toString();
+					resultMap.put(year + month + day, count);
+				});
+			});
+		});
+
+		return resultMap;
 	}
 
 	@Override
 	public Map<String, Long> countByTermAndMonth(String term, String from, String to) {
-		if (from != null && !from.isEmpty() && to != null && !to.isEmpty()) {
-			try {
-				int yearFrom = Integer.parseInt(from.substring(0, 4));
-				int monthFrom = Integer.parseInt(from.substring(4, 6));
-				int dayFrom = Integer.parseInt(from.substring(6, 8));
-				int yearTo = Integer.parseInt(to.substring(0, 4));
-				int monthTo = Integer.parseInt(to.substring(4, 6));
-				int dayTo = Integer.parseInt(to.substring(6, 8));
-				return countByTermAndMonthFromTo(term, yearFrom, monthFrom, dayFrom, yearTo, monthTo, dayTo);
-			} catch (NumberFormatException e) {
-				return Maps.newHashMap();
-			}
-		} else {
-			return countByTermAndMonth(term);
-		}
-	}
-
-	@Override
-	public Map<String, Long> countByTermAndMonth(String term) {
-		Map<String, Long> map = Maps.newHashMap();
-		for (int i = 2017; i < 2018; i++) {
-			String year = Integer.toString(i);
-			for (int m = 1; m <= 12; m++) {
-				String month = (m < 10 ? "0" : "") + Integer.toString(m);
-				for (int d = 1; d <= 31; d++) {
-					String day = (d < 10 ? "0" : "") + Integer.toString(d);
-					long count = articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year, month, day);
-					if (map.containsKey(year + month)) {
-						map.put(year + month, count + map.get(year + month));
-					} else {
-						map.put(year + month, count);
+		Map<String, Long> resultMap = Maps.newHashMap();
+		// @formatter:off
+		SearchQuery aSearchQuery = new NativeSearchQueryBuilder()
+				.withQuery(
+					boolQuery().must(regexpQuery("title", ".*" + term + ".*"))
+							   .must(rangeQuery("dateadded").from(from + "000000").to(to + "235959"))
+				   )
+				.withIndices("article-2018.01.18")
+				.withTypes("csv")
+				.addAggregation(
+					terms("byYear").field("year").size(10).order(Order.term(true))
+						.subAggregation(terms("byMonth").field("month").size(10).order(Order.term(true)))
+					)
+				.build();
+		// @formatter:on
+		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
+				new ResultsExtractor<Aggregations>() {
+					@Override
+					public Aggregations extract(SearchResponse aResponse) {
+						return aResponse.getAggregations();
 					}
-				}
-			}
-		}
-		return map;
-	}
+				});
+		Terms aField1Terms = aField1Aggregations.get("byYear");
+		aField1Terms.getBuckets().stream().forEach(yearBucket -> {
+			Object yearValue = yearBucket.getKey();
+			Terms aField2Terms = yearBucket.getAggregations().get("byMonth");
 
-	@Override
-	public Map<String, Long> countByTermAndDayFromTo(String term, int yearFrom, int monthFrom, int dayFrom, int yearTo,
-			int monthTo, int dayTo) {
-		boolean firstRun = true;
-		Map<String, Long> map = Maps.newHashMap();
-		for (int i = yearFrom; i <= yearTo; i++) {
-			String year = Integer.toString(i);
-			for (int m = firstRun ? monthFrom : 1; m <= (i == yearTo ? monthTo : 12); m++) {
-				String month = (m < 10 ? "0" : "") + Integer.toString(m);
-				for (int d = firstRun ? dayFrom : 1; d <= (i == yearTo && m == monthTo ? dayTo : 31); d++) {
-					firstRun = false;
-					String day = (d < 10 ? "0" : "") + Integer.toString(d);
-					long count = articleRepository.countByTitleContainingAndYearAndMonthAndDay(term, year, month, day);
-					if (map.containsKey(year + month)) {
-						map.put(year + month + day, count + map.get(year + month));
-					} else {
-						map.put(year + month + day, count);
-					}
-				}
-			}
-		}
-		return map;
+			aField2Terms.getBuckets().stream().forEach(monthBucket -> {
+				Object monthValue = monthBucket.getKey();
+				Long count = monthBucket.getDocCount();
+
+				String year = yearValue.toString().length() < 2 ? "0" + yearValue.toString() : yearValue.toString();
+				String month = monthValue.toString().length() < 2 ? "0" + monthValue.toString() : monthValue.toString();
+				resultMap.put(year + month, count);
+			});
+		});
+
+		return resultMap;
 	}
 }
