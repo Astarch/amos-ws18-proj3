@@ -69,7 +69,7 @@
           <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
             <hr class="section-heading-spacer">
             <div class="clearfix"></div>
-            <h2 class="section-heading">About us</h2>
+            <h2 class="section-heading">About Us</h2>
             <p class="lead">
               We are a team of seven students from the TU Berlin who came together in a course about agile methods and 
               open source software development. Each team member is studying towards the master of science degree in a 
@@ -79,6 +79,105 @@
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
             <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
+          </div>
+          <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+             <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
+          </div>
+          <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+          <hr class="section-heading-spacer">
+            <div class="clearfix"></div>
+            <h2 class="section-heading">About Patrick</h2>
+            <p class="lead">
+              
+               We are a team of seven students from the TU Berlin who came together in a course about agile methods and 
+              open source software development. Each team member is studying towards the master of science degree in a 
+              software related field. Lara, Tristan, Joud and Scott are studying Computer Science, Florian and Patrick 
+              Information Systems Management and Antonia Computer Engineering.
+            </p>
+          </div>
+           <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+             <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
+          </div>
+          <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+          <hr class="section-heading-spacer">
+            <div class="clearfix"></div>
+            <h2 class="section-heading">About Lara</h2>
+            <p class="lead">
+              ... We are a team of seven students from the TU Berlin who came together in a course about agile methods and 
+              open source software development. Each team member is studying towards the master of science degree in a 
+              software related field. Lara, Tristan, Joud and Scott are studying Computer Science, Florian and Patrick 
+              Information Systems Management and Antonia Computer Engineering.
+            </p>
+          </div>
+           <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+             <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
+          </div>
+          <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+          <hr class="section-heading-spacer">
+            <div class="clearfix"></div>
+            <h2 class="section-heading">About Tristan</h2>
+            <p class="lead">
+              ... We are a team of seven students from the TU Berlin who came together in a course about agile methods and 
+              open source software development. Each team member is studying towards the master of science degree in a 
+              software related field. Lara, Tristan, Joud and Scott are studying Computer Science, Florian and Patrick 
+              Information Systems Management and Antonia Computer Engineering.
+            </p>
+          </div>
+           <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+             <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
+          </div>
+          <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+          <hr class="section-heading-spacer">
+            <div class="clearfix"></div>
+            <h2 class="section-heading">About Antonia</h2>
+            <p class="lead">
+              ... We are a team of seven students from the TU Berlin who came together in a course about agile methods and 
+              open source software development. Each team member is studying towards the master of science degree in a 
+              software related field. Lara, Tristan, Joud and Scott are studying Computer Science, Florian and Patrick 
+              Information Systems Management and Antonia Computer Engineering.
+            </p>
+          </div>
+           <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+             <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
+          </div>
+          <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+          <hr class="section-heading-spacer">
+            <div class="clearfix"></div>
+            <h2 class="section-heading">About Florian</h2>
+            <p class="lead">
+              ... We are a team of seven students from the TU Berlin who came together in a course about agile methods and 
+              open source software development. Each team member is studying towards the master of science degree in a 
+              software related field. Lara, Tristan, Joud and Scott are studying Computer Science, Florian and Patrick 
+              Information Systems Management and Antonia Computer Engineering.
+            </p>
+          </div>
+           <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+             <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
+          </div>
+          <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+          <hr class="section-heading-spacer">
+            <div class="clearfix"></div>
+            <h2 class="section-heading">About Joud</h2>
+            <p class="lead">
+              ... We are a team of seven students from the TU Berlin who came together in a course about agile methods and 
+              open source software development. Each team member is studying towards the master of science degree in a 
+              software related field. Lara, Tristan, Joud and Scott are studying Computer Science, Florian and Patrick 
+              Information Systems Management and Antonia Computer Engineering.
+            </p>
+          </div>
+           <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+             <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
+          </div>
+          <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+          <hr class="section-heading-spacer">
+            <div class="clearfix"></div>
+            <h2 class="section-heading">About Scott</h2>
+            <p class="lead">
+              ... We are a team of seven students from the TU Berlin who came together in a course about agile methods and 
+              open source software development. Each team member is studying towards the master of science degree in a 
+              software related field. Lara, Tristan, Joud and Scott are studying Computer Science, Florian and Patrick 
+              Information Systems Management and Antonia Computer Engineering.
+            </p>
           </div>
         </div>
   
