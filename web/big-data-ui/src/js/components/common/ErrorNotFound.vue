@@ -12,7 +12,7 @@
     <h2>This trend predicts that this page is not found!</h2>
   </div>
   <div class="footer">
-
+    <p>&copy; 2013 Poses-404. All Rights Reserved | Design by <a href="http://w3layouts.com">w3layouts</a></p>
   </div>
 </div>
 
@@ -23,6 +23,7 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
+
 .wrap {
   margin: 0 auto;
   width: 96%;
@@ -51,6 +52,21 @@ h1 {
     font-size: 3em;
     color: map_get($theme-colors, secondary);
     font-weight: bold;
+  }
+}
+.footer {
+  font-family: "Century Gothic";
+  text-align: right;
+  margin-top: 2em;
+  p {
+    font-size: 1em;
+    color: #603813;
+  }
+  a {
+    color: #f9614d;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 </style>
