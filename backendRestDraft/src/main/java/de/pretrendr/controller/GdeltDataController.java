@@ -29,7 +29,7 @@ import de.pretrendr.dataccess.GdeltCsvCacheDAO;
 import de.pretrendr.model.Article;
 import de.pretrendr.model.GdeltCsvCache;
 
-@RequestMapping("/api/dummy")
+@RequestMapping("/api/gdelt")
 @RestController
 @CrossOrigin
 public class GdeltDataController {
@@ -108,25 +108,4 @@ public class GdeltDataController {
 		List<Article> articles = elasticsearchOperations.queryForList(searchQuery, Article.class);
 		return new ResponseEntity<List<Article>>(articles, HttpStatus.OK);
 	}
-
-	@RequestMapping(value = "/deleteAll", method = RequestMethod.GET)
-	public ResponseEntity<Boolean> deleteAll(@RequestParam(value = "delete", defaultValue = "") final String pass)
-			throws IOException {
-		// Page<Article> page =
-		// articleService.getArticleRepository().findByTypeCustom(new PageRequest(0,
-		// 10));
-		// System.out.println(page);
-		// System.out.println(page.getContent());
-		System.out.println(articleService.getArticleRepository().findAllByYear("2015", new PageRequest(0, 100)));
-		articleService.getArticleRepository().deleteAllByYearAndMonth("2017", "01");
-		// System.out.println();
-		System.out.println("done");
-
-		if (pass.equals("DELETEALL")) {
-			articleService.deleteAll();
-			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
-		}
-		return new ResponseEntity<Boolean>(false, HttpStatus.OK);
-	}
-
 }
