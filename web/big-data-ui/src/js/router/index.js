@@ -67,11 +67,6 @@ const router = new Router({
                     name: 'table-list',
                     component: TableList
                 },
-                {
-                    path: '*',
-                    component : ErrorNotFound
-                },
-
             ]
         },
         { path: '*', component: ErrorNotFound }

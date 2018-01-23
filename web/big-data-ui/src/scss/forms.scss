@@ -1,52 +1,43 @@
 @import './base';
-
 .onboarding-form {
-  &.form-login, &.form-register {
-    padding: 75px 25px 25px;
-    display: none;
-
-    &.active {
-      display: block;
-    }
-
-    .alert {
-      border-radius: 0;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #eeeeee;
-
-      &[type="submit"] {
-        color: #f6f6f6;
-        border: 0;
-        margin-bottom: 0;
-        background-color: map-get($theme-colors, 'primary');
-        cursor: pointer;
-
-        &:hover {
-          background-color: map_get($theme-colors, secondary);
+    &.form-login,
+    &.form-register {
+        padding: 75px 25px 25px;
+        display: none;
+        &.active {
+            display: block;
         }
-        &:active {
-          background-color: map_get($theme-colors, secondary);
+        .alert {
+            border-radius: 0;
         }
-        &.disabled {
-          background-color: map_get($theme-colors, primaryLight);
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #eeeeee;
+            &[type="submit"] {
+                color: #f6f6f6;
+                border: 0;
+                margin-bottom: 0;
+                background-color: map-get($theme-colors, 'primary');
+                cursor: pointer;
+                &:hover {
+                    background-color: map_get($theme-colors, secondary);
+                }
+                &:active {
+                    background-color: map_get($theme-colors, secondary);
+                }
+                &.disabled {
+                    background-color: map_get($theme-colors, primaryLight);
+                }
+            }
         }
-
-      }
+        .links {
+            text-align: center;
+            padding-top: 25px;
+            a {
+                color: map_get($theme-colors, dark);
+            }
+        }
     }
-
-    .links {
-      text-align: center;
-      padding-top: 25px;
-
-      a {
-        color: map_get($theme-colors, dark);
-      }
-    }
-  }
 }
-
