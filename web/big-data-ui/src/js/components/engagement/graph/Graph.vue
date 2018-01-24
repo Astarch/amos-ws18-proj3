@@ -1,11 +1,26 @@
 <template>
-  <svg id="graph"></svg>
+  <div id="graph"></div>
 </template>
+
 <style>
-  .lgnd {
-    fill: #bbb;
-    font-size: 12pt;
-  }
+
+  .line {
+  fill: none;
+  stroke: #e96772;
+  stroke-width: 2px;
+}
+
+  .smoothedline {
+  fill: none;
+  stroke: #127281;
+  stroke-width: 2px;
+}
+
+#graph {
+  padding: 10px 10px 10px 10px;
+}
+
+
 </style>
 <script>
   import * as d3 from 'd3'
@@ -14,75 +29,104 @@
     name: 'graph',
     data() {
       return {
-        dataset: this.data,
-        width: null,
-        height: null,
-        datetime: null,
-        svg: null
+        dataset: this.data
       };
     },
-    props: ['data'],
+        props: ['data'],
     watch: {
       data: function (newData, oldData) {
-        var self = this;
-        newData.forEach(function (d) {
-          d.date = self.datetime(d.date);
-          d.num = +d.num;
-        })
-        this.buildGraph(newData);
+        this.prepareData(newData);
       }
     },
-    mounted: function () {
-      this.datetime = d3.time.format("%d-%b-%y").parse;
+
+   mounted: function () {
+      window.addEventListener("resize", this.onResize);
     },
+
+    beforeDestroy() {
+      window.removeEventListener("resize", this.onResize);
+    },
+
     methods: {
-      // idea: https://leanpub.com/D3-Tips-and-Tricks
-      buildGraph: function (newdata) {
-        var self = this;
-        this.width = document.getElementById('graph').getBoundingClientRect().width - 80;
-        this.height = document.getElementById('graph').getBoundingClientRect().height - 60;
-        this.svg = d3.select('#graph').append('g')
-                     .attr('transform', 'translate(' + 30 + ',' + 30 + ')');
 
-        var x = d3.time.scale().range[(0, this.width)];
-        var xAxis = d3.svg.axis().scale(x);
-        var y = d3.scale.linear().range([this.height, 0]);
-        var yAxis = d3.svg.axis().scale(y).orient('left');//.ticks(5)
+      prepareData : function(data) {
+      this.formatted_data = new Array(); this.smoothed_data = new Array();
+      var parseTime = d3.timeParse("%Y%m%d");
+      var self = this;
 
-        var line = d3.svg.line().x(function (d) {
-          return x(d.date);
-        }).y(function (d) {
-          return y(d.num)
+      $.each(data, function (key, value) {
+        value += value;
+        self.formatted_data.push({'date' : parseTime(key), 'count' : value});
+      });
+
+        var count = 0; var self = this;
+        $.each(data, function (key, value) {
+          count++;
+          if(count%7 != 0 && count%8 != 0) {
+            self.smoothed_data.push({'date' : parseTime(key), 'count' : value});
+          } 
         });
-        x.domain(d3.extent(newdata, function (d) {
-          return d.date;
-        }));
-        y.domain([0, d3.max(data, function (d) {
-          return d.num;
-        })]);
-
-        this.svg.append('path').attr('class', 'line').attr('d', line(newdata));
-        this.svg.append('g').attr('class', 'xaxis').attr('transform', 'translate(0,' + this.height + ')').call(xAxis);
-        this.svg.append('g').attr('class', 'yaxis').call(yAxis);
-        //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        this.buildGraph(this.formatted_data);
       },
-      drawLegend: function (newdata) {
-        var self = this;
-        var num = newdata.length;
-        var size = ((this.rad * 3) / (num + 5)) / 2;
-        var space = (1 / 2) * size;
-        var lgnd = this.svg.selectAll('.lgnd').data(self.colorScale.domain()).enter().append('g').attr('class', 'lgnd').attr('transform', function (d, i) {
-          var lgndheight = size * 2;
-          var offset = lgndheight * (self.colorScale).domain().length / 2;
-          var h = self.rad + size * 2;
-          var v = i * lgndheight - offset;
-          return 'translate(' + h + ',' + v + ')';
-        });
-        lgnd.append('rect').attr('width', size).attr('height', size).style('fill', self.colorScale).style('stroke', self.colorScale);
-        lgnd.append('text').attr('x', size + space).attr('y', size).text(function (d) {
-          return d;
-        });
+
+      buildGraph: function (data) {
+
+      var parentW = document.getElementById("graph").clientWidth;
+      var parentH = 400;
+      this.margin = {top: 20, right: 50, bottom: 50, left: 50};
+
+
+      this.x = d3.scaleTime().range([0, parentW - this.margin.left - this.margin.right]);
+      this.y = d3.scaleLinear().range([parentH - this.margin.top - this.margin.bottom, 0]);
+
+      this.xAxis = d3.axisBottom().scale(this.x);
+      var yAxis = d3.axisLeft().scale(this.y);
+
+      this.x.domain(d3.extent(data, function(d) { return d.date; }));
+      this.y.domain([0, d3.max(data, function(d) { return d.count; })]);
+
+
+      this.line = d3.line();
+      this.smoothed_line = d3.line();
+
+
+      this.svg = d3.select("#graph").append("svg").attr("height", parentH);
+      this.canvas = this.svg.append("g").attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+
+      this.path = this.canvas.append("path").data([data]).attr("class", "line");
+      this.smoothed_path = this.canvas.append("path").data([this.smoothed_data]).attr("class", "smoothedline");
+
+      this.xEl = this.canvas.append("g").attr("transform", "translate(0 " + (parentH - this.margin.top - this.margin.bottom) + ")");
+      this.yEl = this.canvas.append("g").call(yAxis);
+
+
+      this.updateValues(this.x, this.y);
       },
+
+
+      updateValues: function (x, y) {
+
+      var parentW = document.getElementById("graph").clientWidth;
+
+        this.svg.attr("width", parentW);
+        x.range([0, parentW - this.margin.left - this.margin.right]);
+        this.xAxis.scale(x);
+        this.xEl.call(this.xAxis);
+
+        this.line.x(function(d) { return x(d.date); }).y(function(d) { return y(d.count); });
+        this.smoothed_line.x(function(d) { return x(d.date); }).y(function(d) { return y(d.count); });
+
+        this.path.attr("d", this.line);
+        this.smoothed_path.attr("d", this.smoothed_line);
+      },
+
+      onResize(event) {      
+      if($("#graph").is(':parent')) {
+        this.updateValues(this.x, this.y);
+      }
+      }
     },
   }
 </script>
+
+

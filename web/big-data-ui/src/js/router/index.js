@@ -54,12 +54,12 @@ const router = new Router({
             meta: { requiresAuth: true },
             children: [{
                     path: 'dashboard',
-                    name: 'overview',
+                    name: 'Dashboard',
                     component: Dashboard
                 },
                 {
                     path: 'stats',
-                    name: 'stats',
+                    name: 'user',
                     component: UserProfile
                 },
                 {

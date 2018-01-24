@@ -16,10 +16,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -94,8 +96,11 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<Article> findAllByTerm(String string) {
-		return articleRepository.findAllByTitleContaining(string); // articleRepository.findAllByTitleContaining(string);
+	public List<Article> findAllByTerm(String term) {
+		SearchQuery searchQuery = new NativeSearchQueryBuilder().withFilter(regexpQuery("title", toRegEx(term)))
+				.build();
+		List<Article> articles = elasticsearchOperations.queryForList(searchQuery, Article.class);
+		return articles;
 	}
 
 	@Override
@@ -278,7 +283,7 @@ public class ArticleServiceImpl implements ArticleService {
 		// @formatter:off
 		SearchQuery aSearchQuery = new NativeSearchQueryBuilder()
 				.withQuery(
-					boolQuery().must(regexpQuery("title", ".*" + term + ".*"))
+					boolQuery().must(regexpQuery("title", toRegEx(term)))
 							   .must(rangeQuery("dateadded").from(from + "000000").to(to + "235959"))
 				   )
 				.withIndices("article-2018.01.18")
@@ -323,13 +328,21 @@ public class ArticleServiceImpl implements ArticleService {
 		return resultMap;
 	}
 
+	private String toRegEx(String term) {
+		String regEx = ".*(";
+		regEx += Arrays.stream(term.toLowerCase().split(" ")).collect(Collectors.joining("|"));
+		regEx += ").*";
+		return regEx;
+
+	}
+
 	@Override
 	public Map<String, Long> countByTermAndMonth(String term, String from, String to) {
 		Map<String, Long> resultMap = Maps.newHashMap();
 		// @formatter:off
 		SearchQuery aSearchQuery = new NativeSearchQueryBuilder()
 				.withQuery(
-					boolQuery().must(regexpQuery("title", ".*" + term + ".*"))
+					boolQuery().must(regexpQuery("title", toRegEx(term)))
 							   .must(rangeQuery("dateadded").from(from + "000000").to(to + "235959"))
 				   )
 				.withIndices("article-2018.01.18")
