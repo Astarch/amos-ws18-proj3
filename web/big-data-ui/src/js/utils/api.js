@@ -28,6 +28,7 @@ function getAuthToken() {
 
 const axiosInstance = axios.create({
     baseURL: baseUrl,
+    //baseUrl,
 });
 
 if (getAuthToken() && getAuthToken().length > 5) {

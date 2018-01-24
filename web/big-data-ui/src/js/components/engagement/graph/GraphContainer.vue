@@ -1,18 +1,19 @@
 <template>
   <div class="row">
     <!-- include child component and pass data -->
-    <chart class="col s12" :data="dataset"></chart>
+    <graph class="col s12" :data="dataset"></graph>
   </div>
 </template>
 <script>
   import http, {api} from 'js/utils/api';
   import chart from "./Chart"
+  import graph from "./Graph"
   import * as d3 from 'd3'
 
   export default {
     name: 'graphContainer',
     components: {
-      chart
+      graph
     },
     data: function () {
       return {
@@ -33,7 +34,8 @@
 
   },
     created: function () {
-      this.doLogin();
+      //this.doLogin();
+      this.doES();
     },
     methods: {
         doLogin: function () {
@@ -54,6 +56,32 @@
              }
              console.log(error.response);
            });
+      },
+      doES: function () {
+      var total_path = '/api/dummy'
+       api.graph.getData(total_path)
+           .then(response => {
+          console.log(response);
+          console.log("YAY");
+            this.options.totalPages = response.data.totalPages;
+           (response.data.content).forEach(function (e) {
+            var obj = {count : e.count, label : e.word};
+            //console.log(obj);
+            (self.dataset).push(obj);
+           });
+           this.retrieveData(size, ++i);
+           })
+           .catch(error => {
+            console.log(error);
+             let errorCode = error.response.status;
+             if (errorCode < 500) {
+               console.log('Failure - please try again!');
+             } else {
+               console.log('Error - please try again later!');
+             }
+             console.log(error.response);
+           });
+
       },
       retrieveData: function (size, i) {
        var self = this;

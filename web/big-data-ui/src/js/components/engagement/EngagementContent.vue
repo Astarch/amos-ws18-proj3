@@ -9,19 +9,19 @@
   </div>
 </template>
 <script>
-  export default {}
+export default {};
 </script>
 <style lang="scss" scoped>
-  .fade-enter-active,
-  .fade-leave-active {
-    transition: opacity .1s
-  }
+div.content {
+  margin-bottom: 80px;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.1s;
+}
 
-  .fade-enter,
-  .fade-leave-to
-  /* .fade-leave-active in <2.1.8 */
-
-  {
-    opacity: 0
-  }
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>

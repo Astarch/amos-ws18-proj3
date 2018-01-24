@@ -1,13 +1,6 @@
 <template>
   <footer class="footer">
     <div class="container-fluid">
-      <nav class="pull-left">
-        <ul>
-          <li>
-            <router-link :to="{path:'/admin'}">Dashboard</router-link>
-          </li>
-        </ul>
-      </nav>
       <div class="copyright pull-right">
         <p class="copyright text-muted small">Copyright &copy; pretrendr 2017. All Rights Reserved</p>
       </div>
@@ -15,9 +8,14 @@
   </footer>
 </template>
 <script>
-  export default {}
-
+export default {};
 </script>
 <style>
-
+footer.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+}
 </style>
