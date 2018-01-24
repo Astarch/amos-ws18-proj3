@@ -1,7 +1,5 @@
 package de.pretrendr.controller;
 
-import static org.elasticsearch.index.query.QueryBuilders.regexpQuery;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -92,20 +88,9 @@ public class GdeltDataController {
 		return new ResponseEntity<List<Article>>(list, HttpStatus.OK);
 	}
 
-	/**
-	 * Dummy using QueryBuilder. Pass a <b>term</b>, and it will be put into a
-	 * regular expression like <i>.*<b>term</b>.*</i>.
-	 * 
-	 * @param term
-	 *            term to search for, eg bitcoin
-	 * @return all articles containing bitcoin in their <i>sourceurl</i>
-	 * @throws IOException
-	 */
 	@RequestMapping(value = "/findByTerm/{term}", method = RequestMethod.GET)
 	public ResponseEntity<List<Article>> findByTerm(@PathVariable String term) throws IOException {
-		SearchQuery searchQuery = new NativeSearchQueryBuilder().withFilter(regexpQuery("title", ".*" + term + ".*"))
-				.build();
-		List<Article> articles = elasticsearchOperations.queryForList(searchQuery, Article.class);
+		List<Article> articles = articleService.findAllByTerm(term);
 		return new ResponseEntity<List<Article>>(articles, HttpStatus.OK);
 	}
 }
