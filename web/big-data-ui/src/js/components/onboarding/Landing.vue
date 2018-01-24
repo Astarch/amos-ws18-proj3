@@ -81,102 +81,135 @@
             <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
           </div>
           <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/student1.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">About Patrick</h2>
             <p class="lead">
-              
-               We are a team of seven students from the TU Berlin who came together in a course about agile methods and 
-              open source software development. Each team member is studying towards the master of science degree in a 
-              software related field. Lara, Tristan, Joud and Scott are studying Computer Science, Florian and Patrick 
-              Information Systems Management and Antonia Computer Engineering.
+              Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
+              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+            </p>
+            <p class="lead">
+              Get connected on LinkedIn :
+            </p>
+            <p>
+                <a href="#" class="btn btn-primary btn-lg"><i
+                    class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/student2.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">About Lara</h2>
             <p class="lead">
-              ... We are a team of seven students from the TU Berlin who came together in a course about agile methods and 
-              open source software development. Each team member is studying towards the master of science degree in a 
-              software related field. Lara, Tristan, Joud and Scott are studying Computer Science, Florian and Patrick 
-              Information Systems Management and Antonia Computer Engineering.
+               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
+              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+            </p>
+            <p class="lead">
+              Get connected on LinkedIn :
+            </p>
+            <p>
+                <a href="#" class="btn btn-primary btn-lg"><i
+                    class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/student1.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">About Tristan</h2>
             <p class="lead">
-              ... We are a team of seven students from the TU Berlin who came together in a course about agile methods and 
-              open source software development. Each team member is studying towards the master of science degree in a 
-              software related field. Lara, Tristan, Joud and Scott are studying Computer Science, Florian and Patrick 
-              Information Systems Management and Antonia Computer Engineering.
+               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
+              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+            </p>
+            <p class="lead">
+              Get connected on LinkedIn :
+            </p>
+            <p>
+                <a href="#" class="btn btn-primary btn-lg"><i
+                    class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/student2.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">About Antonia</h2>
             <p class="lead">
-              ... We are a team of seven students from the TU Berlin who came together in a course about agile methods and 
-              open source software development. Each team member is studying towards the master of science degree in a 
-              software related field. Lara, Tristan, Joud and Scott are studying Computer Science, Florian and Patrick 
-              Information Systems Management and Antonia Computer Engineering.
+               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
+              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+            </p>
+            <p class="lead">
+              Get connected on LinkedIn :
+            </p>
+            <p>
+                <a href="#" class="btn btn-primary btn-lg"><i
+                    class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/student1.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">About Florian</h2>
             <p class="lead">
-              ... We are a team of seven students from the TU Berlin who came together in a course about agile methods and 
-              open source software development. Each team member is studying towards the master of science degree in a 
-              software related field. Lara, Tristan, Joud and Scott are studying Computer Science, Florian and Patrick 
-              Information Systems Management and Antonia Computer Engineering.
+               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
+              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+            </p>
+            <p class="lead">
+              Get connected on LinkedIn :
+            </p>
+            <p>
+                <a href="#" class="btn btn-primary btn-lg"><i
+                    class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/student2.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">About Joud</h2>
             <p class="lead">
-              ... We are a team of seven students from the TU Berlin who came together in a course about agile methods and 
-              open source software development. Each team member is studying towards the master of science degree in a 
-              software related field. Lara, Tristan, Joud and Scott are studying Computer Science, Florian and Patrick 
-              Information Systems Management and Antonia Computer Engineering.
+               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
+              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+            </p>
+            <p class="lead">
+              Get connected on LinkedIn :
+            </p>
+            <p>
+                <a href="#" class="btn btn-primary btn-lg"><i
+                    class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/student1.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">About Scott</h2>
             <p class="lead">
-              ... We are a team of seven students from the TU Berlin who came together in a course about agile methods and 
-              open source software development. Each team member is studying towards the master of science degree in a 
-              software related field. Lara, Tristan, Joud and Scott are studying Computer Science, Florian and Patrick 
-              Information Systems Management and Antonia Computer Engineering.
+               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
+              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.            </p>
+            <p class="lead">
+              Get connected on LinkedIn :
+            </p>
+            <p>
+                <a href="#" class="btn btn-primary btn-lg"><i
+                    class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
             </p>
           </div>
         </div>
@@ -418,7 +451,7 @@
     float: right;
     margin-top: 0;
   }
-  
+
   @media (max-width: 1199px) {
     ul.banner-social-buttons {
       float: left;
