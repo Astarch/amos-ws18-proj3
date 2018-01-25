@@ -1,7 +1,7 @@
 {
 	"variables": [],
 	"info": {
-		"name": "pretrendr.de/api copy",
+		"name": "pretrendr.de/api",
 		"_postman_id": "5df30635-89ea-a397-ea13-dae69a3a5651",
 		"description": "This serves as a definition for the user management api for the backend.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
@@ -321,13 +321,13 @@
 			]
 		},
 		{
-			"name": "gdelt",
+			"name": "/gdelt",
 			"description": "",
 			"item": [
 				{
-					"name": "/dummy/wordcount/{text}",
+					"name": "/gdelt/wordcount/{text}",
 					"request": {
-						"url": "http://{{baseurl}}:{{baseport}}/api/dummy/wordcount/bitcoin",
+						"url": "http://{{baseurl}}:{{baseport}}/api/gdelt/wordcount/bitcoin",
 						"method": "GET",
 						"header": [
 							{
@@ -345,9 +345,9 @@
 					"response": []
 				},
 				{
-					"name": "/dummy/wordcount/findall",
+					"name": "/gdelt/wordcount/findall",
 					"request": {
-						"url": "http://{{baseurl}}:{{baseport}}/api/dummy/findall",
+						"url": "http://{{baseurl}}:{{baseport}}/api/gdelt/findall",
 						"method": "GET",
 						"header": [
 							{
@@ -365,10 +365,10 @@
 					"response": []
 				},
 				{
-					"name": "/dummy/wordcountByDay/{term}",
+					"name": "/gdelt/wordcountByDay/{term}",
 					"request": {
 						"url": {
-							"raw": "http://{{baseurl}}:{{baseport}}/api/dummy/wordcountByDay/bitcoin?from=20170101&to=20170131",
+							"raw": "http://{{baseurl}}:{{baseport}}/api/gdelt/wordcountByDay/bitcoin?from=20170101&to=20170131",
 							"protocol": "http",
 							"host": [
 								"{{baseurl}}"
@@ -376,7 +376,7 @@
 							"port": "{{baseport}}",
 							"path": [
 								"api",
-								"dummy",
+								"gdelt",
 								"wordcountByDay",
 								"bitcoin"
 							],
@@ -413,10 +413,10 @@
 					"response": []
 				},
 				{
-					"name": "/dummy/wordcountByMonth/{term} copy",
+					"name": "/gdelt/averageWordcountByMonth/{term}",
 					"request": {
 						"url": {
-							"raw": "http://{{baseurl}}:{{baseport}}/api/dummy/wordcountByMonth/bitcoin?from=20170101&to=20170331",
+							"raw": "http://{{baseurl}}:{{baseport}}/api/gdelt/averageWordcountByMonth/bitcoin?from=20170101&to=20170131",
 							"protocol": "http",
 							"host": [
 								"{{baseurl}}"
@@ -424,7 +424,199 @@
 							"port": "{{baseport}}",
 							"path": [
 								"api",
-								"dummy",
+								"gdelt",
+								"averageWordcountByMonth",
+								"bitcoin"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "20170101",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "to",
+									"value": "20170131",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/gdelt/minWordcountByMonth/{term}",
+					"request": {
+						"url": {
+							"raw": "http://{{baseurl}}:{{baseport}}/api/gdelt/minWordcountByMonth/bitcoin?from=20170101&to=20170131",
+							"protocol": "http",
+							"host": [
+								"{{baseurl}}"
+							],
+							"port": "{{baseport}}",
+							"path": [
+								"api",
+								"gdelt",
+								"minWordcountByMonth",
+								"bitcoin"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "20170101",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "to",
+									"value": "20170131",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/gdelt/maxWordcountByMonth/{term}",
+					"request": {
+						"url": {
+							"raw": "http://{{baseurl}}:{{baseport}}/api/gdelt/minWordcountByMonth/bitcoin?from=20170101&to=20170131",
+							"protocol": "http",
+							"host": [
+								"{{baseurl}}"
+							],
+							"port": "{{baseport}}",
+							"path": [
+								"api",
+								"gdelt",
+								"minWordcountByMonth",
+								"bitcoin"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "20170101",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "to",
+									"value": "20170131",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/gdelt/medWordcountByMonth/{term}",
+					"request": {
+						"url": {
+							"raw": "http://{{baseurl}}:{{baseport}}/api/gdelt/medWordcountByMonth/bitcoin?from=20170101&to=20170131",
+							"protocol": "http",
+							"host": [
+								"{{baseurl}}"
+							],
+							"port": "{{baseport}}",
+							"path": [
+								"api",
+								"gdelt",
+								"medWordcountByMonth",
+								"bitcoin"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "20170101",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "to",
+									"value": "20170131",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "/gdelt/wordcountByMonth/{term}",
+					"request": {
+						"url": {
+							"raw": "http://{{baseurl}}:{{baseport}}/api/gdelt/wordcountByMonth/bitcoin?from=20170101&to=20170331",
+							"protocol": "http",
+							"host": [
+								"{{baseurl}}"
+							],
+							"port": "{{baseport}}",
+							"path": [
+								"api",
+								"gdelt",
 								"wordcountByMonth",
 								"bitcoin"
 							],
@@ -461,9 +653,9 @@
 					"response": []
 				},
 				{
-					"name": "/dummy/findByTerm/{term}",
+					"name": "/gdelt/findByTerm/{term}",
 					"request": {
-						"url": "http://{{baseurl}}:{{baseport}}/api/dummy/findByTerm/bitcoin",
+						"url": "http://{{baseurl}}:{{baseport}}/api/gdelt/findByTerm/bitcoin",
 						"method": "GET",
 						"header": [
 							{
@@ -481,9 +673,9 @@
 					"response": []
 				},
 				{
-					"name": "/dummy/cache",
+					"name": "/gdelt/cache",
 					"request": {
-						"url": "http://{{baseurl}}:{{baseport}}/api/dummy/cache",
+						"url": "http://{{baseurl}}:{{baseport}}/api/gdelt/cache",
 						"method": "GET",
 						"header": [
 							{

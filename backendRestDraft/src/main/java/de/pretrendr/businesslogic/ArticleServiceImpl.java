@@ -17,6 +17,7 @@ import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -26,6 +27,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms.Order;
@@ -45,6 +48,7 @@ import de.pretrendr.dataccess.GdeltCsvCacheDAO;
 import de.pretrendr.model.Article;
 import de.pretrendr.model.GdeltCsvCache;
 import de.pretrendr.model.QGdeltCsvCache;
+import de.pretrendr.model.enums.SearchMethod;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -147,7 +151,7 @@ public class ArticleServiceImpl implements ArticleService {
 			int fileCount = 0;
 			int skipped = 0;
 			int masterLineCount = 0;
-			int articleLimit = 10000000;
+			int articleLimit = 1000000;
 			int fileLimit = 10000;
 			long startTime = System.nanoTime();
 			Pattern pattern = Pattern.compile("([0-9]*?) ([0-9a-f]*) http://data.gdeltproject.org/gdeltv2/(.*)");
@@ -278,24 +282,9 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public Map<String, Long> countByTermAndDay(String term, String from, String to) {
+	public Map<String, Long> countByTermAndDay(String term, String from, String to, SearchMethod method) {
 		Map<String, Long> resultMap = Maps.newHashMap();
-		// @formatter:off
-		SearchQuery aSearchQuery = new NativeSearchQueryBuilder()
-				.withQuery(
-					boolQuery().must(regexpQuery("title", toRegEx(term)))
-							   .must(rangeQuery("dateadded").from(from + "000000").to(to + "235959"))
-				   )
-				.withIndices("article-2018.01.18")
-				.withTypes("csv")
-				.addAggregation(
-					terms("byYear").field("year").size(10).order(Order.term(true))
-						.subAggregation(terms("byMonth").field("month").size(12).order(Order.term(true))
-							.subAggregation(terms("byDay").field("day").size(31).order(Order.term(true)))
-						)
-					)
-				.build();
-		// @formatter:on
+		SearchQuery aSearchQuery = buildAggregationByDay(term, from, to, method);
 		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
 				new ResultsExtractor<Aggregations>() {
 					@Override
@@ -336,23 +325,47 @@ public class ArticleServiceImpl implements ArticleService {
 
 	}
 
+	private QueryBuilder buildSearchQuery(String term, String from, String to, SearchMethod method) {
+		BoolQueryBuilder boolQueryBuilder = boolQuery();
+		String cleanTerm = term.toLowerCase().replaceAll("[^a-z0-9 -_#]", "");
+		String[] terms = cleanTerm.split(" ");
+		String regEx;
+		switch (method) {
+		default:
+		case ALL:
+			for (String t : terms) {
+				boolQueryBuilder.must(regexpQuery("title", ".*" + t + ".*"));
+			}
+
+			boolQueryBuilder.must(rangeQuery("dateadded").from(from + "000000").to(to + "235959"));
+			break;
+		case ANY:
+			regEx = ".*(";
+			regEx += Arrays.stream(terms).collect(Collectors.joining("|"));
+			regEx += ").*";
+
+			boolQueryBuilder.must(regexpQuery("title", regEx));
+			boolQueryBuilder.must(rangeQuery("dateadded").from(from + "000000").to(to + "235959"));
+			break;
+		case EXACT:
+			regEx = ".*(";
+			regEx += Arrays.stream(terms).collect(Collectors.joining(").*("));
+			regEx += ").*";
+
+			boolQueryBuilder.must(regexpQuery("title", regEx));
+			boolQueryBuilder.must(rangeQuery("dateadded").from(from + "000000").to(to + "235959"));
+			break;
+		case RAW:
+			boolQueryBuilder.must(regexpQuery("title", term));
+			break;
+		}
+		return boolQueryBuilder;
+	}
+
 	@Override
-	public Map<String, Long> countByTermAndMonth(String term, String from, String to) {
+	public Map<String, Long> countByTermAndMonth(String term, String from, String to, SearchMethod method) {
 		Map<String, Long> resultMap = Maps.newHashMap();
-		// @formatter:off
-		SearchQuery aSearchQuery = new NativeSearchQueryBuilder()
-				.withQuery(
-					boolQuery().must(regexpQuery("title", toRegEx(term)))
-							   .must(rangeQuery("dateadded").from(from + "000000").to(to + "235959"))
-				   )
-				.withIndices("article-2018.01.18")
-				.withTypes("csv")
-				.addAggregation(
-					terms("byYear").field("year").size(10).order(Order.term(true))
-						.subAggregation(terms("byMonth").field("month").size(10).order(Order.term(true)))
-					)
-				.build();
-		// @formatter:on
+		SearchQuery aSearchQuery = buildAggregationByMonth(term, from, to, method);
 		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
 				new ResultsExtractor<Aggregations>() {
 					@Override
@@ -372,6 +385,210 @@ public class ArticleServiceImpl implements ArticleService {
 				String year = yearValue.toString().length() < 2 ? "0" + yearValue.toString() : yearValue.toString();
 				String month = monthValue.toString().length() < 2 ? "0" + monthValue.toString() : monthValue.toString();
 				resultMap.put(year + month, count);
+			});
+		});
+
+		return resultMap;
+	}
+
+	private SearchQuery buildAggregationByMonth(String term, String from, String to, SearchMethod method) {
+		// @formatter:off
+		return new NativeSearchQueryBuilder()
+				.withQuery(
+					buildSearchQuery(term, from, to, method)
+				)
+				.withIndices("article-2018.01.18")
+				.withTypes("csv")
+				.addAggregation(
+					terms("byYear")
+					.field("year")
+					.size(10)
+					.order(Order.term(true))
+					.subAggregation(
+						terms("byMonth")
+						.field("month")
+						.size(10)
+						.order(Order.term(true))
+					)
+				)
+				.build();
+		// @formatter:on
+	}
+
+	private SearchQuery buildAggregationByDay(String term, String from, String to, SearchMethod method) {
+		// @formatter:off
+		return new NativeSearchQueryBuilder()
+				.withQuery(
+					buildSearchQuery(term, from, to, method)
+				)
+				.withIndices("article-2018.01.18")
+				.withTypes("csv")
+				.addAggregation(
+					terms("byYear")
+					.field("year")
+					.size(10)
+					.order(Order.term(true))
+					.subAggregation(
+						terms("byMonth")
+						.field("month")
+						.size(12)
+						.order(Order.term(true))
+						.subAggregation(
+							terms("byDay")
+							.field("day")
+							.size(31)
+							.order(Order.term(true))
+						)
+					)
+				)
+				.build();
+		// @formatter:on
+	}
+
+	@Override
+	public Map<String, Long> averageCountByTermAndMonth(String term, String from, String to, SearchMethod method) {
+		Map<String, Long> resultMap = Maps.newHashMap();
+		SearchQuery aSearchQuery = buildAggregationByDay(term, from, to, method);
+		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
+				new ResultsExtractor<Aggregations>() {
+					@Override
+					public Aggregations extract(SearchResponse aResponse) {
+						return aResponse.getAggregations();
+					}
+				});
+		Terms aField1Terms = aField1Aggregations.get("byYear");
+		aField1Terms.getBuckets().stream().forEach(yearBucket -> {
+			Object yearValue = yearBucket.getKey();
+			Terms aField2Terms = yearBucket.getAggregations().get("byMonth");
+
+			aField2Terms.getBuckets().stream().forEach(monthBucket -> {
+				Object monthValue = monthBucket.getKey();
+				Terms aField3Terms = monthBucket.getAggregations().get("byDay");
+				final long[] values = { 0L, 0L };
+				aField3Terms.getBuckets().stream().forEach(dayBucket -> {
+					Long count = dayBucket.getDocCount();
+					values[0] += count;
+					values[1]++;
+				});
+				long avg = values[0] / values[1];
+				String year = yearValue.toString().length() < 2 ? "0" + yearValue.toString() : yearValue.toString();
+				String month = monthValue.toString().length() < 2 ? "0" + monthValue.toString() : monthValue.toString();
+				resultMap.put(year + month, avg);
+			});
+		});
+
+		return resultMap;
+	}
+
+	@Override
+	public Map<String, Long> minCountByTermAndMonth(String term, String from, String to, SearchMethod method) {
+		Map<String, Long> resultMap = Maps.newHashMap();
+		SearchQuery aSearchQuery = buildAggregationByDay(term, from, to, method);
+		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
+				new ResultsExtractor<Aggregations>() {
+					@Override
+					public Aggregations extract(SearchResponse aResponse) {
+						return aResponse.getAggregations();
+					}
+				});
+		Terms aField1Terms = aField1Aggregations.get("byYear");
+		aField1Terms.getBuckets().stream().forEach(yearBucket -> {
+			Object yearValue = yearBucket.getKey();
+			Terms aField2Terms = yearBucket.getAggregations().get("byMonth");
+
+			aField2Terms.getBuckets().stream().forEach(monthBucket -> {
+				Object monthValue = monthBucket.getKey();
+				Terms aField3Terms = monthBucket.getAggregations().get("byDay");
+				final long[] values = { -1L };
+				aField3Terms.getBuckets().stream().forEach(dayBucket -> {
+					Long count = dayBucket.getDocCount();
+					if (values[0] < 0) {
+						values[0] = count;
+					} else {
+						values[0] = Math.min(values[0], count);
+					}
+				});
+				long min = values[0];
+				String year = yearValue.toString().length() < 2 ? "0" + yearValue.toString() : yearValue.toString();
+				String month = monthValue.toString().length() < 2 ? "0" + monthValue.toString() : monthValue.toString();
+				resultMap.put(year + month, min);
+			});
+		});
+
+		return resultMap;
+	}
+
+	@Override
+	public Map<String, Long> maxCountByTermAndMonth(String term, String from, String to, SearchMethod method) {
+		Map<String, Long> resultMap = Maps.newHashMap();
+		SearchQuery aSearchQuery = buildAggregationByDay(term, from, to, method);
+		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
+				new ResultsExtractor<Aggregations>() {
+					@Override
+					public Aggregations extract(SearchResponse aResponse) {
+						return aResponse.getAggregations();
+					}
+				});
+		Terms aField1Terms = aField1Aggregations.get("byYear");
+		aField1Terms.getBuckets().stream().forEach(yearBucket -> {
+			Object yearValue = yearBucket.getKey();
+			Terms aField2Terms = yearBucket.getAggregations().get("byMonth");
+
+			aField2Terms.getBuckets().stream().forEach(monthBucket -> {
+				Object monthValue = monthBucket.getKey();
+				Terms aField3Terms = monthBucket.getAggregations().get("byDay");
+				final long[] values = { -1L };
+				aField3Terms.getBuckets().stream().forEach(dayBucket -> {
+					Long count = dayBucket.getDocCount();
+					if (values[0] < 0) {
+						values[0] = count;
+					} else {
+						values[0] = Math.max(values[0], count);
+					}
+				});
+				long min = values[0];
+				String year = yearValue.toString().length() < 2 ? "0" + yearValue.toString() : yearValue.toString();
+				String month = monthValue.toString().length() < 2 ? "0" + monthValue.toString() : monthValue.toString();
+				resultMap.put(year + month, min);
+			});
+		});
+
+		return resultMap;
+	}
+
+	@Override
+	public Map<String, Long> medCountByTermAndMonth(String term, String from, String to, SearchMethod method) {
+		Map<String, Long> resultMap = Maps.newHashMap();
+		SearchQuery aSearchQuery = buildAggregationByDay(term, from, to, method);
+		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
+				new ResultsExtractor<Aggregations>() {
+					@Override
+					public Aggregations extract(SearchResponse aResponse) {
+						return aResponse.getAggregations();
+					}
+				});
+		Terms aField1Terms = aField1Aggregations.get("byYear");
+		aField1Terms.getBuckets().stream().forEach(yearBucket -> {
+			Object yearValue = yearBucket.getKey();
+			Terms aField2Terms = yearBucket.getAggregations().get("byMonth");
+
+			aField2Terms.getBuckets().stream().forEach(monthBucket -> {
+				Object monthValue = monthBucket.getKey();
+				Terms aField3Terms = monthBucket.getAggregations().get("byDay");
+				final List<Long> list = Lists.newArrayList();
+				long median;
+				aField3Terms.getBuckets().stream().forEach(dayBucket -> {
+					Long count = dayBucket.getDocCount();
+					list.add(count);
+				});
+				Collections.sort(list);
+				if (list.size() % 2 == 0)
+					median = (list.get(list.size() / 2) + list.get(list.size() / 2 - 1)) / 2;
+				else
+					median = list.get(list.size() / 2);
+				String year = yearValue.toString().length() < 2 ? "0" + yearValue.toString() : yearValue.toString();
+				String month = monthValue.toString().length() < 2 ? "0" + monthValue.toString() : monthValue.toString();
+				resultMap.put(year + month, median);
 			});
 		});
 
