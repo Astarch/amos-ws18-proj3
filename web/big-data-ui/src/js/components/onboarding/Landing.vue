@@ -452,6 +452,16 @@
     margin-top: 0;
   }
 
+  .resize,
+  .thumbnail > img,
+  .thumbnail a > img,
+  .carousel-inner > .item > img,
+  .carousel-inner > .item > a > img {
+    display: block;
+    max-width: 50%;
+    height: 80%;
+}
+
   @media (max-width: 1199px) {
     ul.banner-social-buttons {
       float: left;
