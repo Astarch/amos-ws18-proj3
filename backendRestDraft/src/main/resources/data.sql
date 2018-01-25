@@ -16,33 +16,33 @@ INTO
         '63b61ed5-5ae4-4cc8-9aa3-f14a15c31755',
         'user1',
         '$2a$11$kRVKDZdUVu/8ukF/vD97HOKSTqyOE2GW1CxzEjIRFOjOE.ee9dFvC', -- "pass1"
-        'firstname1',
-        'lastname1',
-        'email1',
-        'address1',
-        'phone1'
+        'James',
+        'Doe',
+        'james.doe@pretrendr.de',
+        'Grovestreet 1',
+        '555 555 555'
     )
     ,
     (
         '337bf2b7-a12e-4d48-ba84-1feaddbd4b20',
         'user2',
         '$2a$11$V4K/YKxxp.N6hHJF/Ef0qul/aDZkOK6GTmo4VgEXGmcgpBXPtifTi', -- "pass2"
-        'firstname2',
-        'lastname2',
-        'email2',
-        'address2',
-        'phone2'
+        'John',
+        'Doe',
+        'john.doe@pretrendr.de',
+        'Grovestreet 1',
+        '555 555 555'
     )
     ,
     (
         '8ad5b3f5-5c78-415f-bd7a-34b38d523027',
         'user3',
         '$2a$11$ItX.nhf7GXskxpGGH9u2Re0M5gjdBGFvWtg/mZZDbmMScjfBgn1ua', -- "pass3"
-        'firstname3',
-        'lastname3',
-        'email3',
-        'address3',
-        'phone3'
+        'Johnny',
+        'Sixpack',
+        'johnny.sixpack@pretrendr.de',
+        'Grovestreet 1',
+        '555 555 555'
     );
 INSERT
 INTO
