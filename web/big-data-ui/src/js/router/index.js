@@ -9,8 +9,7 @@ import LandingPage from '../components/onboarding/Landing';
 import GraphContainer from '../components/engagement/graph/GraphContainer';
 import EngagementLayout from '../components/engagement/EngagementLayout';
 import Dashboard from '../components/engagement/dashboard/Dashboard';
-import UserProfile from '../components/engagement/user-profile/UserProfile';
-import TableList from '../components/engagement/table-list/TableList';
+import AlertHome from '../components/engagement/alerts/AlertHome';
 import ErrorNotFound from '../components/common/ErrorNotFound';
 
 
@@ -58,14 +57,9 @@ const router = new Router({
                     component: Dashboard
                 },
                 {
-                    path: 'stats',
-                    name: 'user',
-                    component: UserProfile
-                },
-                {
-                    path: 'table-list',
-                    name: 'table-list',
-                    component: TableList
+                    path: 'alerts',
+                    name: 'Alerts',
+                    component: AlertHome
                 },
             ]
         },

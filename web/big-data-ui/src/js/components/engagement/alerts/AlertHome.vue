@@ -1,25 +1,15 @@
 <template>
     <div class="row">
       <div class="col-sm-12 col-md-6">
-        <user-card>
-
-        </user-card>
-
-      </div>
-      <div class="col-sm-12 col-md-6">
-        <members-card>
-
-        </members-card>
+        <user-card />
       </div>
     </div>
 </template>
 <script>
   import UserCard from './UserCard.vue'
-  import MembersCard from './MembersCard.vue'
   export default {
     components: {
       UserCard,
-      MembersCard
     }
   }
 

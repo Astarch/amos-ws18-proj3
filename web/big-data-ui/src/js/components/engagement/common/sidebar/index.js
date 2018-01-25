@@ -8,14 +8,9 @@ const SidebarStore = {
             path: '/engagement/dashboard'
         },
         {
-            name: 'User Profile',
-            icon: 'ti-user',
-            path: '/engagement/stats'
-        },
-        {
-            name: 'Table List',
-            icon: 'ti-view-list-alt',
-            path: '/engagement/table-list'
+            name: 'Alerts',
+            icon: 'ti-alarm-clock',
+            path: '/engagement/alerts'
         },
     ],
     displaySidebar(value) {
