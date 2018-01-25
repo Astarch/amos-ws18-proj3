@@ -4,10 +4,11 @@
     <!--Stats cards-->
     <div class="row">
       <div class="col-lg-12">
-        <search-bar v-on:querySubmitted="onSearchQuerySubmitted" />
+        <search-bar 
+        v-on:querySubmitted="onSearchQuerySubmitted"/>
       </div>
   
-      <div class="col-lg-6 col-sm-6" v-show="hasTrends">
+      <div class="col-lg-12 col-sm-12" v-show="hasTrends">
         <card>
   
           <div slot="title">
@@ -29,7 +30,7 @@
         </card>
       </div>
   
-      <div class="col-lg-6 col-sm-6" v-if="hasTrends">
+      <div class="col-lg-12 col-sm-12" v-if="hasTrends">
         <card>
           <div slot="title">
             Google Trends
@@ -91,16 +92,16 @@ export default {
       }
   },
   methods: {
-    onSearchQuerySubmitted(newQuery) {
-      console.log("onSearchQuerySubmitted() ", newQuery);
+    onSearchQuerySubmitted(queryObj) {
+      console.log("onSearchQuerySubmitted() ", queryObj);
+      let method = queryObj.method;
       $("svg").empty();
       $("svg").remove();
       this.isLoading = true;
-      this.query = newQuery;
-
-      var newpath = String(this.path + newQuery + this.timerange);
+      this.query = queryObj.query;
+      
       api.graph
-        .getData(newpath)
+        .getWordcountByDay(this.query, method)
         .then(response => {
           console.log(response.data);
           this.isLoading = false;
@@ -119,7 +120,7 @@ export default {
           }
           console.log(error.response);
         });
-    }
+    },
   }
 };
 </script>

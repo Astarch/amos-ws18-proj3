@@ -17,6 +17,29 @@
         </button>
       </div>
     </form>
+    <div class="searchtype">
+    <b>Search type: </b>
+    <div class="pretty p-default p-round">
+        <input type="radio" name="searchType" v-model="searchType" v-bind:value="'ANY'">
+        <div class="state">
+            <label>Match any of the terms</label>
+        </div>
+    </div>
+
+    <div class="pretty p-default p-round">
+        <input type="radio" name="searchType" v-model="searchType" v-bind:value="'ALL'">
+        <div class="state">
+            <label>Match all terms</label>
+        </div>
+    </div>
+
+    <div class="pretty p-default p-round">
+        <input type="radio" name="searchType" v-model="searchType" v-bind:value="'EXACT'">
+        <div class="state">
+            <label>Exact Match</label>
+        </div>
+    </div>
+    </div>
   </div>
 </template>
 
@@ -24,26 +47,47 @@
 export default {
   name: "search-bar",
   data: () => ({
-    searchTerm: ""
+    searchTerm: "",
+    searchType: "ANY",
   }),
   methods: {
-    submit(){
-      this.$emit("querySubmitted", this.searchTerm);
-    }
+    submit() {
+      let query = this.searchTerm;
+      let method = this.searchType;
+
+      console.log("query:"+ query);
+      console.log("method:"+ method);
+      this.$emit("querySubmitted", {
+        query: query,
+        method: method
+      });
+    },
   }
 };
 </script>
 
 <style lang="scss" scoped>
+@import "~pretty-checkbox/src/pretty-checkbox.scss";
+
+// change radio button color
+.pretty.p-default input:checked ~ .state label:after {
+  background-color: map_get($theme-colors, secondary) !important;
+}
+.pretty .state label{
+  vertical-align: middle;
+}
+.searchtype {
+  margin: 5px 5px 15px 5px;
+}
+
 .searchbox {
   display: inline-block;
-  margin-bottom: 15px;
   position: relative;
   width: 100%;
   height: 45px;
   white-space: nowrap;
   box-sizing: border-box;
-    font-size: 16px;
+  font-size: 16px;
 
   .searchbox_wrapper {
     width: 100%;

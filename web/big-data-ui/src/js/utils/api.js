@@ -39,6 +39,7 @@ if (getAuthToken() && getAuthToken().length > 5) {
 axiosInstance.interceptors.response.use(response => {
     let authToken = getAuthToken()
     if (response.status == 401) {
+        console.log("backend session is expired, logout user")
         store.dispatch('logoutUser').then(event => {}).catch()
     } else if (response && response.headers && response.headers['x-auth-token']) {
         let authToken = writeAuthToken(response.headers['x-auth-token']);
@@ -49,10 +50,13 @@ axiosInstance.interceptors.response.use(response => {
 
     return response;
 }, error => {
-    // Do something with response error
+    console.log(error.response)
+    if (error.response.status == 401) {
+        console.log("backend session is expired, logout user")
+        store.dispatch('logoutUser').then(event => {}).catch()
+    }
     return Promise.reject(error);
 });
-
 export default axiosInstance;
 
 export const isLoggedIn = () => {
@@ -115,10 +119,11 @@ const user = {
 };
 
 /***** graph *****/
-const getData = (path) => axiosInstance.get(path);
+const getWordcountByDay = (query, method) =>
+    axiosInstance.get(`/api/gdelt/wordcountByDay/${query}?from=20170101&to=20170331&method=${method}`);
 
 const graph = {
-    getData
+    getWordcountByDay
 };
 
 const api = {
