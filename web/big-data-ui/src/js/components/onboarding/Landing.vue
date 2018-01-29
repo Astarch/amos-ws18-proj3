@@ -78,10 +78,10 @@
             </p>
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
-            <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
+            <img class="img-responsive" src="~assets/landing-page/pretrendr_1.jpg" alt="">
           </div>
           <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="resize" src="~assets/landing-page/student1.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/patrick.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
@@ -100,7 +100,7 @@
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="resize" src="~assets/landing-page/student2.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/lara.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
@@ -119,7 +119,7 @@
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="resize" src="~assets/landing-page/student1.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/tristan.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
@@ -138,7 +138,7 @@
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="resize" src="~assets/landing-page/student2.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/antonia.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
@@ -157,7 +157,7 @@
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="resize" src="~assets/landing-page/student1.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/florian.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
@@ -176,7 +176,7 @@
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="resize" src="~assets/landing-page/student2.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/joud.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
@@ -195,7 +195,7 @@
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="resize" src="~assets/landing-page/student1.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/scott.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
@@ -458,7 +458,7 @@
   .carousel-inner > .item > img,
   .carousel-inner > .item > a > img {
     display: block;
-    max-width: 50%;
+    max-width: 60%;
     height: 80%;
 }
 
