@@ -88,8 +88,8 @@
             <div class="clearfix"></div>
             <h2 class="section-heading">About Patrick</h2>
             <p class="lead">
-              Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+              Patrick is a graduate student studying Information Systems at TU Berlin.
+              During this project he has worked on the Frontend, Vue.js, Node.js, Git, Java, Javascript, Continuos Integration, CircleCi and Session Handling.
             </p>
             <p class="lead">
               Get connected on LinkedIn :
@@ -107,8 +107,8 @@
             <div class="clearfix"></div>
             <h2 class="section-heading">About Lara</h2>
             <p class="lead">
-               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+               Lara is a graduate student studying Computer Science at TU Berlin.
+              During this project she has worked on the Frontend, Graphs, D3.js, Workbench, GDELT, JavaScript, Java, Query Optimization and Elasticsearch.
             </p>
             <p class="lead">
               Get connected on LinkedIn :
@@ -126,8 +126,8 @@
             <div class="clearfix"></div>
             <h2 class="section-heading">About Tristan</h2>
             <p class="lead">
-               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+               Tristan is a graduate student studying Computer Science at TU Berlin.
+              During this project he has worked on the Backend, Spring/Boot , REST, Databases, Java, Elasticsearch, Query Optimization and AWS S3.
             </p>
             <p class="lead">
               Get connected on LinkedIn :
@@ -145,8 +145,8 @@
             <div class="clearfix"></div>
             <h2 class="section-heading">About Antonia</h2>
             <p class="lead">
-               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+               Antonia is a graduate student studying Computer Engineering at TU Berlin.
+              During this project she has worked on the Workbench, Open Data Sources, GDELT, Query Optimization, Elasticsearch, Metrics and Use Cases.
             </p>
             <p class="lead">
               Get connected on LinkedIn :
@@ -164,14 +164,14 @@
             <div class="clearfix"></div>
             <h2 class="section-heading">About Florian</h2>
             <p class="lead">
-               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+               Florian is a graduate student studying Information Systems at TU Berlin.
+              During this project he has worked on the Architecture, AWS, Backend, REST, Java, circleCI, Databases and Elasticsearch.
             </p>
             <p class="lead">
               Get connected on LinkedIn :
             </p>
             <p>
-                <a href="#" class="btn btn-primary btn-lg"><i
+                <a href="https://www.linkedin.com/in/florian-muchow/" class="btn btn-primary btn-lg"><i
                     class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
             </p>
           </div>
@@ -183,8 +183,8 @@
             <div class="clearfix"></div>
             <h2 class="section-heading">About Joud</h2>
             <p class="lead">
-               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+               Joud is a graduate student studying Computer Science at TU Berlin.
+              During this project she has worked on the Backend, Spring boot, Metrics, Postman, AWS S3 and Architecture. 
             </p>
             <p class="lead">
               Get connected on LinkedIn :
@@ -202,13 +202,13 @@
             <div class="clearfix"></div>
             <h2 class="section-heading">About Scott</h2>
             <p class="lead">
-               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.            </p>
+               Scott is a graduate student studying Computer Science at TU Berlin.
+              During this project he has worked on the Frontend, Workbench, Test Environment, Elastic Map Reduce and Elasticsearch.            </p>
             <p class="lead">
               Get connected on LinkedIn :
             </p>
             <p>
-                <a href="#" class="btn btn-primary btn-lg"><i
+                <a href="https://www.linkedin.com/in/scottyswork" class="btn btn-primary btn-lg"><i
                     class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
             </p>
           </div>
