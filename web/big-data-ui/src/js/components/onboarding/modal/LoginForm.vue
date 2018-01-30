@@ -13,76 +13,74 @@
 </template>
 
 <script>
-  import {
-    mapState
-  } from "vuex";
-  import {
-    isPasswordValid,
-    isNameValid
-  } from "../../../utils/validation";
-  import RequestStatus from 'src/js/models/RequestStatus';
-  import {
-    ServerErrors
-  } from 'src/js/utils/constants';
-  
-  export default {
-    name: "login-form",
-    props: {
-      active: Boolean
-    },
-    data: () => ({
-      username: "",
-      password: "",
-      errorText: "",
-      hasError: false,
-      reqStatus: new RequestStatus()
-    }),
-    computed: mapState({
-      // arrow functions can make the code very succinct!
-      user: state => state.user.user,
-    }),
-    mounted() {
+import { mapState } from "vuex";
+import { isPasswordValid, isNameValid } from "../../../utils/validation";
+import RequestStatus from "src/js/models/RequestStatus";
+import { ServerErrors } from "src/js/utils/constants";
 
-      // fill in username if user just registered
-      if (this.user != undefined && this.user.username != undefined && this.user.username.length > 2) {
-        this.username = this.user.username
+export default {
+  name: "login-form",
+  props: {
+    active: Boolean
+  },
+  data: () => ({
+    username: "",
+    password: "",
+    errorText: "",
+    hasError: false,
+    reqStatus: new RequestStatus()
+  }),
+  computed: mapState({
+    // arrow functions can make the code very succinct!
+    user: state => state.user.user
+  }),
+  mounted() {
+    // fill in username if user just registered
+    if (
+      this.user != undefined &&
+      this.user.username != undefined &&
+      this.user.username.length > 2
+    ) {
+      this.username = this.user.username;
+    }
+  },
+  methods: {
+    submit() {
+      var data = {
+        form: this.type
+      };
+
+      let validLoginData = this.validateLogin(this.username, this.password);
+      if (validLoginData) {
+        data.password = this.password;
+        data.user = this.username;
+        this.doLogin(this.username, this.password);
       }
     },
-    methods: {
-      submit() {
-        var data = {
-          form: this.type
-        };
-  
-        let validLoginData = this.validateLogin(this.username, this.password);
-        if (validLoginData) {
-          data.password = this.password;
-          data.user = this.username;
-          this.doLogin(this.username, this.password);
-        }
-      },
-      doLogin(name, password) {
-        this.reqStatus.pending = true;
-        this.$store.dispatch('loginUser', {
-            username: name,
-            password
-          })
-          .then(requestStatus => {
-            this.reqStatus = requestStatus;
-            console.log(this.user)
-            this.$router.push({
-              path: "engagement"
-            });
-          }).catch(requestStatus => {
-            this.reqStatus = requestStatus;
-            console.log(requestStatus)
-            if (this.reqStatus !== ServerErrors.ERROR_SERVER) {
-              this.showLoginError("Login failure - please try again!");
-            } else {
-              this.showLoginError("Server error - please try again later!");
-            }
-          })
-        /*api.auth
+    doLogin(name, password) {
+      this.reqStatus.pending = true;
+      this.$store
+        .dispatch("loginUser", {
+          username: name,
+          password
+        })
+        .then(requestStatus => {
+          this.reqStatus = requestStatus;
+          console.log(this.user);
+          this.$router.push({
+            path: "engagement"
+          });
+        })
+        .catch(requestStatus => {
+          this.reqStatus = requestStatus;
+          console.log(requestStatus);
+          if (this.reqStatus !== ServerErrors.ERROR_SERVER) {
+            this.showLoginError("Login failure - please try again!");
+          } else {
+            this.showLoginError("Server error - please try again later!");
+          }
+        });
+      /*api.auth
           .postLogin(name, password)
           .then(response => {
             this.$router.push({
@@ -101,38 +99,38 @@
               this.showLoginError("Server error - please try again later!");
             }
           });*/
-      },
-      validateLogin(name, password) {
-        let isValid = false;
-        if (!isNameValid(name)) {
-          this.showLoginError("Please enter a valid username!");
-        } else if (!isPasswordValid(password)) {
-          this.showLoginError("Please enter a valid password!");
-        } else {
-          isValid = true;
-          this.hideLoginError();
-        }
-  
-        return isValid;
-      },
-      showLoginError(message) {
-        if (typeof message === "string" || message instanceof String) {
-          this.hasError = true;
-          this.errorText = message;
-        } else {
-          this.hasError = false;
-        }
-      },
-      hideLoginError() {
-        this.hasError = false;
-      },
-      openRegistration() {
-        this.$emit("openRegistration");
+    },
+    validateLogin(name, password) {
+      let isValid = false;
+      if (!isNameValid(name)) {
+        this.showLoginError("Please enter a valid username!");
+      } else if (!isPasswordValid(password)) {
+        this.showLoginError("Please enter a valid password!");
+      } else {
+        isValid = true;
+        this.hideLoginError();
       }
+
+      return isValid;
+    },
+    showLoginError(message) {
+      if (typeof message === "string" || message instanceof String) {
+        this.hasError = true;
+        this.errorText = message;
+      } else {
+        this.hasError = false;
+      }
+    },
+    hideLoginError() {
+      this.hasError = false;
+    },
+    openRegistration() {
+      this.$emit("openRegistration");
     }
-  };
+  }
+};
 </script>
 
 <style lang='scss'>
-  @import "../../../../scss/forms";
+@import "../../../../scss/forms";
 </style>

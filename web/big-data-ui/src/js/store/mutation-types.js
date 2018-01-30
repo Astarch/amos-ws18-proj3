@@ -1,2 +1,7 @@
 export const USER_SET = 'USER_SET'
 export const USER_CLEAR = 'USER_CLEAR'
+export const SET_CURRENT_QUERY = 'CURRENT_QUERY'
+export const CLEAR_CURRENT_QUERY = 'CLEAR_CURRENT_QUERY'
+
+export const TREND_ADD = 'TREND_ADD'
+export const TRENDS_CLEAR = 'TRENDS_CLEAR'

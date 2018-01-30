@@ -5,7 +5,9 @@
     <div class="row">
       <div class="col-lg-12">
         <search-bar 
-        v-on:querySubmitted="onSearchQuerySubmitted"/>
+        :initialSearchType="queryMethod"
+        :initialSearchTerm="query"
+        v-on:querySubmitted="onSearchQuerySubmitted" />
       </div>
   
       <div class="col-lg-12 col-sm-12" v-show="hasTrends">
@@ -51,15 +53,20 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import RequestStatus from "src/js/models/RequestStatus";
+
 import Card from "./../common/Card";
 import SearchBar from "./../common/Searchbar";
 import Graph from "./../graph/Graph";
 import http, { api } from "js/utils/api";
 import VueLoading from "vue-simple-loading";
 
-import moment from "moment"
+import moment from "moment";
+import { isLong } from "long";
 
 export default {
+  name: "dashboard",
   components: {
     Card,
     Graph,
@@ -74,53 +81,101 @@ export default {
       graphdata: undefined,
       dummy_path: "/api/dummy/wordcountByDay/bitcoin?from=20170101&to=20170331",
       path: "/api/gdelt/wordcountByDay/",
-      timerange: "?from=20170101&to=20170331",
+      timerange: "from=20170101&to=20171231",
       query: "",
-      isLoading: false
+      queryMethod: "ANY",
+      isLoading: false,
+      reqStatus: new RequestStatus()
     };
   },
   computed: {
-      hasTrends(){
-        return this.graphdata != undefined
-      },
-      prettyTimerange(){
-        let prettyDateFormat = "ll"
-        let test = this.timerange.split("&")
-        let start = moment(test[0].split("=")[1], "YYYYMMDD")
-        let end = moment(test[1].split("=")[1], "YYYYMMDD")
-        return "From "+ start.format(prettyDateFormat) + " to " + end.format(prettyDateFormat) 
-      }
+    hasTrends() {
+      return this.graphdata != undefined || this.isLoading;
+    },
+    prettyTimerange() {
+      let prettyDateFormat = "ll";
+      let test = this.timerange.split("&");
+      let start = moment(test[0].split("=")[1], "YYYYMMDD");
+      let end = moment(test[1].split("=")[1], "YYYYMMDD");
+      return (
+        "From " +
+        start.format(prettyDateFormat) +
+        " to " +
+        end.format(prettyDateFormat)
+      );
+    }
   },
   methods: {
-    onSearchQuerySubmitted(queryObj) {
-      console.log("onSearchQuerySubmitted() ", queryObj);
-      let method = queryObj.method;
+    ...mapActions(["getWordcountByDay", "updateCurrentSearchQuery"]),
+    setData(data) {
+      console.log("setData:", data);
+      this.isLoading = false;
+      this.graphdata = data;
+    },
+    fetchStateWordCountData(query, method, timerange) {
+      return this.$store.getters.getTrendByDay(query, method, timerange);
+    },
+    fetchWordcountData(queryObj) {
       $("svg").empty();
       $("svg").remove();
       this.isLoading = true;
       this.query = queryObj.query;
-      
-      api.graph
-        .getWordcountByDay(this.query, method)
-        .then(response => {
-          console.log(response.data);
-          this.isLoading = false;
-          this.graphdata = response.data;
-        })
-        .catch(error => {
-          console.log(error);
-          this.isLoading = false;
-          graphdata: undefined;
 
-          let errorCode = error.response.status;
-          if (errorCode < 500) {
-            console.log("Failure - please try again!");
-          } else {
-            console.log("Error - please try again later!");
-          }
-          console.log(error.response);
-        });
+      let stateData = this.fetchStateWordCountData(
+        queryObj.query,
+        queryObj.method,
+        queryObj.timerange
+      );
+
+      if (stateData != undefined && stateData.data != undefined) {
+        console.log("stateData:", stateData);
+        this.setData(stateData.data);
+      } else {
+        this.getWordcountByDay(queryObj)
+          .then(resp => {
+            this.reqStatus = resp.req;
+            console.log(resp.trend);
+            this.setData(resp.trend.data);
+          })
+          .catch(requestStatus => {
+            this.reqStatus = requestStatus;
+            console.log(requestStatus);
+            this.isLoading = false;
+            graphdata: undefined;
+          });
+      }
     },
+    onSearchQuerySubmitted(queryObj) {
+      console.log("onSearchQuerySubmitted() ", queryObj);
+      if (
+        queryObj.query === this.query &&
+        queryObj.method === this.queryMethod
+      ) {
+        return;
+      }
+
+      let query = {
+        query: queryObj.query,
+        method: queryObj.method,
+        timerange: this.timerange
+      };
+      this.updateCurrentSearchQuery(query)
+        .then(resp => {
+          console.log(this.$store.user.currentSearchQuery);
+        })
+        .catch(error => {});
+
+      this.fetchWordcountData(query);
+    }
+  },
+  mounted() {
+    let lastQuery = this.$store.state.user.currentSearchQuery;
+    if (lastQuery && lastQuery.query && lastQuery.query.length > 1) {
+      //this.timerange = lastQuery.timerange;
+      this.queryMethod = lastQuery.method;
+
+      this.fetchWordcountData(lastQuery);
+    }
   }
 };
 </script>
@@ -134,11 +189,9 @@ export default {
     width: 100%;
     height: 400px;
   }
-
   .hide {
     display: none;
   }
-
   // change loading spinner color
   .sk-circle .sk-child:before {
     background-color: map_get($theme-colors, secondary);

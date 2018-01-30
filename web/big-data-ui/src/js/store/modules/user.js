@@ -21,6 +21,11 @@ const state = {
         authorities: [],
         isLoggedIn: false
     },
+    currentSearchQuery: {
+        query: "",
+        method: "",
+        timerange: "",
+    }
 }
 
 // getters
@@ -30,6 +35,18 @@ const getters = {
 
 // actions
 const actions = {
+    clearCurrentSearchQuery({ commit, state }) {
+        return new Promise((resolve, reject) => {
+            commit(types.CLEAR_CURRENT_QUERY)
+            resolve()
+        })
+    },
+    updateCurrentSearchQuery({ commit, state }, { query, method, timerange }) {
+        return new Promise((resolve, reject) => {
+            commit(types.SET_CURRENT_QUERY, { query, method, timerange })
+            resolve()
+        })
+    },
     loginUser({ commit, state }, { username, password }) {
         return new Promise((resolve, reject) => {
 
@@ -166,6 +183,8 @@ const actions = {
         return new Promise((resolve, reject) => {
             logoutUser()
             commit(types.USER_CLEAR)
+            commit(types.TRENDS_CLEAR)
+            commit(types.CLEAR_CURRENT_QUERY)
             router.push({
                 path: "/"
             });
@@ -183,6 +202,14 @@ const mutations = {
     [types.USER_CLEAR](state) {
         //clear user
         state.user = {}
+    },
+    [types.SET_CURRENT_QUERY](state, query) {
+        //clear user
+        state.currentSearchQuery = Object.assign({}, state.currentSearchQuery, query)
+    },
+    [types.CLEAR_CURRENT_QUERY](state) {
+        //clear user
+        state.currentSearchQuery = {}
     },
 }
 

@@ -119,8 +119,8 @@ const user = {
 };
 
 /***** graph *****/
-const getWordcountByDay = (query, method) =>
-    axiosInstance.get(`/api/gdelt/wordcountByDay/${query}?from=20170101&to=20170331&method=${method}`);
+const getWordcountByDay = (query, method, timerange) =>
+    axiosInstance.get(`/api/gdelt/wordcountByDay/${query}?${timerange}&method=${method}`);
 
 const graph = {
     getWordcountByDay

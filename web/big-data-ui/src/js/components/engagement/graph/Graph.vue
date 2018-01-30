@@ -35,6 +35,7 @@
         props: ['data'],
     watch: {
       data: function (newData, oldData) {
+        console.log("newData!")
         this.prepareData(newData);
       }
     },
