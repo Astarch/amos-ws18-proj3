@@ -63,7 +63,7 @@ import http, { api } from "js/utils/api";
 import VueLoading from "vue-simple-loading";
 
 import moment from "moment";
-import { isLong } from "long";
+
 
 export default {
   name: "dashboard",
