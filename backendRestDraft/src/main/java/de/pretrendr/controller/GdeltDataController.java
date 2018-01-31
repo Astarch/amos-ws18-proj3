@@ -68,9 +68,12 @@ public class GdeltDataController {
 	public ResponseEntity<Map<String, Long>> getWordCountByDay(@PathVariable String term,
 			@RequestParam(value = "from", defaultValue = "20170101") final String from,
 			@RequestParam(value = "to", defaultValue = "20171231") final String to,
-			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method) throws IOException {
+			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method,
+			@RequestParam(value = "normalize", defaultValue = "false") final boolean normalize) throws IOException {
 		Map<String, Long> list = articleService.countByTermAndDay(term, from, to, method);
-
+		if (normalize) {
+			articleService.normalizeMap(list);
+		}
 		return new ResponseEntity<Map<String, Long>>(list, HttpStatus.OK);
 	}
 
@@ -78,9 +81,12 @@ public class GdeltDataController {
 	public ResponseEntity<Map<String, Long>> getWordCountByMonth(@PathVariable String term,
 			@RequestParam(value = "from", defaultValue = "20170101") final String from,
 			@RequestParam(value = "to", defaultValue = "20171231") final String to,
-			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method) throws IOException {
+			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method,
+			@RequestParam(value = "normalize", defaultValue = "false") final boolean normalize) throws IOException {
 		Map<String, Long> list = articleService.countByTermAndMonth(term, from, to, method);
-
+		if (normalize) {
+			articleService.normalizeMap(list);
+		}
 		return new ResponseEntity<Map<String, Long>>(list, HttpStatus.OK);
 	}
 
@@ -88,19 +94,26 @@ public class GdeltDataController {
 	public ResponseEntity<Map<String, Long>> getAverageWordCountByMonth(@PathVariable String term,
 			@RequestParam(value = "from", defaultValue = "20170101") final String from,
 			@RequestParam(value = "to", defaultValue = "20171231") final String to,
-			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method) throws IOException {
+			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method,
+			@RequestParam(value = "normalize", defaultValue = "false") final boolean normalize) throws IOException {
 		Map<String, Long> list = articleService.averageCountByTermAndMonth(term, from, to, method);
-
+		if (normalize) {
+			articleService.normalizeMap(list);
+		}
 		return new ResponseEntity<Map<String, Long>>(list, HttpStatus.OK);
+
 	}
 
 	@RequestMapping(value = "/minWordcountByMonth/{term}", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Long>> getMinWordCountByMonth(@PathVariable String term,
 			@RequestParam(value = "from", defaultValue = "20170101") final String from,
 			@RequestParam(value = "to", defaultValue = "20171231") final String to,
-			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method) throws IOException {
+			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method,
+			@RequestParam(value = "normalize", defaultValue = "false") final boolean normalize) throws IOException {
 		Map<String, Long> list = articleService.minCountByTermAndMonth(term, from, to, method);
-
+		if (normalize) {
+			articleService.normalizeMap(list);
+		}
 		return new ResponseEntity<Map<String, Long>>(list, HttpStatus.OK);
 	}
 
@@ -108,9 +121,12 @@ public class GdeltDataController {
 	public ResponseEntity<Map<String, Long>> getMaxWordCountByMonth(@PathVariable String term,
 			@RequestParam(value = "from", defaultValue = "20170101") final String from,
 			@RequestParam(value = "to", defaultValue = "20171231") final String to,
-			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method) throws IOException {
+			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method,
+			@RequestParam(value = "normalize", defaultValue = "false") final boolean normalize) throws IOException {
 		Map<String, Long> list = articleService.maxCountByTermAndMonth(term, from, to, method);
-
+		if (normalize) {
+			articleService.normalizeMap(list);
+		}
 		return new ResponseEntity<Map<String, Long>>(list, HttpStatus.OK);
 	}
 
@@ -118,9 +134,12 @@ public class GdeltDataController {
 	public ResponseEntity<Map<String, Long>> getMedWordCountByMonth(@PathVariable String term,
 			@RequestParam(value = "from", defaultValue = "20170101") final String from,
 			@RequestParam(value = "to", defaultValue = "20171231") final String to,
-			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method) throws IOException {
+			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method,
+			@RequestParam(value = "normalize", defaultValue = "false") final boolean normalize) throws IOException {
 		Map<String, Long> list = articleService.medCountByTermAndMonth(term, from, to, method);
-
+		if (normalize) {
+			articleService.normalizeMap(list);
+		}
 		return new ResponseEntity<Map<String, Long>>(list, HttpStatus.OK);
 	}
 

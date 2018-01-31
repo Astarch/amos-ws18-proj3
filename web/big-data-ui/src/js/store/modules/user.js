@@ -9,7 +9,7 @@ import router from 'src/js/router'
 // initial state
 // shape: {
 //  user:{ },
-//  loginStatus
+//  currentSearchQueries: []
 // }
 const state = {
     user: {
@@ -21,6 +21,7 @@ const state = {
         authorities: [],
         isLoggedIn: false
     },
+    currentSearchQueries: []
 }
 
 // getters
@@ -30,6 +31,18 @@ const getters = {
 
 // actions
 const actions = {
+    clearCurrentSearchQuery({ commit, state }) {
+        return new Promise((resolve, reject) => {
+            commit(types.CLEAR_CURRENT_QUERIES)
+            resolve()
+        })
+    },
+    updateCurrentSearchQueries({ commit, state }, queries) {
+        return new Promise((resolve, reject) => {
+            commit(types.SET_CURRENT_QUERIES, queries)
+            resolve()
+        })
+    },
     loginUser({ commit, state }, { username, password }) {
         return new Promise((resolve, reject) => {
 
@@ -166,6 +179,8 @@ const actions = {
         return new Promise((resolve, reject) => {
             logoutUser()
             commit(types.USER_CLEAR)
+            commit(types.TRENDS_CLEAR)
+            commit(types.CLEAR_CURRENT_QUERIES)
             router.push({
                 path: "/"
             });
@@ -183,6 +198,13 @@ const mutations = {
     [types.USER_CLEAR](state) {
         //clear user
         state.user = {}
+    },
+    [types.SET_CURRENT_QUERIES](state, queries) {
+        state.currentSearchQueries = [...queries]
+    },
+    [types.CLEAR_CURRENT_QUERIES](state) {
+        //clear queries
+        state.currentSearchQueries = {}
     },
 }
 

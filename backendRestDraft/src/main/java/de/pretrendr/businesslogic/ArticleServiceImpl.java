@@ -594,4 +594,20 @@ public class ArticleServiceImpl implements ArticleService {
 
 		return resultMap;
 	}
+
+	@Override
+	public void normalizeMap(Map<String, Long> list) {
+		Long maxEntry = null;
+		for (Map.Entry<String, Long> entry : list.entrySet()) {
+			if (maxEntry == null || entry.getValue().compareTo(maxEntry) > 0) {
+				maxEntry = entry.getValue();
+			}
+		}
+		if (maxEntry != null && maxEntry > 0) {
+			double normalizeFactor = 1d / (maxEntry / 100d);
+			for (Map.Entry<String, Long> entry : list.entrySet()) {
+				list.put(entry.getKey(), (long) (entry.getValue() / normalizeFactor));
+			}
+		}
+	}
 }

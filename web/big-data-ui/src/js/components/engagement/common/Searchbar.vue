@@ -46,22 +46,51 @@
 <script>
 export default {
   name: "search-bar",
-  data: () => ({
-    searchTerm: "",
-    searchType: "ANY",
-  }),
+  props: {
+    initialSearchType: {
+      validator: function(value) {
+        return value === "ANY" || value === "EXACT" || value === "ALL";
+      },
+      default: function() {
+        return "ANY";
+      }
+    },
+    initialSearchTerm: {
+      type: String,
+      default: function() {
+        return "";
+      }
+    }
+  },
+  data: function() {
+    return {
+      searchTerm: this.initialSearchTerm,
+      searchType: this.initialSearchType
+    };
+  },
+  watch: {
+    initialSearchTerm(newVal, oldValue) {
+      this.searchTerm = newVal;
+    },
+    initialSearchType(newVal, oldValue) {
+      this.searchType = newVal;
+    }
+  },
   methods: {
     submit() {
+      if(this.searchTerm.length <= 0){
+        return
+      }
       let query = this.searchTerm;
       let method = this.searchType;
 
-      console.log("query:"+ query);
-      console.log("method:"+ method);
+      console.log("query:" + query);
+      console.log("method:" + method);
       this.$emit("querySubmitted", {
         query: query,
         method: method
       });
-    },
+    }
   }
 };
 </script>
@@ -73,7 +102,7 @@ export default {
 .pretty.p-default input:checked ~ .state label:after {
   background-color: map_get($theme-colors, secondary) !important;
 }
-.pretty .state label{
+.pretty .state label {
   vertical-align: middle;
 }
 .searchtype {
