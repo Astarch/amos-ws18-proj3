@@ -603,9 +603,11 @@ public class ArticleServiceImpl implements ArticleService {
 				maxEntry = entry.getValue();
 			}
 		}
-		double normalizeFactor = (maxEntry / 100d);
-		for (Map.Entry<String, Long> entry : list.entrySet()) {
-			list.put(entry.getKey(), (long) (entry.getValue() / normalizeFactor));
+		if (maxEntry != null && maxEntry > 0) {
+			double normalizeFactor = 1d / (maxEntry / 100d);
+			for (Map.Entry<String, Long> entry : list.entrySet()) {
+				list.put(entry.getKey(), (long) (entry.getValue() / normalizeFactor));
+			}
 		}
 	}
 }
