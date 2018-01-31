@@ -41,7 +41,8 @@
             <graph :data="queries"></graph>
           </div>
           <div slot="footer">
-            {{prettyTimerange}}
+            <p><b>{{trendIndicatorMessage}}</b></p>
+            <p>{{prettyTimerange}}</p>
           </div>
   
         </card>
@@ -151,7 +152,7 @@ export default {
     clearError() {
       this.errorMessage = "";
     },
-    giveTrendIndication(graphdata) {
+    giveTrendIndication(newQuery,graphdata) {
       var trendData = [];
       $.each(graphdata, function (key, value) {
         trendData.push({value});
@@ -187,22 +188,22 @@ export default {
       }
       if(countTrend > 2){
           if(falling == true) {
-            this.trendIndicatorMessage= "This trend seems to have been fallen for a while and going!";
+            this.trendIndicatorMessage= "The trend for '"+newQuery.query+"' seems to have been fallen for a while and will probably fall more!";
           }
             else{
-              this.trendIndicatorMessage="This trend seems to have been rising for a while and going!";
+              this.trendIndicatorMessage="The trend for '"+newQuery.query+"' seems to have been rising for a while and will probably rise more!";
             }
       }
       if(countTrend <3 && countTrend >0){
         if(falling == true) {
-            this.trendIndicatorMessage= "This trend is falling at the moment!";
+            this.trendIndicatorMessage= "The trend for '"+newQuery.query+"'  is falling at the moment!";
           }
             else{
-              this.trendIndicatorMessage="This trend is rising at the moment!";
+              this.trendIndicatorMessage="The trend for '"+newQuery.query+"'  is rising at the moment!";
             }
       }  
         if (countTrend==0){
-          this.trendIndicatorMessage = "There is no data";
+          this.trendIndicatorMessage = "There is no data for "+newQuery.query;
         }
       console.log("This is the message: "+ this.trendIndicatorMessage+ " ,The count: "+ countTrend + " ,Falling?: " +falling);
     },
@@ -278,6 +279,7 @@ export default {
             console.log(resp.trend);
             //this.setData(resp.trend.data);
             this.addQueryData(queryObj, resp.trend.data);
+            this.giveTrendIndication(queryObj,resp.trend.data);
           })
           .catch(requestStatus => {
             this.reqStatus = requestStatus;
@@ -303,7 +305,6 @@ export default {
       }
       this.queryTerm = "";
       this.fetchWordcountData(query);
-      this.giveTrendIndication(this.queries[0].data);
     }
   },
   mounted() {
