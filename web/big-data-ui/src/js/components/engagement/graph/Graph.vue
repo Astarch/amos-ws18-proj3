@@ -32,17 +32,13 @@ export default {
   props: ["data"],
   watch: {
     data: function(newDataArray, oldData) {
-      console.log("newData! array:", newDataArray);
-      $("svg").empty();
       $("svg").remove();
-      if (newDataArray.length <= 0) {
-        $("svg").empty();
-        $("svg").remove();
-        return;
-      }
+
+      if (newDataArray.length > 0){
       let newData = newDataArray[0].data;
-      //console.log("newData! first item:", newData);
-      this.prepareData(newData);
+      console.log("newData! first item:", newData);
+      this.prepareData(newDataArray);
+      }
     }
   },
 
@@ -56,41 +52,40 @@ export default {
 
   methods: {
     prepareData: function(data) {
-      this.formatted_data = new Array();
       this.smoothed_data = new Array();
-      var parseTime = d3.timeParse("%Y%m%d");
-      var self = this;
-
-      $.each(data, function(key, value) {
-        value += value;
-        self.formatted_data.push({ date: parseTime(key), count: value });
-      });
-
-      var count = 0;
-      var self = this;
-      $.each(data, function(key, value) {
+      this.colors = new Array();
+      let parseTime = d3.timeParse("%Y%m%d");
+      let count = 0;
+      let self = this;
+      $.each(data, function(index, item) {
+        self.colors.push(item.color);
+        $.each(item.data, function(key, value) {
         count++;
-        if (count % 7 != 0 && count % 8 != 0) {
-          self.smoothed_data.push({ date: parseTime(key), count: value });
-        }
+        if(!(parseTime(key).getDay() ==0) && !(parseTime(key).getDay() ==6)){
+         self.smoothed_data.push({ query: index, date: parseTime(key), count: value });
+        };
       });
-      this.buildGraph(this.formatted_data);
+      });
+      this.group = d3.nest().key(function(d) {
+        return d.query;
+      }).entries(this.smoothed_data);
+      this.buildGraph(this.smoothed_data);
     },
 
     buildGraph: function(data) {
       var parentW = document.getElementById("graph").clientWidth;
-      var parentH = 400;
+      this.parentH = 400;
       this.margin = { top: 20, right: 50, bottom: 50, left: 50 };
 
       this.x = d3
         .scaleTime()
-        .range([0, parentW - this.margin.left - this.margin.right]);
+        .range([0, this.parentW - this.margin.left - this.margin.right]);
       this.y = d3
         .scaleLinear()
-        .range([parentH - this.margin.top - this.margin.bottom, 0]);
+        .range([this.parentH - this.margin.top - this.margin.bottom, 0]);
 
       this.xAxis = d3.axisBottom().scale(this.x);
-      var yAxis = d3.axisLeft().scale(this.y);
+      this.yAxis = d3.axisLeft().scale(this.y);
 
       this.x.domain(
         d3.extent(data, function(d) {
@@ -104,13 +99,17 @@ export default {
         })
       ]);
 
-      this.line = d3.line();
-      this.smoothed_line = d3.line();
+      this.buildLines(this.group);
+      },
+
+      buildLines : function (data) {
+      let self = this;
+      this.patharray = new Array();
 
       this.svg = d3
         .select("#graph")
         .append("svg")
-        .attr("height", parentH);
+        .attr("height", this.parentH);
       this.canvas = this.svg
         .append("g")
         .attr(
@@ -118,29 +117,27 @@ export default {
           "translate(" + this.margin.left + "," + this.margin.top + ")"
         );
 
-      this.path = this.canvas
-        .append("path")
-        .data([data])
-        .attr("class", "line");
-      this.smoothed_path = this.canvas
-        .append("path")
-        .data([this.smoothed_data])
-        .attr("class", "smoothedline");
+        $.each(data, function(index, item) {
+          self.patharray[index] = self.canvas
+          .append("path")
+          .attr("class", "line")
+          .style("stroke", self.colors[index]);
+        });
 
       this.xEl = this.canvas
         .append("g")
         .attr(
           "transform",
           "translate(0 " +
-            (parentH - this.margin.top - this.margin.bottom) +
+            (this.parentH - this.margin.top - this.margin.bottom) +
             ")"
         );
-      this.yEl = this.canvas.append("g").call(yAxis);
+      this.yEl = this.canvas.append("g").call(this.yAxis);
 
-      this.updateValues(this.x, this.y);
+      this.updateValues(this.x, this.y, data);
     },
 
-    updateValues: function(x, y) {
+    updateValues: function(x, y, data) {
       var parentW = document.getElementById("graph").clientWidth;
 
       this.svg.attr("width", parentW);
@@ -148,14 +145,7 @@ export default {
       this.xAxis.scale(x);
       this.xEl.call(this.xAxis);
 
-      this.line
-        .x(function(d) {
-          return x(d.date);
-        })
-        .y(function(d) {
-          return y(d.count);
-        });
-      this.smoothed_line
+      let line = d3.line()
         .x(function(d) {
           return x(d.date);
         })
@@ -163,13 +153,14 @@ export default {
           return y(d.count);
         });
 
-      this.path.attr("d", this.line);
-      this.smoothed_path.attr("d", this.smoothed_line);
+     $.each(this.patharray, function(index, item) {
+          item.attr("d", line(data[index].values));
+     });
     },
 
     onResize(event) {
       if ($("#graph").is(":parent")) {
-        this.updateValues(this.x, this.y);
+        this.updateValues(this.x, this.y, this.group);
       }
     }
   }

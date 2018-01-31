@@ -183,7 +183,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
           <img
             alt=""
             class="img-responsive"
-            src="~assets/landing-page/aboutus.jpg"
+            src="~assets/landing-page/pretrendr_1.jpg"
           />
         </div>
          
@@ -193,7 +193,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
           <img
             alt=""
             class="resize"
-            src="~assets/landing-page/student1.jpg"
+            src="~assets/landing-page/patrick.jpg"
           />
         </div>
          
@@ -218,8 +218,8 @@ exports[`Landing.test.js has the expected html structure 1`] = `
             class="lead"
           >
             
-            Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-            No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+            Patrick is a graduate student studying Information Systems at TU Berlin.
+            During this project he has worked on the Frontend, Vue.js, Node.js, Git, Java, Javascript, Continuos Integration, CircleCi and Session Handling.
           
           </p>
            
@@ -234,7 +234,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
           <p>
             <a
               class="btn btn-primary btn-lg"
-              href="#"
+              href="https://www.linkedin.com/in/patrick-willmann/"
             >
               <i
                 aria-hidden="true"
@@ -250,7 +250,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
           <img
             alt=""
             class="resize"
-            src="~assets/landing-page/student2.jpg"
+            src="~assets/landing-page/lara.jpg"
           />
         </div>
          
@@ -275,29 +275,9 @@ exports[`Landing.test.js has the expected html structure 1`] = `
             class="lead"
           >
             
-             Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-            No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+             Lara is a graduate student studying Computer Science at TU Berlin.
+            During this project she has worked on the Frontend, Graphs, D3.js, Workbench, GDELT, JavaScript, Java, Query Optimization and Elasticsearch.
           
-          </p>
-           
-          <p
-            class="lead"
-          >
-            
-            Get connected on LinkedIn :
-          
-          </p>
-           
-          <p>
-            <a
-              class="btn btn-primary btn-lg"
-              href="#"
-            >
-              <i
-                aria-hidden="true"
-                class="fa fa-linkedin fa-fw"
-              />
-            </a>
           </p>
         </div>
          
@@ -307,7 +287,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
           <img
             alt=""
             class="resize"
-            src="~assets/landing-page/student1.jpg"
+            src="~assets/landing-page/tristan.jpg"
           />
         </div>
          
@@ -332,8 +312,8 @@ exports[`Landing.test.js has the expected html structure 1`] = `
             class="lead"
           >
             
-             Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-            No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+             Tristan is a graduate student studying Computer Science at TU Berlin.
+            During this project he has worked on the Backend, Spring/Boot , REST, Databases, Java, Elasticsearch, Query Optimization and AWS S3.
           
           </p>
            
@@ -341,19 +321,24 @@ exports[`Landing.test.js has the expected html structure 1`] = `
             class="lead"
           >
             
-            Get connected on LinkedIn :
+            Get connected on Github :
           
           </p>
            
           <p>
             <a
-              class="btn btn-primary btn-lg"
-              href="#"
+              class="btn btn-default btn-lg"
+              href="https://github.com/Astarch"
             >
               <i
-                aria-hidden="true"
-                class="fa fa-linkedin fa-fw"
+                class="fa fa-github fa-fw"
               />
+               
+              <span
+                class="network-name"
+              >
+                Github
+              </span>
             </a>
           </p>
         </div>
@@ -364,7 +349,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
           <img
             alt=""
             class="resize"
-            src="~assets/landing-page/student2.jpg"
+            src="~assets/landing-page/antonia.jpg"
           />
         </div>
          
@@ -389,8 +374,8 @@ exports[`Landing.test.js has the expected html structure 1`] = `
             class="lead"
           >
             
-             Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-            No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+             Antonia is a graduate student studying Computer Engineering at TU Berlin.
+            During this project she has worked on the Workbench, Open Data Sources, GDELT, Query Optimization, Elasticsearch, Metrics and Use Cases.
           
           </p>
            
@@ -405,7 +390,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
           <p>
             <a
               class="btn btn-primary btn-lg"
-              href="#"
+              href="https://www.linkedin.com/in/antonia-düker-b25b2211a/"
             >
               <i
                 aria-hidden="true"
@@ -421,7 +406,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
           <img
             alt=""
             class="resize"
-            src="~assets/landing-page/student1.jpg"
+            src="~assets/landing-page/florian.jpg"
           />
         </div>
          
@@ -446,8 +431,8 @@ exports[`Landing.test.js has the expected html structure 1`] = `
             class="lead"
           >
             
-             Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-            No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+             Florian is a graduate student studying Information Systems at TU Berlin.
+            During this project he has worked on the Architecture, AWS, Backend, REST, Java, circleCI, Databases and Elasticsearch.
           
           </p>
            
@@ -462,7 +447,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
           <p>
             <a
               class="btn btn-primary btn-lg"
-              href="#"
+              href="https://www.linkedin.com/in/florian-muchow/"
             >
               <i
                 aria-hidden="true"
@@ -478,7 +463,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
           <img
             alt=""
             class="resize"
-            src="~assets/landing-page/student2.jpg"
+            src="~assets/landing-page/joud.jpg"
           />
         </div>
          
@@ -503,29 +488,9 @@ exports[`Landing.test.js has the expected html structure 1`] = `
             class="lead"
           >
             
-             Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-            No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+             Joud is a graduate student studying Computer Science at TU Berlin.
+            During this project she has worked on the Backend, Spring boot, Metrics, Postman, AWS S3 and Architecture. 
           
-          </p>
-           
-          <p
-            class="lead"
-          >
-            
-            Get connected on LinkedIn :
-          
-          </p>
-           
-          <p>
-            <a
-              class="btn btn-primary btn-lg"
-              href="#"
-            >
-              <i
-                aria-hidden="true"
-                class="fa fa-linkedin fa-fw"
-              />
-            </a>
           </p>
         </div>
          
@@ -535,7 +500,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
           <img
             alt=""
             class="resize"
-            src="~assets/landing-page/student1.jpg"
+            src="~assets/landing-page/scott.jpg"
           />
         </div>
          
@@ -560,8 +525,8 @@ exports[`Landing.test.js has the expected html structure 1`] = `
             class="lead"
           >
             
-             Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-            No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.            
+             Scott is a graduate student studying Computer Science at TU Berlin.
+            During this project he has worked on the Frontend, Workbench, Test Environment, Elastic Map Reduce and Elasticsearch.            
           </p>
            
           <p
@@ -575,7 +540,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
           <p>
             <a
               class="btn btn-primary btn-lg"
-              href="#"
+              href="https://www.linkedin.com/in/scottyswork"
             >
               <i
                 aria-hidden="true"

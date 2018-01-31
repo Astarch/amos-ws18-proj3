@@ -94,7 +94,7 @@ export default {
    */
   data() {
     return {
-      timerange: "from=20170101&to=20171231",
+      timerange: "from=20170101&to=20171231&normalize=true",
       trendIndicatorMessage: "",
       queries: [],
       queryTerm: "",
@@ -114,7 +114,8 @@ export default {
         "#aaffc3",
         "#008080",
         "#46f0f0"
-      ]
+      ],
+      tempColors:[]
     };
   },
   computed: {
@@ -135,7 +136,7 @@ export default {
         " to " +
         end.format(prettyDateFormat)
       );
-    }
+    },
   },
   methods: {
     ...mapActions(["getWordcountByDay", "updateCurrentSearchQueries"]),
@@ -234,13 +235,15 @@ export default {
       );
       if (oldQueryIndex >= 0) {
         this.queries.splice(oldQueryIndex, 1);
+        this.tempColors.push(newQuery.color)
       }
     },
     addQueryData(newQuery, data) {
       let oldQueryIndex = _.findIndex(this.queries, q =>
         this.areQueriesEqual(q, newQuery)
       );
-      let color = this.colors[this.queries.length % this.colors.length];
+      let color = this.tempColors[this.queries.length % this.tempColors.length];
+      color = this.tempColors.pop()
       let _query = Object.assign({}, newQuery, { data, color });
       if (oldQueryIndex >= 0) {
         this.queries = Object.assign([...this.queries], {
@@ -290,6 +293,7 @@ export default {
       }
     },
     onSearchQuerySubmitted(queryObj) {
+      $("svg").remove();
       console.log("onSearchQuerySubmitted() ", queryObj);
       let query = {
         query: queryObj.query,
@@ -299,8 +303,8 @@ export default {
       if (this.hasQuery(query)) {
         return;
       }
-      if(this.queries.length >= 5){
-        this.errorMessage = "Only up to 5 terms allowed!"
+      if(this.queries.length >= 10){
+        this.errorMessage = "Only up to 10 terms allowed!"
         return
       }
       this.queryTerm = "";
@@ -308,6 +312,7 @@ export default {
     }
   },
   mounted() {
+    this.tempColors = [...this.colors]
     let lastQueries = this.$store.state.user.currentSearchQueries;
     if (lastQueries && lastQueries.length > 0) {
       //this.timerange = lastQuery.timerange;

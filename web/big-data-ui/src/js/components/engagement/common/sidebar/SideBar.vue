@@ -35,12 +35,19 @@
             </p>
           </a>
         </router-link>
+         <li>
+           <a href="" v-on:click.prevent.stop="clearData">
+            <i class="ti-trash"></i>
+            <p>Clear Trends Cache</p>
+            </a>
+          </li>
         <li>
           <a href="" v-on:click.prevent.stop="logout">
             <i class="ti-power-off"></i>
             <p>Logout</p>
             </a>
           </li>
+         
       </ul>
       <moving-arrow :move-y="arrowMovePx">
 
@@ -109,9 +116,9 @@ export default {
       }
     },
     /**
-       * Styles to animate the arrow near the current active sidebar link
-       * @returns {{transform: string}}
-       */
+     * Styles to animate the arrow near the current active sidebar link
+     * @returns {{transform: string}}
+     */
     arrowMovePx() {
       return this.linkHeight * this.activeLinkIndex;
     },
@@ -141,13 +148,28 @@ export default {
         return found;
       });
     },
-    logout(){
-      this.$store.dispatch('logoutUser').then( event =>{
-        console.log("logged out")
-         /*this.$router.push({
+    logout() {
+      this.$store
+        .dispatch("logoutUser")
+        .then(event => {
+          console.log("logged out");
+          /*this.$router.push({
               path: "/"
             });*/
-      }).catch()
+        })
+        .catch();
+    },
+    clearData() {
+      console.log("Clear Trends Data");
+      this.$store
+        .dispatch("clearTrends")
+        .then(event => {
+          console.log("trends cleared");
+          /*this.$router.push({
+              path: "/"
+            });*/
+        })
+        .catch();
     }
   },
   mounted() {
