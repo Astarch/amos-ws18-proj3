@@ -95,7 +95,7 @@
               Get connected on LinkedIn :
             </p>
             <p>
-                <a href="#" class="btn btn-primary btn-lg"><i
+                <a href="https://www.linkedin.com/in/patrick-willmann/" class="btn btn-primary btn-lg"><i
                     class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
             </p>
           </div>
@@ -110,13 +110,6 @@
                Lara is a graduate student studying Computer Science at TU Berlin.
               During this project she has worked on the Frontend, Graphs, D3.js, Workbench, GDELT, JavaScript, Java, Query Optimization and Elasticsearch.
             </p>
-            <p class="lead">
-              Get connected on LinkedIn :
-            </p>
-            <p>
-                <a href="#" class="btn btn-primary btn-lg"><i
-                    class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
-            </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
              <img class="resize" src="~assets/landing-page/tristan.jpg" alt="">
@@ -130,11 +123,11 @@
               During this project he has worked on the Backend, Spring/Boot , REST, Databases, Java, Elasticsearch, Query Optimization and AWS S3.
             </p>
             <p class="lead">
-              Get connected on LinkedIn :
+              Get connected on Github :
             </p>
             <p>
-                <a href="#" class="btn btn-primary btn-lg"><i
-                    class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
+                <a href="https://github.com/Astarch" class="btn btn-default btn-lg"><i
+                    class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
@@ -152,7 +145,7 @@
               Get connected on LinkedIn :
             </p>
             <p>
-                <a href="#" class="btn btn-primary btn-lg"><i
+                <a href="https://www.linkedin.com/in/antonia-düker-b25b2211a/" class="btn btn-primary btn-lg"><i
                     class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
             </p>
           </div>
@@ -185,13 +178,6 @@
             <p class="lead">
                Joud is a graduate student studying Computer Science at TU Berlin.
               During this project she has worked on the Backend, Spring boot, Metrics, Postman, AWS S3 and Architecture. 
-            </p>
-            <p class="lead">
-              Get connected on LinkedIn :
-            </p>
-            <p>
-                <a href="#" class="btn btn-primary btn-lg"><i
-                    class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
@@ -458,8 +444,8 @@
   .carousel-inner > .item > img,
   .carousel-inner > .item > a > img {
     display: block;
-    max-width: 60%;
-    height: 80%;
+    max-width: 55%;
+    height: 70%;
 }
 
   @media (max-width: 1199px) {
