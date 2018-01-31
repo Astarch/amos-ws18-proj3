@@ -69,15 +69,18 @@ export default {
     };
   },
   watch: {
-    initialSearchTerm(value) {
-      this.searchTerm = value;
+    initialSearchTerm(newVal, oldValue) {
+      this.searchTerm = newVal;
     },
-    initialSearchType(value) {
-      this.searchType = value;
+    initialSearchType(newVal, oldValue) {
+      this.searchType = newVal;
     }
   },
   methods: {
     submit() {
+      if(this.searchTerm.length <= 0){
+        return
+      }
       let query = this.searchTerm;
       let method = this.searchType;
 

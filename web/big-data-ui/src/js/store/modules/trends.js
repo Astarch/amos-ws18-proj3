@@ -30,9 +30,8 @@ const getters = {
     getTrendByDay: (state) => (query, method, timerange) => {
         let data = state.trends.find(trend => query === trend.query && method === trend.method && timerange === trend.timerange)
         data = Object.assign({}, data)
-        console.log(data)
-        console.log(moment().diff(moment(data.lastFetchedMillis), 'days'))
-            // refresh data when it is older than 7 days
+
+        // refresh data when it is older than 7 days
         if (moment().diff(moment(data.lastFetchedMillis), 'days') > 7) {
             return {}
         }
