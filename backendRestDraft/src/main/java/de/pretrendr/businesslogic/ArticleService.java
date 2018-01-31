@@ -45,4 +45,6 @@ public interface ArticleService {
 
 	void delete(List<Article> articles);
 
+	void normalizeMap(Map<String, Long> list);
+
 }
