@@ -9,7 +9,7 @@ import router from 'src/js/router'
 // initial state
 // shape: {
 //  user:{ },
-//  loginStatus
+//  currentSearchQueries: []
 // }
 const state = {
     user: {
@@ -21,11 +21,7 @@ const state = {
         authorities: [],
         isLoggedIn: false
     },
-    currentSearchQuery: {
-        query: "",
-        method: "",
-        timerange: "",
-    }
+    currentSearchQueries: []
 }
 
 // getters
@@ -37,13 +33,13 @@ const getters = {
 const actions = {
     clearCurrentSearchQuery({ commit, state }) {
         return new Promise((resolve, reject) => {
-            commit(types.CLEAR_CURRENT_QUERY)
+            commit(types.CLEAR_CURRENT_QUERIES)
             resolve()
         })
     },
-    updateCurrentSearchQuery({ commit, state }, { query, method, timerange }) {
+    updateCurrentSearchQueries({ commit, state }, queries) {
         return new Promise((resolve, reject) => {
-            commit(types.SET_CURRENT_QUERY, { query, method, timerange })
+            commit(types.SET_CURRENT_QUERIES, queries)
             resolve()
         })
     },
@@ -184,7 +180,7 @@ const actions = {
             logoutUser()
             commit(types.USER_CLEAR)
             commit(types.TRENDS_CLEAR)
-            commit(types.CLEAR_CURRENT_QUERY)
+            commit(types.CLEAR_CURRENT_QUERIES)
             router.push({
                 path: "/"
             });
@@ -203,13 +199,12 @@ const mutations = {
         //clear user
         state.user = {}
     },
-    [types.SET_CURRENT_QUERY](state, query) {
-        //clear user
-        state.currentSearchQuery = Object.assign({}, state.currentSearchQuery, query)
+    [types.SET_CURRENT_QUERIES](state, queries) {
+        state.currentSearchQueries = [...queries]
     },
-    [types.CLEAR_CURRENT_QUERY](state) {
-        //clear user
-        state.currentSearchQuery = {}
+    [types.CLEAR_CURRENT_QUERIES](state) {
+        //clear queries
+        state.currentSearchQueries = {}
     },
 }
 
