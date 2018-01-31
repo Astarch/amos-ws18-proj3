@@ -41,7 +41,8 @@
             <graph :data="queries"></graph>
           </div>
           <div slot="footer">
-            {{prettyTimerange}}
+            <p><b>{{trendIndicatorMessage}}</b></p>
+            <p>{{prettyTimerange}}</p>
           </div>
   
         </card>
@@ -94,6 +95,7 @@ export default {
   data() {
     return {
       timerange: "from=20170101&to=20171231&normalize=true",
+      trendIndicatorMessage: "",
       queries: [],
       queryTerm: "",
       queryMethod: "ANY",
@@ -150,6 +152,61 @@ export default {
     },
     clearError() {
       this.errorMessage = "";
+    },
+    giveTrendIndication(newQuery,graphdata) {
+      var trendData = [];
+      $.each(graphdata, function (key, value) {
+        trendData.push({value});
+      });
+      var countTrend = 0;
+      var falling = undefined;
+      console.log(trendData.length);
+      var tmp = trendData.length-1;
+      for (var i = 0; i< tmp; i--) { 
+        if((trendData[tmp].value - trendData[tmp-1].value > 0) && falling == undefined ){
+          falling = false;
+          countTrend += 1;
+          tmp--;
+          continue;
+        }
+        if((trendData[tmp].value - trendData[tmp-1].value < 0) && falling == undefined ){
+          falling = true;
+          countTrend +=1;
+          tmp--;
+          continue;
+        }
+        if((trendData[tmp].value - trendData[tmp-1].value < 0) && falling == true ){
+          countTrend +=1;
+          tmp--;
+          continue;
+        }
+        if((trendData[tmp].value - trendData[tmp-1].value > 0) && falling == false ){
+          countTrend += 1;
+          tmp--;
+          continue;
+        }
+        break;  
+      }
+      if(countTrend > 2){
+          if(falling == true) {
+            this.trendIndicatorMessage= "The trend for '"+newQuery.query+"' seems to have been fallen for a while and will probably fall more!";
+          }
+            else{
+              this.trendIndicatorMessage="The trend for '"+newQuery.query+"' seems to have been rising for a while and will probably rise more!";
+            }
+      }
+      if(countTrend <3 && countTrend >0){
+        if(falling == true) {
+            this.trendIndicatorMessage= "The trend for '"+newQuery.query+"'  is falling at the moment!";
+          }
+            else{
+              this.trendIndicatorMessage="The trend for '"+newQuery.query+"'  is rising at the moment!";
+            }
+      }  
+        if (countTrend==0){
+          this.trendIndicatorMessage = "There is no data for "+newQuery.query;
+        }
+      console.log("This is the message: "+ this.trendIndicatorMessage+ " ,The count: "+ countTrend + " ,Falling?: " +falling);
     },
     setData(data) {
       console.log("setData:", data);
@@ -225,6 +282,7 @@ export default {
             console.log(resp.trend);
             //this.setData(resp.trend.data);
             this.addQueryData(queryObj, resp.trend.data);
+            this.giveTrendIndication(queryObj,resp.trend.data);
           })
           .catch(requestStatus => {
             this.reqStatus = requestStatus;
