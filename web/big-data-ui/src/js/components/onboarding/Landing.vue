@@ -179,6 +179,13 @@
                Joud is a graduate student studying Computer Science at TU Berlin.
               During this project she has worked on the Backend, Spring boot, Metrics, Postman, AWS S3 and Architecture. 
             </p>
+            <p class="lead">
+              Get connected on LinkedIn :
+            </p>
+            <p>
+                <a href="https://www.linkedin.com/in/joud-sayed-issa-3b740327/" class="btn btn-primary btn-lg"><i
+                    class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
+            </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
              <img class="resize" src="~assets/landing-page/scott.jpg" alt="">
