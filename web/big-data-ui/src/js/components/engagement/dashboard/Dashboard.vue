@@ -47,22 +47,6 @@
   
         </card>
       </div>
-  
-      <div class="col-lg-12 col-sm-12" v-if="hasTrends">
-        <card>
-          <div slot="title">
-            Google Trends
-          </div>
-          <div slot="subTitle">
-            for comparison
-          </div>
-          <div slot="content" class="contentframe">
-          </div>
-          <div slot="footer">
-            {{prettyTimerange}}
-          </div>
-        </card>
-      </div>
     </div>
   
   </div>
@@ -94,7 +78,7 @@ export default {
    */
   data() {
     return {
-      timerange: "from=20170101&to=20171231&normalize=true",
+      timerange: "from=20170101&to=20171231",
       trendIndicatorMessage: "",
       queries: [],
       queryTerm: "",
