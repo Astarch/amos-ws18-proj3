@@ -47,22 +47,6 @@
   
         </card>
       </div>
-  
-      <div class="col-lg-12 col-sm-12" v-if="hasTrends">
-        <card>
-          <div slot="title">
-            Google Trends
-          </div>
-          <div slot="subTitle">
-            for comparison
-          </div>
-          <div slot="content" class="contentframe">
-          </div>
-          <div slot="footer">
-            {{prettyTimerange}}
-          </div>
-        </card>
-      </div>
     </div>
   
   </div>
