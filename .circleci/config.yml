@@ -28,6 +28,9 @@ jobs:
           path: web/big-data-ui/test/report
       - store_artifacts:
           path: web/big-data-ui/test/coverage
+      - run:
+          name: create build
+          command: cd web/big-data-ui; yarn run build
       - save_cache:
           paths:
             - ./web/big-data-ui/.cache/yarn

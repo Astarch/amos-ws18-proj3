@@ -78,137 +78,123 @@
             </p>
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
-            <img class="img-responsive" src="~assets/landing-page/aboutus.jpg" alt="">
+            <img class="img-responsive" src="~assets/landing-page/pretrendr_1.jpg" alt="">
           </div>
           <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="resize" src="~assets/landing-page/student1.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/patrick.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">About Patrick</h2>
             <p class="lead">
-              Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+              Patrick is a graduate student studying Information Systems at TU Berlin.
+              During this project he has worked on the Frontend, Vue.js, Node.js, Git, Java, Javascript, Continuos Integration, CircleCi and Session Handling.
             </p>
             <p class="lead">
               Get connected on LinkedIn :
             </p>
             <p>
-                <a href="#" class="btn btn-primary btn-lg"><i
+                <a href="https://www.linkedin.com/in/patrick-willmann/" class="btn btn-primary btn-lg"><i
                     class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="resize" src="~assets/landing-page/student2.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/lara.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">About Lara</h2>
             <p class="lead">
-               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
-            </p>
-            <p class="lead">
-              Get connected on LinkedIn :
-            </p>
-            <p>
-                <a href="#" class="btn btn-primary btn-lg"><i
-                    class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
+               Lara is a graduate student studying Computer Science at TU Berlin.
+              During this project she has worked on the Frontend, Graphs, D3.js, Workbench, GDELT, JavaScript, Java, Query Optimization and Elasticsearch.
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="resize" src="~assets/landing-page/student1.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/tristan.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">About Tristan</h2>
             <p class="lead">
-               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+               Tristan is a graduate student studying Computer Science at TU Berlin.
+              During this project he has worked on the Backend, Spring/Boot , REST, Databases, Java, Elasticsearch, Query Optimization and AWS S3.
             </p>
             <p class="lead">
-              Get connected on LinkedIn :
+              Get connected on Github :
             </p>
             <p>
-                <a href="#" class="btn btn-primary btn-lg"><i
-                    class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
+                <a href="https://github.com/Astarch" class="btn btn-default btn-lg"><i
+                    class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="resize" src="~assets/landing-page/student2.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/antonia.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">About Antonia</h2>
             <p class="lead">
-               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+               Antonia is a graduate student studying Computer Engineering at TU Berlin.
+              During this project she has worked on the Workbench, Open Data Sources, GDELT, Query Optimization, Elasticsearch, Metrics and Use Cases.
             </p>
             <p class="lead">
               Get connected on LinkedIn :
             </p>
             <p>
-                <a href="#" class="btn btn-primary btn-lg"><i
+                <a href="https://www.linkedin.com/in/antonia-düker-b25b2211a/" class="btn btn-primary btn-lg"><i
                     class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="resize" src="~assets/landing-page/student1.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/florian.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">About Florian</h2>
             <p class="lead">
-               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
+               Florian is a graduate student studying Information Systems at TU Berlin.
+              During this project he has worked on the Architecture, AWS, Backend, REST, Java, circleCI, Databases and Elasticsearch.
             </p>
             <p class="lead">
               Get connected on LinkedIn :
             </p>
             <p>
-                <a href="#" class="btn btn-primary btn-lg"><i
+                <a href="https://www.linkedin.com/in/florian-muchow/" class="btn btn-primary btn-lg"><i
                     class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="resize" src="~assets/landing-page/student2.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/joud.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">About Joud</h2>
             <p class="lead">
-               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.
-            </p>
-            <p class="lead">
-              Get connected on LinkedIn :
-            </p>
-            <p>
-                <a href="#" class="btn btn-primary btn-lg"><i
-                    class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
+               Joud is a graduate student studying Computer Science at TU Berlin.
+              During this project she has worked on the Backend, Spring boot, Metrics, Postman, AWS S3 and Architecture. 
             </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-             <img class="resize" src="~assets/landing-page/student1.jpg" alt="">
+             <img class="resize" src="~assets/landing-page/scott.jpg" alt="">
           </div>
           <div class="col-lg-5 col-sm-pull-6  col-sm-6">
           <hr class="section-heading-spacer">
             <div class="clearfix"></div>
             <h2 class="section-heading">About Scott</h2>
             <p class="lead">
-               Hi my name is .... I'm a super cool developer of this Website and study something really awesome. Frontend? Backend?
-              No problem for me because I can do everything. I'm a graduate student persuing a degree in being a professional developer.            </p>
+               Scott is a graduate student studying Computer Science at TU Berlin.
+              During this project he has worked on the Frontend, Workbench, Test Environment, Elastic Map Reduce and Elasticsearch.            </p>
             <p class="lead">
               Get connected on LinkedIn :
             </p>
             <p>
-                <a href="#" class="btn btn-primary btn-lg"><i
+                <a href="https://www.linkedin.com/in/scottyswork" class="btn btn-primary btn-lg"><i
                     class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
             </p>
           </div>
@@ -458,8 +444,8 @@
   .carousel-inner > .item > img,
   .carousel-inner > .item > a > img {
     display: block;
-    max-width: 50%;
-    height: 80%;
+    max-width: 55%;
+    height: 70%;
 }
 
   @media (max-width: 1199px) {
