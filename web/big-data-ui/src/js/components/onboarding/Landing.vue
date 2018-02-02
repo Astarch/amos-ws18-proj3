@@ -88,7 +88,7 @@
             <div class="clearfix"></div>
             <h2 class="section-heading">About Patrick</h2>
             <p class="lead">
-              Patrick is a graduate student studying Information Systems at TU Berlin.
+              Patrick is a graduate student studying Information Systems Management at TU Berlin.
               During this project he has worked on the Frontend, Vue.js, Node.js, Git, Java, Javascript, Continuos Integration, CircleCi and Session Handling.
             </p>
             <p class="lead">
@@ -157,7 +157,7 @@
             <div class="clearfix"></div>
             <h2 class="section-heading">About Florian</h2>
             <p class="lead">
-               Florian is a graduate student studying Information Systems at TU Berlin.
+               Florian is a graduate student studying Information Systems Management at TU Berlin.
               During this project he has worked on the Architecture, AWS, Backend, REST, Java, circleCI, Databases and Elasticsearch.
             </p>
             <p class="lead">

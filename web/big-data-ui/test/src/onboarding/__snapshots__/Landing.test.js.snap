@@ -218,7 +218,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
             class="lead"
           >
             
-            Patrick is a graduate student studying Information Systems at TU Berlin.
+            Patrick is a graduate student studying Information Systems Management at TU Berlin.
             During this project he has worked on the Frontend, Vue.js, Node.js, Git, Java, Javascript, Continuos Integration, CircleCi and Session Handling.
           
           </p>
@@ -431,7 +431,7 @@ exports[`Landing.test.js has the expected html structure 1`] = `
             class="lead"
           >
             
-             Florian is a graduate student studying Information Systems at TU Berlin.
+             Florian is a graduate student studying Information Systems Management at TU Berlin.
             During this project he has worked on the Architecture, AWS, Backend, REST, Java, circleCI, Databases and Elasticsearch.
           
           </p>

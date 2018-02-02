@@ -11,7 +11,7 @@
       </div>
       <div class="col-lg-12 col-sm-12 alert alert-danger" role="alert" v-show="hasError">
         {{errorMessage}}      <i class="ti-close" v-on:click.stop="clearError" />
-        </div>
+      </div>
 
       <div class="col-lg-12 col-sm-12" v-show="hasTrends">
         <card>  
@@ -36,7 +36,7 @@
           </div>
           <div slot="content" class="contentframe">
             <div id="spinner" class="overlay" :class="{hide: !isLoading}">
-              <vue-loading spinner="circles"></vue-loading>
+              <bounce-loader :loading="isLoading" color="#127281"></bounce-loader>
             </div>
             <graph :data="queries"></graph>
           </div>
@@ -60,7 +60,7 @@ import Card from "./../common/Card";
 import SearchBar from "./../common/Searchbar";
 import Graph from "./../graph/Graph";
 import http, { api } from "js/utils/api";
-import VueLoading from "vue-simple-loading";
+import BounceLoader from 'vue-spinner/src/BounceLoader.vue'
 
 import moment from "moment";
 import _ from "lodash";
@@ -71,7 +71,7 @@ export default {
     Card,
     Graph,
     SearchBar,
-    VueLoading
+    BounceLoader
   },
   /**
    * Chart data used to render stats, charts. Should be replaced with server data
@@ -136,60 +136,85 @@ export default {
     clearError() {
       this.errorMessage = "";
     },
-    giveTrendIndication(newQuery,graphdata) {
+    giveTrendIndication(newQuery, graphdata) {
       var trendData = [];
-      $.each(graphdata, function (key, value) {
-        trendData.push({value});
+      $.each(graphdata, function(key, value) {
+        trendData.push({ value });
       });
       var countTrend = 0;
       var falling = undefined;
       console.log(trendData.length);
-      var tmp = trendData.length-1;
-      for (var i = 0; i< tmp; i--) { 
-        if((trendData[tmp].value - trendData[tmp-1].value > 0) && falling == undefined ){
+      var tmp = trendData.length - 1;
+      for (var i = 0; i < tmp; i--) {
+        if (
+          trendData[tmp].value - trendData[tmp - 1].value > 0 &&
+          falling == undefined
+        ) {
           falling = false;
           countTrend += 1;
           tmp--;
           continue;
         }
-        if((trendData[tmp].value - trendData[tmp-1].value < 0) && falling == undefined ){
+        if (
+          trendData[tmp].value - trendData[tmp - 1].value < 0 &&
+          falling == undefined
+        ) {
           falling = true;
-          countTrend +=1;
-          tmp--;
-          continue;
-        }
-        if((trendData[tmp].value - trendData[tmp-1].value < 0) && falling == true ){
-          countTrend +=1;
-          tmp--;
-          continue;
-        }
-        if((trendData[tmp].value - trendData[tmp-1].value > 0) && falling == false ){
           countTrend += 1;
           tmp--;
           continue;
         }
-        break;  
-      }
-      if(countTrend > 2){
-          if(falling == true) {
-            this.trendIndicatorMessage= "The trend for '"+newQuery.query+"' seems to have been fallen for a while and will probably fall more!";
-          }
-            else{
-              this.trendIndicatorMessage="The trend for '"+newQuery.query+"' seems to have been rising for a while and will probably rise more!";
-            }
-      }
-      if(countTrend <3 && countTrend >0){
-        if(falling == true) {
-            this.trendIndicatorMessage= "The trend for '"+newQuery.query+"'  is falling at the moment!";
-          }
-            else{
-              this.trendIndicatorMessage="The trend for '"+newQuery.query+"'  is rising at the moment!";
-            }
-      }  
-        if (countTrend==0){
-          this.trendIndicatorMessage = "There is no data for "+newQuery.query;
+        if (
+          trendData[tmp].value - trendData[tmp - 1].value < 0 &&
+          falling == true
+        ) {
+          countTrend += 1;
+          tmp--;
+          continue;
         }
-      console.log("This is the message: "+ this.trendIndicatorMessage+ " ,The count: "+ countTrend + " ,Falling?: " +falling);
+        if (
+          trendData[tmp].value - trendData[tmp - 1].value > 0 &&
+          falling == false
+        ) {
+          countTrend += 1;
+          tmp--;
+          continue;
+        }
+        break;
+      }
+      if (countTrend > 2) {
+        if (falling == true) {
+          this.trendIndicatorMessage =
+            "The trend for '" +
+            newQuery.query +
+            "' seems to have been fallen for a while and will probably fall more!";
+        } else {
+          this.trendIndicatorMessage =
+            "The trend for '" +
+            newQuery.query +
+            "' seems to have been rising for a while and will probably rise more!";
+        }
+      }
+      if (countTrend < 3 && countTrend > 0) {
+        if (falling == true) {
+          this.trendIndicatorMessage =
+            "The trend for '" + newQuery.query + "'  is falling at the moment!";
+        } else {
+          this.trendIndicatorMessage =
+            "The trend for '" + newQuery.query + "'  is rising at the moment!";
+        }
+      }
+      if (countTrend == 0) {
+        this.trendIndicatorMessage = "There is no data for " + newQuery.query;
+      }
+      console.log(
+        "This is the message: " +
+          this.trendIndicatorMessage +
+          " ,The count: " +
+          countTrend +
+          " ,Falling?: " +
+          falling
+      );
     },
     setData(data) {
       console.log("setData:", data);
@@ -234,7 +259,7 @@ export default {
         this.queries = [...this.queries, _query];
       }
       this.isLoading = false;
-        this.updateCurrentSearchQueries(this.queries)
+      this.updateCurrentSearchQueries(this.queries)
         .then(resp => {
           console.log(this.$store.user.currentSearchQueries);
         })
@@ -263,7 +288,7 @@ export default {
             console.log(resp.trend);
             //this.setData(resp.trend.data);
             this.addQueryData(queryObj, resp.trend.data);
-            this.giveTrendIndication(queryObj,resp.trend.data);
+            this.giveTrendIndication(queryObj, resp.trend.data);
           })
           .catch(requestStatus => {
             this.reqStatus = requestStatus;
@@ -283,9 +308,9 @@ export default {
       if (this.hasQuery(query)) {
         return;
       }
-      if(this.queries.length >= 5){
-        this.errorMessage = "Only up to 5 terms allowed!"
-        return
+      if (this.queries.length >= 10) {
+        this.errorMessage = "Only up to 10 terms allowed!";
+        return;
       }
       this.queryTerm = "";
       this.fetchWordcountData(query);
@@ -295,7 +320,7 @@ export default {
     let lastQueries = this.$store.state.user.currentSearchQueries;
     if (lastQueries && lastQueries.length > 0) {
       //this.timerange = lastQuery.timerange;
-      lastQueries.forEach(query => this.fetchWordcountData(query))
+      lastQueries.forEach(query => this.fetchWordcountData(query));
     }
   }
 };
@@ -306,6 +331,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: absolute;
   &.overlay {
     width: 100%;
     height: 400px;
@@ -314,10 +340,14 @@ export default {
     display: none;
   }
   // change loading spinner color
-  .sk-circle .sk-child:before {
+  .sk-child:before {
     background-color: map_get($theme-colors, secondary);
   }
 }
+.sk-child {
+  background-color: map_get($theme-colors, secondary);
+}
+
 div.alert-danger {
   background-color: map_get($theme-colors, warning);
   color: map_get($theme-colors, danger);
