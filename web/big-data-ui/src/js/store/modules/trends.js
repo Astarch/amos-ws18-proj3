@@ -50,9 +50,9 @@ const actions = {
             resolve()
         })
     },
-    getWordcountByDay({ commit, state }, { query, method, timerange }) {
+    getWordcountByDay({ commit, state }, { query, method, timerange, normalize }) {
         return new Promise((resolve, reject) => {
-            api.graph.getWordcountByDay(query, method, timerange)
+            api.graph.getWordcountByDay(query, method, timerange, normalize)
                 .then(response => {
                     if (response != undefined && response.data != undefined) {
                         let data = response.data
