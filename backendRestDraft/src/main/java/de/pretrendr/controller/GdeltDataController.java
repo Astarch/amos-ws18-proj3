@@ -70,7 +70,7 @@ public class GdeltDataController {
 			@RequestParam(value = "to", defaultValue = "20171231") final String to,
 			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method,
 			@RequestParam(value = "normalize", defaultValue = "false") final boolean normalize) throws IOException {
-		Map<String, Long> list = articleService.countByTermAndDay(term, from, to, method);
+		Map<String, Long> list = articleService.countByTermAndDay(term, from, to, method, normalize);
 		if (normalize) {
 			articleService.normalizeMap(list);
 		}
@@ -83,11 +83,17 @@ public class GdeltDataController {
 			@RequestParam(value = "to", defaultValue = "20171231") final String to,
 			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method,
 			@RequestParam(value = "normalize", defaultValue = "false") final boolean normalize) throws IOException {
-		Map<String, Long> list = articleService.countByTermAndMonth(term, from, to, method);
-		if (normalize) {
-			articleService.normalizeMap(list);
-		}
+		Map<String, Long> list = articleService.countByTermAndMonth(term, from, to, method, normalize);
 		return new ResponseEntity<Map<String, Long>>(list, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/metadataForWordcountByMonth/{term}", method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Map<String, Long>>> getMetadataForWordCountByMonth(@PathVariable String term,
+			@RequestParam(value = "from", defaultValue = "20170101") final String from,
+			@RequestParam(value = "to", defaultValue = "20171231") final String to,
+			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method) throws IOException {
+		Map<String, Map<String, Long>> list = articleService.metaDataByTermAndMonth(term, from, to, method);
+		return new ResponseEntity<Map<String, Map<String, Long>>>(list, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/averageWordcountByMonth/{term}", method = RequestMethod.GET)
@@ -96,7 +102,7 @@ public class GdeltDataController {
 			@RequestParam(value = "to", defaultValue = "20171231") final String to,
 			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method,
 			@RequestParam(value = "normalize", defaultValue = "false") final boolean normalize) throws IOException {
-		Map<String, Long> list = articleService.averageCountByTermAndMonth(term, from, to, method);
+		Map<String, Long> list = articleService.averageCountByTermAndMonth(term, from, to, method, normalize);
 		if (normalize) {
 			articleService.normalizeMap(list);
 		}
@@ -110,7 +116,7 @@ public class GdeltDataController {
 			@RequestParam(value = "to", defaultValue = "20171231") final String to,
 			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method,
 			@RequestParam(value = "normalize", defaultValue = "false") final boolean normalize) throws IOException {
-		Map<String, Long> list = articleService.minCountByTermAndMonth(term, from, to, method);
+		Map<String, Long> list = articleService.minCountByTermAndMonth(term, from, to, method, normalize);
 		if (normalize) {
 			articleService.normalizeMap(list);
 		}
@@ -123,7 +129,7 @@ public class GdeltDataController {
 			@RequestParam(value = "to", defaultValue = "20171231") final String to,
 			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method,
 			@RequestParam(value = "normalize", defaultValue = "false") final boolean normalize) throws IOException {
-		Map<String, Long> list = articleService.maxCountByTermAndMonth(term, from, to, method);
+		Map<String, Long> list = articleService.maxCountByTermAndMonth(term, from, to, method, normalize);
 		if (normalize) {
 			articleService.normalizeMap(list);
 		}
@@ -136,7 +142,7 @@ public class GdeltDataController {
 			@RequestParam(value = "to", defaultValue = "20171231") final String to,
 			@RequestParam(value = "method", defaultValue = "ALL") final SearchMethod method,
 			@RequestParam(value = "normalize", defaultValue = "false") final boolean normalize) throws IOException {
-		Map<String, Long> list = articleService.medCountByTermAndMonth(term, from, to, method);
+		Map<String, Long> list = articleService.medCountByTermAndMonth(term, from, to, method, normalize);
 		if (normalize) {
 			articleService.normalizeMap(list);
 		}
