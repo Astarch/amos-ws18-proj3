@@ -225,7 +225,7 @@ export default {
         }
       }
       if (countTrend == 0) {
-        this.trendIndicatorMessage = "There is no data for " + newQuery.query;
+        this.trendIndicatorMessage = "The trend has not been falling or rising at the moment for " + newQuery.query;
       }
       console.log(
         "This is the message: " +
