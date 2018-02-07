@@ -96,8 +96,8 @@
         this.$store
           .dispatch("registerUser", {
             username: name,
-            firstname : firstname,
-            lastname : lastname,
+            firstname: firstname,
+            lastname: lastname,
             email,
             password
           })
