@@ -94,10 +94,12 @@ const postCompleteRegistration = (username,
     "phone": phone
 });
 
-const postRegistration = (username,
+const postRegistration = (username, firstname,lastname,
     email,
     password) => axiosInstance.post('/auth/register', {
     "username": username,
+    "firstname": firstname,
+    "lastname": lastname,
     "password": password,
     "email": email,
 });

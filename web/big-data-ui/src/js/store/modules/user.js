@@ -111,9 +111,9 @@ const actions = {
 
         })
     },
-    registerUser({ commit, state }, { username, email, password }) {
+    registerUser({ commit, state }, { username,firstname,lastname, email, password }) {
         return new Promise((resolve, reject) => {
-            api.auth.postRegistration(username, email, password)
+            api.auth.postRegistration(username, firstname,lastname, email, password)
                 .then(response => {
                     if (response != undefined && response.data != undefined && response.data.id != undefined) {
                         let authorities = []

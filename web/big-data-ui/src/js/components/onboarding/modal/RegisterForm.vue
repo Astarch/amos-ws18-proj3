@@ -1,6 +1,8 @@
 <template>
   <div id="form-register" class="onboarding-form form-register" :class="{active: active}">
     <input id="register-username" type="text" name="name" placeholder="Name" v-model="username" v-on:keyup.enter.stop="submit()" v-on:input="hideError">
+    <input id="register-firstname" type="text" name="firstname" placeholder="Firstname" v-model="firstname" v-on:keyup.enter.stop="submit()" v-on:input="hideError">
+    <input id="register-lastname" type="text" name="lastname" placeholder="Lastname" v-model="lastname" v-on:keyup.enter.stop="submit()" v-on:input="hideError">
     <input id="register-email" type="email" name="email" placeholder="Email" v-model="email" v-on:keyup.enter.stop="submit()" v-on:input="checkEmail" ref="emailInput" v-bind:style="regEmailStyle">
     <input id="register-password" type="password" name="password" placeholder="Password" v-model="password" v-on:keyup.enter.stop="submit()" v-on:input="checkPassword" ref="pwinput" v-bind:style="regPwStyle">
     <div v-if="hasError" class="alert alert-danger" role="alert">
@@ -50,6 +52,8 @@
     },
     data: () => ({
       username: "",
+      firstname: "",
+      lastname: "",
       email: "",
       password: "",
       errorText: "",
@@ -79,19 +83,23 @@
   
         let validData = this.validateRegistration(
           this.username,
+          this.firstname,
+          this.lastname,
           this.email,
           this.password
         );
   
         if (validData) {
-          this.doRegistration(this.username, this.email, this.password);
+          this.doRegistration(this.username, this.firstname, this.lastname, this.email, this.password);
         }
       },
-      doRegistration(name, email, password) {
+      doRegistration(name, firstname ,lastname,  email, password) {
         this.requestStatus.pending = true;
         this.$store
           .dispatch("registerUser", {
             username: name,
+            firstname: firstname,
+            lastname: lastname,
             email,
             password
           })
@@ -111,14 +119,20 @@
       },
       clearRegistration() {
         this.username = "";
+        this.firstname = "";
+        this.lastname = "";
         this.email = "";
         this.password = "";
         this.requestStatus = new RequestStatus();
       },
-      validateRegistration(name, mail, password) {
+      validateRegistration(name, firstname, lastname, mail, password) {
         let validRegistration = false;
         if (!isNameValid(name)) {
           this.showError("Please enter a valid name!");
+        } else if (!isNameValid(firstname)) {
+          this.showError("Please enter a valid firstname!");
+        } else if (!isNameValid(lastname)) {
+          this.showError("Please enter a valid lastname!");
         } else if (!isMailValid(mail)) {
           this.showError("Please enter a valid mail!");
         } else if (!isPasswordValid(password)) {

@@ -13,6 +13,20 @@ exports[`RegisterForm.test.js has the expected html structure when active: activ
   />
    
   <input
+    id="register-firstname"
+    name="firstname"
+    placeholder="Firstname"
+    type="text"
+  />
+   
+  <input
+    id="register-lastname"
+    name="lastname"
+    placeholder="Lastname"
+    type="text"
+  />
+   
+  <input
     id="register-email"
     name="email"
     placeholder="Email"
@@ -58,6 +72,20 @@ exports[`RegisterForm.test.js has the expected html structure when not active: i
     id="register-username"
     name="name"
     placeholder="Name"
+    type="text"
+  />
+   
+  <input
+    id="register-firstname"
+    name="firstname"
+    placeholder="Firstname"
+    type="text"
+  />
+   
+  <input
+    id="register-lastname"
+    name="lastname"
+    placeholder="Lastname"
     type="text"
   />
    

@@ -110,6 +110,13 @@
                Lara is a graduate student studying Computer Science at TU Berlin.
               During this project she has worked on the Frontend, Graphs, D3.js, Workbench, GDELT, JavaScript, Java, Query Optimization and Elasticsearch.
             </p>
+             <p class="lead">
+              Get connected on LinkedIn :
+            </p>
+            <p>
+                <a href="https://www.linkedin.com/in/lara-christmann" class="btn btn-primary btn-lg"><i
+                    class="fa fa-linkedin fa-fw" aria-hidden="true"></i></a>
+            </p>
           </div>
            <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
              <img class="resize" src="~assets/landing-page/tristan.jpg" alt="">
