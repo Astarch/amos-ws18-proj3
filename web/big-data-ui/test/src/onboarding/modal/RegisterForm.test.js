@@ -167,10 +167,16 @@ describe('RegisterForm.test.js', () => {
         let email = validEmail
         let username = validUsername
         let password = validPassword
+        let firstname = "Max"
+        let lastname = "Mustermann"
         cmp.find('input#register-password').element.value = password
         cmp.find('input#register-password').trigger('input')
         cmp.find('input#register-username').element.value = username
         cmp.find('input#register-username').trigger('input')
+        cmp.find('input#register-firstname').element.value = firstname
+        cmp.find('input#register-firstname').trigger('input')
+        cmp.find('input#register-lastname').element.value = lastname
+        cmp.find('input#register-lastname').trigger('input')
         cmp.find('input#register-email').element.value = email
         cmp.find('input#register-email').trigger('input')
         cmp.find('#registerSubmit').trigger('click')
@@ -178,7 +184,7 @@ describe('RegisterForm.test.js', () => {
         expect(errorAlert.exists()).toBeFalsy()
 
         expect(actions.registerUser.mock.calls).toHaveLength(1)
-        expect(actions.registerUser.mock.calls[0][1]).toEqual({ username, email, password })
+        expect(actions.registerUser.mock.calls[0][1]).toEqual({ username, firstname, lastname, email, password })
     })
 
 })

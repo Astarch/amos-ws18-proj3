@@ -83,6 +83,8 @@
   
         let validData = this.validateRegistration(
           this.username,
+          this.firstname,
+          this.lastname,
           this.email,
           this.password
         );
@@ -123,10 +125,14 @@
         this.password = "";
         this.requestStatus = new RequestStatus();
       },
-      validateRegistration(name, mail, password) {
+      validateRegistration(name, firstname, lastname, mail, password) {
         let validRegistration = false;
         if (!isNameValid(name)) {
           this.showError("Please enter a valid name!");
+        } else if (!isNameValid(firstname)) {
+          this.showError("Please enter a valid firstname!");
+        } else if (!isNameValid(lastname)) {
+          this.showError("Please enter a valid lastname!");
         } else if (!isMailValid(mail)) {
           this.showError("Please enter a valid mail!");
         } else if (!isPasswordValid(password)) {
