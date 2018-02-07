@@ -118,7 +118,8 @@ export default {
         "#aaffc3",
         "#008080",
         "#46f0f0"
-      ]
+      ],
+      availableColors: this.colors
     };
   },
   computed: {
@@ -263,6 +264,7 @@ export default {
       );
       if (oldQueryIndex >= 0) {
         this.queries.splice(oldQueryIndex, 1);
+        this.availableColors.push(newQuery.color)
       }
       this.updateCurrentSearchQueries(this.queries)
         .then(resp => {
@@ -275,6 +277,7 @@ export default {
         this.areQueriesEqual(q, newQuery)
       );
       let color = this.colors[this.queries.length % this.colors.length];
+      color = this.availableColors.pop()
       let _query = Object.assign({}, newQuery, { data, color });
       if (oldQueryIndex >= 0) {
         this.queries = Object.assign([...this.queries], {
@@ -344,6 +347,7 @@ export default {
     }
   },
   mounted() {
+    this.availableColors = this.colors
     let lastQueries = this.$store.state.user.currentSearchQueries;
     if (lastQueries && lastQueries.length > 0) {
       //this.timerange = lastQuery.timerange;
