@@ -21,27 +21,38 @@
 </style>
 <script>
 import * as d3 from "d3";
+import { normalizeDataArray } from "js/utils/datahelper";
 
 export default {
   name: "graph",
   data() {
     return {
-      dataset: this.data
+      dataset: this.data,
+      useNormalizedData: this.normalize
     };
   },
-  props: ["data"],
-  watch: {
-    data: function(newDataArray, oldData) {
-      $("svg").remove();
-
-      if (newDataArray.length > 0){
-      let newData = newDataArray[0].data;
-      console.log("newData! first item:", newData);
-      this.prepareData(newDataArray);
+  props: {
+    data: {
+      type: Array,
+      required: true
+    },
+    normalize: {
+      type: Boolean,
+      default: function() {
+        return false;
       }
     }
   },
-
+  watch: {
+    data: function(newDataArray, oldData) {
+      this.dataset = newDataArray
+      this.updateDataArray(newDataArray);
+    },
+    normalize: function(normalizeVal, oldData) {
+      this.useNormalizedData = normalizeVal
+      this.updateDataArray(this.dataset);
+    }
+  },
   mounted: function() {
     window.addEventListener("resize", this.onResize);
   },
@@ -51,6 +62,16 @@ export default {
   },
 
   methods: {
+    updateDataArray: function(newDataArray) {
+      $("svg").remove();
+
+      if (newDataArray.length > 0) {
+        let data = this.useNormalizedData
+          ? normalizeDataArray(newDataArray)
+          : newDataArray;
+        this.prepareData(data);
+      }
+    },
     prepareData: function(data) {
       this.smoothed_data = new Array();
       this.colors = new Array();
@@ -60,15 +81,25 @@ export default {
       $.each(data, function(index, item) {
         self.colors.push(item.color);
         $.each(item.data, function(key, value) {
-        count++;
-        if(!(parseTime(key).getDay() ==0) && !(parseTime(key).getDay() ==6)){
-         self.smoothed_data.push({ query: index, date: parseTime(key), count: value });
-        };
+          count++;
+          if (
+            !(parseTime(key).getDay() == 0) &&
+            !(parseTime(key).getDay() == 6)
+          ) {
+            self.smoothed_data.push({
+              query: index,
+              date: parseTime(key),
+              count: value
+            });
+          }
+        });
       });
-      });
-      this.group = d3.nest().key(function(d) {
-        return d.query;
-      }).entries(this.smoothed_data);
+      this.group = d3
+        .nest()
+        .key(function(d) {
+          return d.query;
+        })
+        .entries(this.smoothed_data);
       this.buildGraph(this.smoothed_data);
     },
 
@@ -100,9 +131,9 @@ export default {
       ]);
 
       this.buildLines(this.group);
-      },
+    },
 
-      buildLines : function (data) {
+    buildLines: function(data) {
       let self = this;
       this.patharray = new Array();
 
@@ -117,12 +148,12 @@ export default {
           "translate(" + this.margin.left + "," + this.margin.top + ")"
         );
 
-        $.each(data, function(index, item) {
-          self.patharray[index] = self.canvas
+      $.each(data, function(index, item) {
+        self.patharray[index] = self.canvas
           .append("path")
           .attr("class", "line")
           .style("stroke", self.colors[index]);
-        });
+      });
 
       this.xEl = this.canvas
         .append("g")
@@ -145,7 +176,8 @@ export default {
       this.xAxis.scale(x);
       this.xEl.call(this.xAxis);
 
-      let line = d3.line()
+      let line = d3
+        .line()
         .x(function(d) {
           return x(d.date);
         })
@@ -153,9 +185,9 @@ export default {
           return y(d.count);
         });
 
-     $.each(this.patharray, function(index, item) {
-          item.attr("d", line(data[index].values));
-     });
+      $.each(this.patharray, function(index, item) {
+        item.attr("d", line(data[index].values));
+      });
     },
 
     onResize(event) {

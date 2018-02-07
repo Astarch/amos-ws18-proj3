@@ -25,17 +25,21 @@ public interface ArticleService {
 
 	long countByTerm(String term);
 
-	Map<String, Long> countByTermAndDay(String term, String from, String to, SearchMethod method);
+	Map<String, Long> countByTermAndDay(String term, String from, String to, SearchMethod method, boolean normalize);
 
-	Map<String, Long> countByTermAndMonth(String term, String from, String to, SearchMethod method);
+	Map<String, Long> countByTermAndMonth(String term, String from, String to, SearchMethod method, boolean normalize);
 
-	Map<String, Long> averageCountByTermAndMonth(String term, String from, String to, SearchMethod method);
+	Map<String, Long> averageCountByTermAndMonth(String term, String from, String to, SearchMethod method,
+			boolean normalize);
 
-	Map<String, Long> minCountByTermAndMonth(String term, String from, String to, SearchMethod method);
+	Map<String, Long> minCountByTermAndMonth(String term, String from, String to, SearchMethod method,
+			boolean normalize);
 
-	Map<String, Long> maxCountByTermAndMonth(String term, String from, String to, SearchMethod method);
+	Map<String, Long> maxCountByTermAndMonth(String term, String from, String to, SearchMethod method,
+			boolean normalize);
 
-	Map<String, Long> medCountByTermAndMonth(String term, String from, String to, SearchMethod method);
+	Map<String, Long> medCountByTermAndMonth(String term, String from, String to, SearchMethod method,
+			boolean normalize);
 
 	void crawlData();
 
@@ -46,5 +50,7 @@ public interface ArticleService {
 	void delete(List<Article> articles);
 
 	void normalizeMap(Map<String, Long> list);
+
+	Map<String, Map<String, Long>> metaDataByTermAndMonth(String term, String from, String to, SearchMethod method);
 
 }

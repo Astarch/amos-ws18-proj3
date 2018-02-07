@@ -461,6 +461,54 @@
 					"response": []
 				},
 				{
+					"name": "/gdelt/metadataForWordcountByMonth/{term}",
+					"request": {
+						"url": {
+							"raw": "http://{{baseurl}}:{{baseport}}/api/gdelt/metadataForWordcountByMonth/bitcoin?from=20170101&to=20170131",
+							"protocol": "http",
+							"host": [
+								"{{baseurl}}"
+							],
+							"port": "{{baseport}}",
+							"path": [
+								"api",
+								"gdelt",
+								"metadataForWordcountByMonth",
+								"bitcoin"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "20170101",
+									"equals": true,
+									"description": ""
+								},
+								{
+									"key": "to",
+									"value": "20170131",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{currentToken}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
 					"name": "/gdelt/minWordcountByMonth/{term}",
 					"request": {
 						"url": {

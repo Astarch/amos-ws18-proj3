@@ -282,7 +282,8 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public Map<String, Long> countByTermAndDay(String term, String from, String to, SearchMethod method) {
+	public Map<String, Long> countByTermAndDay(String term, String from, String to, SearchMethod method,
+			boolean normalize) {
 		Map<String, Long> resultMap = Maps.newHashMap();
 		SearchQuery aSearchQuery = buildAggregationByDay(term, from, to, method);
 		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
@@ -313,6 +314,8 @@ public class ArticleServiceImpl implements ArticleService {
 				});
 			});
 		});
+		if (normalize)
+			normalizeMap(resultMap);
 
 		return resultMap;
 	}
@@ -363,7 +366,8 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public Map<String, Long> countByTermAndMonth(String term, String from, String to, SearchMethod method) {
+	public Map<String, Long> countByTermAndMonth(String term, String from, String to, SearchMethod method,
+			boolean normalize) {
 		Map<String, Long> resultMap = Maps.newHashMap();
 		SearchQuery aSearchQuery = buildAggregationByMonth(term, from, to, method);
 		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
@@ -387,6 +391,8 @@ public class ArticleServiceImpl implements ArticleService {
 				resultMap.put(year + month, count);
 			});
 		});
+		if (normalize)
+			normalizeMap(resultMap);
 
 		return resultMap;
 	}
@@ -446,7 +452,8 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public Map<String, Long> averageCountByTermAndMonth(String term, String from, String to, SearchMethod method) {
+	public Map<String, Long> averageCountByTermAndMonth(String term, String from, String to, SearchMethod method,
+			boolean normalize) {
 		Map<String, Long> resultMap = Maps.newHashMap();
 		SearchQuery aSearchQuery = buildAggregationByDay(term, from, to, method);
 		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
@@ -476,12 +483,15 @@ public class ArticleServiceImpl implements ArticleService {
 				resultMap.put(year + month, avg);
 			});
 		});
+		if (normalize)
+			normalizeMap(resultMap);
 
 		return resultMap;
 	}
 
 	@Override
-	public Map<String, Long> minCountByTermAndMonth(String term, String from, String to, SearchMethod method) {
+	public Map<String, Long> minCountByTermAndMonth(String term, String from, String to, SearchMethod method,
+			boolean normalize) {
 		Map<String, Long> resultMap = Maps.newHashMap();
 		SearchQuery aSearchQuery = buildAggregationByDay(term, from, to, method);
 		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
@@ -514,12 +524,15 @@ public class ArticleServiceImpl implements ArticleService {
 				resultMap.put(year + month, min);
 			});
 		});
+		if (normalize)
+			normalizeMap(resultMap);
 
 		return resultMap;
 	}
 
 	@Override
-	public Map<String, Long> maxCountByTermAndMonth(String term, String from, String to, SearchMethod method) {
+	public Map<String, Long> maxCountByTermAndMonth(String term, String from, String to, SearchMethod method,
+			boolean normalize) {
 		Map<String, Long> resultMap = Maps.newHashMap();
 		SearchQuery aSearchQuery = buildAggregationByDay(term, from, to, method);
 		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
@@ -552,12 +565,15 @@ public class ArticleServiceImpl implements ArticleService {
 				resultMap.put(year + month, min);
 			});
 		});
+		if (normalize)
+			normalizeMap(resultMap);
 
 		return resultMap;
 	}
 
 	@Override
-	public Map<String, Long> medCountByTermAndMonth(String term, String from, String to, SearchMethod method) {
+	public Map<String, Long> medCountByTermAndMonth(String term, String from, String to, SearchMethod method,
+			boolean normalize) {
 		Map<String, Long> resultMap = Maps.newHashMap();
 		SearchQuery aSearchQuery = buildAggregationByDay(term, from, to, method);
 		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
@@ -591,6 +607,8 @@ public class ArticleServiceImpl implements ArticleService {
 				resultMap.put(year + month, median);
 			});
 		});
+		if (normalize)
+			normalizeMap(resultMap);
 
 		return resultMap;
 	}
@@ -609,5 +627,70 @@ public class ArticleServiceImpl implements ArticleService {
 				list.put(entry.getKey(), (long) (entry.getValue() * normalizeFactor));
 			}
 		}
+	}
+
+	@Override
+	public Map<String, Map<String, Long>> metaDataByTermAndMonth(String term, String from, String to,
+			SearchMethod method) {
+		Map<String, Map<String, Long>> resultMap = Maps.newHashMap();
+		Map<String, Long> countMap = Maps.newHashMap();
+		Map<String, Long> minMap = Maps.newHashMap();
+		Map<String, Long> maxMap = Maps.newHashMap();
+		Map<String, Long> avgMap = Maps.newHashMap();
+		Map<String, Long> medMap = Maps.newHashMap();
+
+		SearchQuery aSearchQuery = buildAggregationByDay(term, from, to, method);
+		Aggregations aField1Aggregations = elasticsearchOperations.query(aSearchQuery,
+				new ResultsExtractor<Aggregations>() {
+					@Override
+					public Aggregations extract(SearchResponse aResponse) {
+						return aResponse.getAggregations();
+					}
+				});
+		Terms aField1Terms = aField1Aggregations.get("byYear");
+		aField1Terms.getBuckets().stream().forEach(yearBucket -> {
+			Object yearValue = yearBucket.getKey();
+			Terms aField2Terms = yearBucket.getAggregations().get("byMonth");
+
+			aField2Terms.getBuckets().stream().forEach(monthBucket -> {
+				Object monthValue = monthBucket.getKey();
+				Terms aField3Terms = monthBucket.getAggregations().get("byDay");
+				final long[] values = { -1L, -1L, 0L };
+				final List<Long> list = Lists.newArrayList();
+				long median;
+
+				aField3Terms.getBuckets().stream().forEach(dayBucket -> {
+					Object dayValue = dayBucket.getKey();
+					Long count = dayBucket.getDocCount();
+
+					values[0] = values[0] == -1L ? count : Math.min(count, values[0]);
+					values[1] = Math.max(count, values[1]);
+					values[2] += count;
+					list.add(count);
+				});
+
+				String year = yearValue.toString().length() < 2 ? "0" + yearValue.toString() : yearValue.toString();
+				String month = monthValue.toString().length() < 2 ? "0" + monthValue.toString() : monthValue.toString();
+				Collections.sort(list);
+				if (list.size() % 2 == 0)
+					median = (list.get(list.size() / 2) + list.get(list.size() / 2 - 1)) / 2;
+				else
+					median = list.get(list.size() / 2);
+
+				minMap.put(year + month, values[0]);
+				maxMap.put(year + month, values[1]);
+				avgMap.put(year + month, values[2] / list.size());
+				medMap.put(year + month, median);
+				countMap.put(year + month, values[2]);
+			});
+		});
+
+		resultMap.put("count", countMap);
+		resultMap.put("min", minMap);
+		resultMap.put("max", maxMap);
+		resultMap.put("avg", avgMap);
+		resultMap.put("med", medMap);
+
+		return resultMap;
 	}
 }

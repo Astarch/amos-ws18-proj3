@@ -29,22 +29,39 @@
       </div>
   
       <div class="col-lg-12 col-sm-12" v-show="hasTrends">
-        <card>
-  
+        <card>  
           <div slot="title">
-            Trend Analysis
+            Trend Analysis 
+          </div>
+          <div slot="subTitle">
+             <div class="pretty p-default">
+                <input type="checkbox" v-model="showNormalizedData"/>
+                <div class="state p-primary">
+                    <label>Normalize Data</label>
+                </div>
+            </div>          
           </div>
           <div slot="content" class="contentframe">
             <div id="spinner" class="overlay" :class="{hide: !isLoading}">
               <bounce-loader :loading="isLoading" color="#127281"></bounce-loader>
             </div>
-            <graph :data="queries"></graph>
+            <graph :data="queries" :normalize="showNormalizedData"></graph>
           </div>
           <div slot="footer">
             <p><b>{{trendIndicatorMessage}}</b></p>
             <p>{{prettyTimerange}}</p>
+          </div>  
+        </card>
+      </div>
+
+      <div class="col-lg-12 col-sm-12" v-show="hasTrends">
+        <card>  
+          <div slot="title">
+            Trend Analysis
           </div>
-  
+          <div slot="content" class="contentframe datatable">
+           <additional-data :data="queries"></additional-data>
+          </div>
         </card>
       </div>
     </div>
@@ -53,17 +70,18 @@
 </template>
 
 <script>
+import moment from "moment";
+import _ from "lodash";
 import { mapActions } from "vuex";
 import RequestStatus from "src/js/models/RequestStatus";
+import http, { api } from "js/utils/api";
+import { normalizeData } from "js/utils/datahelper";
 
 import Card from "./../common/Card";
 import SearchBar from "./../common/Searchbar";
 import Graph from "./../graph/Graph";
-import http, { api } from "js/utils/api";
-import BounceLoader from 'vue-spinner/src/BounceLoader.vue'
-
-import moment from "moment";
-import _ from "lodash";
+import AdditionalData from "src/js/components/engagement/common/AdditionalDataTable";
+import BounceLoader from "vue-spinner/src/BounceLoader.vue";
 
 export default {
   name: "dashboard",
@@ -71,7 +89,8 @@ export default {
     Card,
     Graph,
     SearchBar,
-    BounceLoader
+    BounceLoader,
+    AdditionalData
   },
   /**
    * Chart data used to render stats, charts. Should be replaced with server data
@@ -87,6 +106,7 @@ export default {
       reqStatus: new RequestStatus(),
       graphdata: undefined,
       errorMessage: "",
+      showNormalizedData: false,
       colors: [
         "#e6194b",
         "#3cb44b",
@@ -244,6 +264,11 @@ export default {
       if (oldQueryIndex >= 0) {
         this.queries.splice(oldQueryIndex, 1);
       }
+      this.updateCurrentSearchQueries(this.queries)
+        .then(resp => {
+          console.log(this.$store.user.currentSearchQueries);
+        })
+        .catch(error => {});
     },
     addQueryData(newQuery, data) {
       let oldQueryIndex = _.findIndex(this.queries, q =>
@@ -277,12 +302,14 @@ export default {
         queryObj.timerange
       );
 
+      let reqObj = Object.assign({}, queryObj, { normalize: false });
+
       if (stateData != undefined && stateData.data != undefined) {
         console.log("stateData:", stateData);
         this.addQueryData(stateData, stateData.data);
         //this.setData(stateData.data);
       } else {
-        this.getWordcountByDay(queryObj)
+        this.getWordcountByDay(reqObj)
           .then(resp => {
             this.reqStatus = resp.req;
             console.log(resp.trend);
@@ -327,6 +354,12 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+ @import '~pretty-checkbox/src/pretty-checkbox.scss';
+div.datatable {
+  overflow: auto;
+  max-height: 400px;
+  height: auto;
+}
 #spinner {
   display: flex;
   justify-content: center;
