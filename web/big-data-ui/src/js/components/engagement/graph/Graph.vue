@@ -63,7 +63,7 @@ export default {
 
   methods: {
     updateDataArray: function(newDataArray) {
-      $("svg").remove();
+      $("#graph svg").remove();
 
       if (newDataArray.length > 0) {
         let data = this.useNormalizedData

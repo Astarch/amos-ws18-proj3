@@ -1,8 +1,9 @@
 <template>
-<div>
- <bars v-for="row in computedData" :rowData="row" :key="row.query"></bars> 
-   <!--  <verticalBars v-for="row in computedData" :rowData="row" :key="row.query"></verticalBars>-->
-
+  <div>
+    <div v-for="row in computedData" :key="row.query">
+        <h5>{{row.query}}</h5>
+        <bars :rowData="row"></bars>
+    </div>
   </div>
 </template>
 
@@ -33,6 +34,7 @@ export default {
   },
   watch: {
     data: function(newDataArray, oldData) {
+      console.log("Data changed", newDataArray)
       this.dataset = aggregateDataArray(newDataArray);
     },
   },
@@ -80,5 +82,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+h5{
+  margin-bottom: 0px;
+  border-bottom:1px solid grey;
+}
 
 </style>

@@ -57,7 +57,7 @@
       <div class="col-lg-12 col-sm-12" v-show="hasTrends">
         <card>  
           <div slot="title">
-            Trend Analysis
+            Trend Statistics
           </div>
           <div slot="content" class="contentframe datatable">
            <!--<additional-data :data="queries"></additional-data>-->
