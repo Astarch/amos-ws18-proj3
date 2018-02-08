@@ -1,6 +1,8 @@
 <template>
 <div>
-  <bars v-for="row in computedData" :rowData="row" :key="row.query"></bars>
+ <!-- <bars v-for="row in computedData" :rowData="row" :key="row.query"></bars> -->
+    <verticalBars v-for="row in computedData" :rowData="row" :key="row.query"></verticalBars>
+
   </div>
 </template>
 
@@ -8,6 +10,8 @@
 import DataRow from "src/js/components/engagement/common/AdditionalDataTableRow";
 import { aggregateDataArray } from "js/utils/datahelper";
 import bars from "src/js/components/engagement/common/Bars";
+import verticalBars from "src/js/components/engagement/common/vertical_bars";
+
 
 export default {
   name: "additional-graph-data",
@@ -19,7 +23,8 @@ export default {
   },
   components: {
     DataRow,
-    bars
+    bars,
+    verticalBars
   },
   data: function() {
     return {
