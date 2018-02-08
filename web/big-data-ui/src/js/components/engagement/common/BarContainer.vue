@@ -1,7 +1,7 @@
 <template>
 <div>
- <!-- <bars v-for="row in computedData" :rowData="row" :key="row.query"></bars> -->
-    <verticalBars v-for="row in computedData" :rowData="row" :key="row.query"></verticalBars>
+ <bars v-for="row in computedData" :rowData="row" :key="row.query"></bars> 
+   <!--  <verticalBars v-for="row in computedData" :rowData="row" :key="row.query"></verticalBars>-->
 
   </div>
 </template>

@@ -1,5 +1,6 @@
 <template>
-  <div id="barCharts"></div>
+            <div id="barCharts"></div>
+
 </template>
 
 <script>
@@ -25,6 +26,7 @@ export default {
   watch: {
      rowData: function(data, oldData) {
      this.color = this.rowData.color;
+     this.rowData = data;
       this.updateDataArray(data);
     }
   },
@@ -59,34 +61,43 @@ export default {
   },
   methods: {
     updateDataArray: function(data) {
-      //$("svg").remove();
+      console.log(data.max[0]);
       this.doBars([{"what":"min", "count":data.min[0]}, {"what": "max", "count":data.max[0]}, {"what":"avg","count":data.avg[0]}, {"what":"median","count":data.median[0]}]);
 
     },
     doBars: function(data) {
-      var parentW = document.getElementById("graph").clientWidth;
-      var parentH = 100;
+      var parentH = 5000;
+      var parentW = (document.getElementById("graph").clientWidth);
       var margin = { top: 20, right: 50, bottom: 50, left: 50 };
 
-      var svg = d3.select("#barCharts").append("svg").attr("width", parentW-margin.left-margin.right).attr("height", parentH+margin.top+margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      var svg = d3.select("#barCharts").append("svg").attr("width", parentW-margin.left-margin.right).attr("height", parentH+margin.top+margin.bottom).append("g").attr("transform", 
+          "translate(" + margin.left + "," + margin.top + ")");
 
-      var y = d3.scaleBand().range([parentH, 0]).padding(0.1);var x = d3.scaleLinear().range([0, parentW - margin.left*2 - margin.right*2]);
+      var x = d3.scaleBand().range([0, parentW- 2*margin.left], .1);
 
-      x.domain([0, d3.max(data, function(d){ return d.count; })])
-      y.domain(data.map(function(d) { return d.what; }));
+      var y = d3.scaleLinear().range([parentH-margin.top-margin.bottom*2-margin.top*2, 0]);
 
-      var yAxis = svg.append("g").attr("class", "axis").call(d3.axisLeft(y));
+      y.domain([0, d3.max(data, function(d){ return d.count; })])
+      x.domain(data.map(function(d) { return d.what; })).paddingInner(0.1).paddingOuter(0.5);
 
-      var bar = svg.append("g").selectAll("rect").data(data).enter();
-      bar.append("rect").attr("class", "bar").attr("fill", this.color.toString()).attr("y", function(d,i) { return y(d.what);}).attr("width", function(d) {return x(d.count);}).attr("height", y.bandwidth());
+      var xAxis = svg.append("g").attr("class", "axis").attr("transform", "translate(0," + parentH + ")").call(d3.axisBottom(x));
+
+     var bar = svg.append("g").selectAll("rect").data(data).enter();
+       bar.append("rect").attr("class", "bar")
+      .attr("fill", this.color.toString())
+      .attr("x", function(d) {return x(d.what);})
+      .attr("width", x.bandwidth())
+      .attr("y", function(d,i) { return y(d.count);})
+      .attr("height", function(d) { 
+      return parentH - y(d.count); });
 
       svg.append("g").selectAll("text")
         .data(data)
         .enter()
-        .append("text")
+        .append("text")//.attr('transform', 'rotate(-90)')
         .text(function (d) { return d.count; })
-        .attr("x", function (d) { return x(d.count)+5 })
-        .attr("y", function (d) { return y(d.what) + y.bandwidth() / 2; })
+        .attr("x", function (d) { return x(d.what) + x.bandwidth() / 2; })
+        .attr("y", function (d) { return (y(d.count)-5) })
         .style("fill", this.color.toString());
         }
       }
