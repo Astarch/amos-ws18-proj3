@@ -6,7 +6,6 @@ import { isLoggedIn } from 'src/js/utils/api';
 
 // components
 import LandingPage from '../components/onboarding/Landing';
-import GraphContainer from '../components/engagement/graph/GraphContainer';
 import EngagementLayout from '../components/engagement/EngagementLayout';
 import Dashboard from '../components/engagement/dashboard/Dashboard';
 import AlertHome from '../components/engagement/alerts/AlertHome';
@@ -38,11 +37,6 @@ const router = new Router({
             component: EngagementLayout,
             name: 'dashboard-home',
             redirect: '/engagement/dashboard',
-            meta: { requiresAuth: true }
-        },
-        {
-            path: '/graph',
-            component: GraphContainer,
             meta: { requiresAuth: true }
         },
 

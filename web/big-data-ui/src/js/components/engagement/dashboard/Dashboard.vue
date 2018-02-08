@@ -60,7 +60,8 @@
             Trend Analysis
           </div>
           <div slot="content" class="contentframe datatable">
-           <additional-data :data="queries"></additional-data>
+           <!--<additional-data :data="queries"></additional-data>-->
+           <barc :data="queries"></barc>
           </div>
         </card>
       </div>
@@ -76,6 +77,7 @@ import { mapActions } from "vuex";
 import RequestStatus from "src/js/models/RequestStatus";
 import http, { api } from "js/utils/api";
 import { normalizeData } from "js/utils/datahelper";
+import barc from "src/js/components/engagement/common/BarContainer";
 
 import Card from "./../common/Card";
 import SearchBar from "./../common/Searchbar";
@@ -90,7 +92,8 @@ export default {
     Graph,
     SearchBar,
     BounceLoader,
-    AdditionalData
+    AdditionalData,
+    barc
   },
   /**
    * Chart data used to render stats, charts. Should be replaced with server data
