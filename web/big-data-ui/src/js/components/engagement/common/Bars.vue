@@ -1,6 +1,5 @@
 <template>
-            <div id="barCharts"></div>
-
+  <div id="barCharts"></div>
 </template>
 
 <script>
@@ -69,21 +68,16 @@ export default {
       var parentH = 100;
       var margin = { top: 20, right: 50, bottom: 50, left: 50 };
 
-      var svg = d3.select("#barCharts").append("svg").attr("width", parentW-margin.left-margin.right).attr("height", parentH+margin.top+margin.bottom).append("g").attr("transform", 
-          "translate(" + margin.left + "," + margin.top + ")");
+      var svg = d3.select("#barCharts").append("svg").attr("width", parentW-margin.left-margin.right).attr("height", parentH+margin.top+margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-      var y = d3.scaleBand()
-          .range([parentH, 0])
-          .padding(0.1);
-var x = d3.scaleLinear()
-          .range([0, parentW - margin.left*2 - margin.right*2]);
+      var y = d3.scaleBand().range([parentH, 0]).padding(0.1);var x = d3.scaleLinear().range([0, parentW - margin.left*2 - margin.right*2]);
 
       x.domain([0, d3.max(data, function(d){ return d.count; })])
       y.domain(data.map(function(d) { return d.what; }));
 
       var yAxis = svg.append("g").attr("class", "axis").call(d3.axisLeft(y));
 
-     var bar = svg.append("g").selectAll("rect").data(data).enter();
+      var bar = svg.append("g").selectAll("rect").data(data).enter();
       bar.append("rect").attr("class", "bar").attr("fill", this.color.toString()).attr("y", function(d,i) { return y(d.what);}).attr("width", function(d) {return x(d.count);}).attr("height", y.bandwidth());
 
       svg.append("g").selectAll("text")
@@ -94,8 +88,7 @@ var x = d3.scaleLinear()
         .attr("x", function (d) { return x(d.count+0.5) })
         .attr("y", function (d) { return y(d.what) + y.bandwidth() / 2; })
         .style("fill", this.color.toString());
-
-      }
+        }
       }
 };
 </script>

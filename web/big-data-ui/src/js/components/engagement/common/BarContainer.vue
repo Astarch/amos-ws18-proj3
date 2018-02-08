@@ -10,7 +10,7 @@
 import DataRow from "src/js/components/engagement/common/AdditionalDataTableRow";
 import { aggregateDataArray } from "js/utils/datahelper";
 import bars from "src/js/components/engagement/common/Bars";
-import verticalBars from "src/js/components/engagement/common/vertical_bars";
+import verticalBars from "src/js/components/engagement/common/VerticalBars";
 
 
 export default {
