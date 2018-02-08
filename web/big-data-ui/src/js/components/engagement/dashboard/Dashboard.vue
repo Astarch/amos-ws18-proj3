@@ -317,6 +317,15 @@ export default {
             this.reqStatus = resp.req;
             console.log(resp.trend);
             //this.setData(resp.trend.data);
+            // upload server result to firestore!
+            api.uploadDataToFirestore(
+              queryObj.query,
+              queryObj.method,
+              queryObj.timerange,
+              resp.trend.data
+              ).then(res => {
+              return res;
+            });
             this.addQueryData(queryObj, resp.trend.data);
             this.giveTrendIndication(queryObj, resp.trend.data);
           })
