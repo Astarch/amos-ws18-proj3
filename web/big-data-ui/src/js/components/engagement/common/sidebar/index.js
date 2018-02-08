@@ -12,6 +12,11 @@ const SidebarStore = {
             icon: 'ti-alarm-clock',
             path: '/engagement/alerts'
         },
+        {
+            name: 'Related Terms',
+            icon: 'ti-view-list-alt',
+            path: '/engagement/related'
+        }
     ],
     displaySidebar(value) {
         this.showSidebar = value

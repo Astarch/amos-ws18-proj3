@@ -6,12 +6,11 @@ import { isLoggedIn } from 'src/js/utils/api';
 
 // components
 import LandingPage from '../components/onboarding/Landing';
-import GraphContainer from '../components/engagement/graph/GraphContainer';
 import EngagementLayout from '../components/engagement/EngagementLayout';
 import Dashboard from '../components/engagement/dashboard/Dashboard';
 import AlertHome from '../components/engagement/alerts/AlertHome';
 import ErrorNotFound from '../components/common/ErrorNotFound';
-
+import RelatedHome from '../components/engagement/related/AlertHome';
 
 Vue.use(VueResource);
 Vue.use(Router);
@@ -40,11 +39,6 @@ const router = new Router({
             redirect: '/engagement/dashboard',
             meta: { requiresAuth: true }
         },
-        {
-            path: '/graph',
-            component: GraphContainer,
-            meta: { requiresAuth: true }
-        },
 
         {
             path: '/engagement',
@@ -60,6 +54,11 @@ const router = new Router({
                     path: 'alerts',
                     name: 'Alerts',
                     component: AlertHome
+                },
+                {
+                    path: 'related',
+                    name: 'Related Terms',
+                    component: RelatedHome
                 },
             ]
         },
