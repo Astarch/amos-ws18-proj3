@@ -179,7 +179,6 @@ const actions = {
         return new Promise((resolve, reject) => {
             logoutUser()
             commit(types.USER_CLEAR)
-            commit(types.TRENDS_CLEAR)
             commit(types.CLEAR_CURRENT_QUERIES)
             router.push({
                 path: "/"

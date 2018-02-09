@@ -97,7 +97,7 @@ export default {
         return Object.assign(
           {},
           {
-            query: val.query,
+            query: this.formattedTerm(val),
             color: val.color,
             min: [val.min, globalMaxMin],
             max: [val.max, globalMax],
@@ -110,13 +110,25 @@ export default {
       return transformedData;
     }
   },
-  methods: {}
+  methods: {
+     formattedTerm(query) {
+      if (query.method == "ALL") {
+        return query.query.trim().replace(/\s/g, "&");
+      } else if (query.method == "EXACT") {
+        return `"${query.query.trim()}"`;
+      } else if (query.method == "ANY") {
+        return query.query.trim();
+      }
+      return query.query.trim();
+    },
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 table thead {
-  background-color: map_get($theme-colors, primaryLight);
+  background-color: map_get($theme-colors, primary);
+  color: white;
   th {
     font-weight: bold;
   }
