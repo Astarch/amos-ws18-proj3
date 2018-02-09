@@ -1,6 +1,6 @@
 <template>
   <div id="form-register" class="onboarding-form form-register" :class="{active: active}">
-    <input id="register-username" type="text" name="name" placeholder="Name" v-model="username" v-on:keyup.enter.stop="submit()" v-on:input="hideError">
+    <input id="register-username" type="text" name="name" placeholder="Username" v-model="username" v-on:keyup.enter.stop="submit()" v-on:input="hideError">
     <input id="register-firstname" type="text" name="firstname" placeholder="Firstname" v-model="firstname" v-on:keyup.enter.stop="submit()" v-on:input="hideError">
     <input id="register-lastname" type="text" name="lastname" placeholder="Lastname" v-model="lastname" v-on:keyup.enter.stop="submit()" v-on:input="hideError">
     <input id="register-email" type="email" name="email" placeholder="Email" v-model="email" v-on:keyup.enter.stop="submit()" v-on:input="checkEmail" ref="emailInput" v-bind:style="regEmailStyle">

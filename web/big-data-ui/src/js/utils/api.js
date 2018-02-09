@@ -128,10 +128,21 @@ const graph = {
     getWordcountByDay
 };
 
+const uploadDataToFirestore = (query, method, timerange, data) => {
+    const uploadData = {
+      query,
+      method,
+      timerange,
+      data,
+    };
+    return axios.post('https://us-central1-pretrendr-d5939.cloudfunctions.net/addWordcountData', uploadData)    
+  }
+
 const api = {
     auth,
     user,
-    graph
+    graph,
+    uploadDataToFirestore
 }
 
 export {
