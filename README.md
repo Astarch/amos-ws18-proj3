@@ -1,4 +1,12 @@
-# amos-ws18-proj3
+(amos-ws18-proj3)
+# Pretrendr
+
+Pretrendr is an open source project to predict technology trends out of open data sources. It is a web-based solution to extract trend data out of the worlds broadcast, print and web news and predict if it will become a trend.
+
+Pretrendr simplifies the identification of existing and emerging trends that reshape industries. News are linked and refined to evaluate trends in order to deliver accurate results. We provide an easy-to-use webpage where trends can be monitored and identified.
+
+[DEMO](http://pretrendr.com)
+
 
 For meeting checklist click [here](https://github.com/Astarch/amos-ws18-proj3/blob/develop/MEETINGS_CHECKLIST.md)
 
