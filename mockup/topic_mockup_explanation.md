@@ -1,5 +1,7 @@
 # Related Terms / Topic Clustering
 
+In addition to the word count metrics it could be interesting to look at similar topics or the same industry. This could help to understand if a technology is rising in its field or a whole industry is coming up. For example if a specific craft beer is trending or all craft beers.
+
 When entering a search term it should be easy to search for similar terms. Those could be terms from the same industry or topic or often coming up with the term itself. This can be achieved on different ways. We want to display our topic clusters idea here.
 
 ## Mockup
