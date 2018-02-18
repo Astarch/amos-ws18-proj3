@@ -7,6 +7,10 @@ Pretrendr simplifies the identification of existing and emerging trends that res
 
 [DEMO](http://pretrendr.com)
 
+Branches:
+- master: Latest stable release
+- develop: Latest stable development build
+- original: Latest Original Project build (not cached version, which runs on develop and master now) 
 
 For meeting checklist click [here](https://github.com/Astarch/amos-ws18-proj3/blob/develop/MEETINGS_CHECKLIST.md)
 
