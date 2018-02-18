@@ -13,6 +13,11 @@ const SidebarStore = {
             path: '/engagement/alerts'
         },
         {
+            name: 'Cached Terms',
+            icon: 'ti-save',
+            path: '/engagement/cached'
+        },
+        {
             name: 'Related Terms',
             icon: 'ti-view-list-alt',
             path: '/engagement/related'

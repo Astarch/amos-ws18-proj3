@@ -23,6 +23,7 @@ import router from 'src/js/router'
 //
 const state = {
     trends: [],
+    cachedTrendsList: []
 }
 
 // getters
@@ -106,6 +107,55 @@ const actions = {
 
         })
     },
+    getCachedTrends({ commit, state }) {
+        return new Promise((resolve, reject) => {
+            api.graph.getCachedTrends()
+                .then(response => {
+                    if (response != undefined && response.data != undefined) {
+                        let data = response.data
+                        let reqStatus = Object.assign({}, new RequestStatus(), {
+                            pending: false,
+                            success: true,
+                        })
+
+                        commit(types.CACHED_TRENDS_SET, data)
+                        resolve({ reqStatus, data })
+                    } else {
+                        let reqStatus = Object.assign({}, new RequestStatus(), {
+                            pending: false,
+                            failure: true,
+                            failureType: ServerErrors.ERROR_REQUEST
+                        })
+
+                        reject(reqStatus)
+                    }
+                })
+                .catch(error => {
+                    let failure = ServerErrors.ERROR_NONE
+                    let errorCode = 404
+                    if (error && error.response && error.response.status > 0) {
+                        errorCode = error.response.status
+                    }
+                    if (errorCode >= 500) {
+                        failure = ServerErrors.ERROR_SERVER
+                    } else if (errorCode = 401) {
+                        failure = ServerErrors.ERROR_AUTHENTICATION
+                    } else if (errorCode = 403) {
+                        failure = ServerErrors.ERROR_PERMISSION
+                    } else {
+                        failure = ServerErrors.ERROR_REQUEST
+                    }
+
+                    let reqStatus = Object.assign({}, new RequestStatus(), {
+                        pending: false,
+                        failure: true,
+                        failureType: failure
+                    })
+                    reject(reqStatus)
+                });
+
+        })
+    },
 }
 
 // mutations
@@ -127,9 +177,13 @@ const mutations = {
         }
     },
     [types.TRENDS_CLEAR](state) {
-
         state.trends = []
     },
+    [types.CACHED_TRENDS_SET](state, trends) {
+        state.cachedTrendsList = trends
+    },
+
+    
 }
 
 export default {

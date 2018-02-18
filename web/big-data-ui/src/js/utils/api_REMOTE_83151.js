@@ -2,7 +2,13 @@ import realClient, {api as realApi, logoutUser as realLogoutUser, isLoggedIn as 
 import standaloneClient, {api as standaloneApi, logoutUser as standaloneLogoutUser, isLoggedIn as standaloneIsLoggedIn}  from './api.standalone'
 console.dir(standaloneApi)
 
-const isStandaloneClient = true
+const isStandaloneClient = false
+
+if(isStandaloneClient){
+    //export default standaloneClient;
+}else{
+    //export default realClient;
+}
 
 const isLoggedIn = isStandaloneClient? standaloneIsLoggedIn : realIsLoggedIn
 const logoutUser = isStandaloneClient? standaloneLogoutUser : realLogoutUser

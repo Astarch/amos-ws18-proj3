@@ -7,6 +7,7 @@
         <search-bar 
         :initialSearchType="queryMethod"
         :initialSearchTerm="queryTerm"
+        :cachedSearchTerms="cachedTerms"
         v-on:querySubmitted="onSearchQuerySubmitted" />
       </div>
       <div class="col-lg-12 col-sm-12 alert alert-danger" role="alert" v-show="hasError">
@@ -140,10 +141,13 @@ export default {
         " to " +
         end.format(prettyDateFormat)
       );
+    },
+    cachedTerms(){
+      return this.$store.state.trends.cachedTrendsList
     }
   },
   methods: {
-    ...mapActions(["getWordcountByDay", "updateCurrentSearchQueries"]),
+    ...mapActions(["getWordcountByDay", "updateCurrentSearchQueries", "getCachedTrends"]),
     formattedTerm(query) {
       if (query.method == "ALL") {
         return query.query.trim().replace(/\s/g, "&");
@@ -316,16 +320,12 @@ export default {
           .then(resp => {
             this.reqStatus = resp.req;
             console.log(resp.trend);
+            if(!resp.trend.data || Object.keys(resp.trend.data).length === 0){
+              return undefined
+            }
             //this.setData(resp.trend.data);
             // upload server result to firestore!
-            api.uploadDataToFirestore(
-              queryObj.query,
-              queryObj.method,
-              queryObj.timerange,
-              resp.trend.data
-              ).then(res => {
-              return res;
-            });
+    
             this.addQueryData(queryObj, resp.trend.data);
             this.giveTrendIndication(queryObj, resp.trend.data);
           })
@@ -357,6 +357,9 @@ export default {
   },
   mounted() {
     this.availableColors = this.colors
+    this.getCachedTrends()
+    .then(response => console.log(response))
+    .catch(error => console.error(error))
     let lastQueries = this.$store.state.user.currentSearchQueries;
     if (lastQueries && lastQueries.length > 0) {
       //this.timerange = lastQuery.timerange;

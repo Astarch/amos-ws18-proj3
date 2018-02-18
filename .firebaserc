@@ -1,6 +1,7 @@
 {
   "projects": {
     "default": "pretrendr-d5939",
-    "staging": "pretrendr-staging"
+    "staging": "pretrendr-staging",
+    "independent": "pretrendr-independent"
   }
 }

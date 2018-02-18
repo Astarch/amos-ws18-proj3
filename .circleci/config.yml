@@ -6,8 +6,7 @@ version: 2
 jobs:
   frontend_build_and_test:
     docker:
-      - image: circleci/node:7.10
-
+      - image: devillex/docker-firebase
     working_directory: ~/repo
 
     steps:
@@ -62,8 +61,7 @@ jobs:
 
   frontend_deploy:
     docker:
-      # docker image with aws and node version 8.7 preinstalled!
-      - image: andrasszell/circleci-node-aws:8.7
+      - image: devillex/docker-firebase
     working_directory: ~/repo
     steps:
       - checkout
@@ -82,26 +80,14 @@ jobs:
             - ./web/big-data-ui/.cache/yarn
           key: v1-dependencies-{{ checksum "web/big-data-ui/yarn.lock" }}
       - run:
-          name: Deploy Frontend to AWS
-          working_directory: /
-          command: |
-            if [[ $CIRCLE_BRANCH == "master" ]]; then
-              aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontend/ --region us-east-2 --acl public-read --delete
-              echo "Deployed to production";
-            else
-              aws s3 sync ~/repo/web/big-data-ui/dist s3://pretrendrfrontendstaging/ --region us-east-2 --acl public-read --delete
-              echo "deployed to staging";
-            fi
-      - run:
           name: Deploy Frontend to Firebase
           working_directory: ~/repo
           command: |
-            sudo yarn            
             if [[ $CIRCLE_BRANCH == "master" ]]; then
-              sudo ./node_modules/.bin/firebase deploy -P default --token=$FIREBASE_TOKEN --non-interactive
+              firebase deploy -P independent --token=$FIREBASE_TOKEN --non-interactive --only hosting
               echo "deployed to staging";
             else
-              sudo ./node_modules/.bin/firebase deploy -P staging --token=$FIREBASE_TOKEN --non-interactive
+              firebase deploy -P staging --token=$FIREBASE_TOKEN --non-interactive --only hosting
               echo "deployed to staging";
             fi
             
@@ -131,7 +117,7 @@ workflows:
   build_test_deploy:
     jobs:
       - frontend_build_and_test
-      - backend_build_and_test
+     # - backend_build_and_test
       - frontend_deploy:
           requires:
             - frontend_build_and_test
@@ -140,11 +126,11 @@ workflows:
               only:
                 - develop
                 - master
-      - backend_deploy:
-          requires:
-            - backend_build_and_test
-          filters:
-            branches:
-              only:
-                - develop
-                - master
+     # - backend_deploy:
+      #    requires:
+       #     - backend_build_and_test
+        #  filters:
+         #   branches:
+          #    only:
+           #     - develop
+            #    - master

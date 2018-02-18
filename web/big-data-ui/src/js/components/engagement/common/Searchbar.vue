@@ -8,13 +8,25 @@
         placeholder="Trendsearch" 
         autocomplete="off" 
         required="required" 
-        v-model.trim="searchTerm">
+        v-model.trim="searchTerm"
+        v-on:keyup.enter.stop="submit()"
+        v-on:keyup.up.stop="selectPreviousSuggestion()"
+        v-on:keyup.down.stop="selecteNextSuggestion()">
         <button type="submit" title="Submit your search query." class="submit" v-on:click.stop="submit()">
           <i class="ti-search"/>
         </button>
         <button type="reset" title="Clear the search query." class="reset">
           <i class="ti-close"/>
         </button>
+        <ul class="suggestions" v-show="showSuggestions">
+            <li v-for="(term, index) in currentSuggestions"
+                v-bind:class="{'active': isSuggestionActive(index)}"
+                @click="suggestionClick(term)"
+            >
+              <p>{{ term.query.toLowerCase() }} <small>{{ term.method }}</small>
+              </p>
+            </li>
+        </ul>
       </div>
     </form>
     <div class="searchtype">
@@ -39,6 +51,8 @@
             <label>Exact Match</label>
         </div>
     </div>
+    <div>
+    </div>
     </div>
   </div>
 </template>
@@ -46,6 +60,7 @@
 <script>
 export default {
   name: "search-bar",
+  components: {},
   props: {
     initialSearchType: {
       validator: function(value) {
@@ -60,12 +75,20 @@ export default {
       default: function() {
         return "";
       }
+    },
+    cachedSearchTerms: {
+      type: Array,
+      default: function() {
+        return [];
+      }
     }
   },
   data: function() {
     return {
       searchTerm: this.initialSearchTerm,
-      searchType: this.initialSearchType
+      searchType: this.initialSearchType,
+      cachedTerms: this.cachedSearchTerms,
+      activeSuggestionsIndex: -1,
     };
   },
   watch: {
@@ -74,12 +97,63 @@ export default {
     },
     initialSearchType(newVal, oldValue) {
       this.searchType = newVal;
+    },
+    cachedSearchTerms(newVal, oldVal) {
+      console.log(newVal);
+      this.cachedTerms = newVal;
+    },
+  },
+  computed:{
+    showSuggestions(){
+      let showSuggestions = false;
+      const distinctSuggestions = this.currentSuggestions.reduce((total, current)=> {
+        if(total.length == 0 || total.indexOf(current.query)<0){
+          total.push(current.query)
+        }
+        return total
+      }, [])
+      if(distinctSuggestions.length == 1){
+        showSuggestions =  this.searchTerm.toLowerCase() != distinctSuggestions[0].toLowerCase()
+      }else{
+        showSuggestions = distinctSuggestions.length > 1 && this.searchTerm.length > 1
+      }
+      if(!showSuggestions){
+        this.activeSuggestionsIndex = -1
+      }
+      return showSuggestions || this.forceShowAllSuggestions
+    },
+    currentSuggestions(){
+      const filteredSuggestions = this.cachedTerms.filter(queryObj => queryObj.query.toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0)
+
+      if(this.activeSuggestionsIndex > filteredSuggestions.length -1){
+         this.activeSuggestionsIndex = -1
+      }
+      return filteredSuggestions
     }
   },
   methods: {
+    isSuggestionActive(index) {
+      return this.activeSuggestionsIndex == index
+    },
+    selecteNextSuggestion(){
+      if(this.activeSuggestionsIndex < this.currentSuggestions.length -1){
+        this.activeSuggestionsIndex++;
+      }
+    },
+    selectPreviousSuggestion(){
+      if(this.activeSuggestionsIndex > 0){
+        this.activeSuggestionsIndex--;
+      }
+    },
     submit() {
-      if(this.searchTerm.length <= 0){
-        return
+      if(this.showSuggestions && this.activeSuggestionsIndex >= 0){
+        const suggestion = this.currentSuggestions[this.activeSuggestionsIndex]
+        this.searchTerm = suggestion.query;
+        this.searchType = suggestion.method;
+        this.clickedSuggestion = true;
+      }
+      if (this.searchTerm.length <= 0) {
+        return;
       }
       let query = this.searchTerm;
       let method = this.searchType;
@@ -90,6 +164,14 @@ export default {
         query: query,
         method: method
       });
+    },
+    suggestionClick(termObj) {
+      if (termObj.query.length <= 0 || termObj.method.length <= 0) {
+        return;
+      }
+      this.searchTerm = termObj.query;
+      this.searchType = termObj.method;
+      this.clickedSuggestion = true;
     }
   }
 };
@@ -107,6 +189,36 @@ export default {
 }
 .searchtype {
   margin: 5px 5px 15px 5px;
+}
+
+ul.suggestions {
+  box-shadow: 0 2px 2px rgba(204, 197, 185, 0.5);
+  position: absolute;
+  top: 50px;
+  padding: 0px;
+  right: 48px;
+  left: 0px;
+  list-style: none;
+  background: white;
+  max-height: 200px;
+  overflow: auto;
+  z-index: 1;
+  li {
+    padding: 5px 19px;
+    &.active,
+    &:hover{
+      background: map_get($theme-colors, light);
+      color: map_get($theme-colors, secondary);
+    }
+  }
+  p{
+    cursor: pointer;
+    margin: 0px
+  }
+  small{
+    font-size: 0.6em;
+    color: map_get($theme-colors, secondary)
+  }
 }
 
 .searchbox {

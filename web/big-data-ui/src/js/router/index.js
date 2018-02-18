@@ -11,6 +11,7 @@ import Dashboard from '../components/engagement/dashboard/Dashboard';
 import AlertHome from '../components/engagement/alerts/AlertHome';
 import ErrorNotFound from '../components/common/ErrorNotFound';
 import RelatedHome from '../components/engagement/related/AlertHome';
+import CachedTerms from '../components/engagement/cachedterms/CachedTerms';
 
 Vue.use(VueResource);
 Vue.use(Router);
@@ -54,6 +55,11 @@ const router = new Router({
                     path: 'alerts',
                     name: 'Alerts',
                     component: AlertHome
+                },
+                {
+                    path: 'cached',
+                    name: 'Cached Terms',
+                    component: CachedTerms
                 },
                 {
                     path: 'related',
